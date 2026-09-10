@@ -36,16 +36,21 @@ apropos:
     - 'My work splits across two registers that feed each other: an editorial practice where type carries the image, and a compositing practice where the difficulty is making the construction invisible.'
     - Longer term I'm aiming at interface design roles in games. Until then, every commission is a chance to test what holds up outside the working canvas.
   parcours:
-    - periode: 2024 — 2027
-      titre: Bachelier en techniques infographiques
-      titre_en: BA in Graphic Techniques
+    - periode: 2023 — 2026
+      titre: 4e — 5e — 6e techniques qualification infographiques
+      titre_en: 4th — 5th — 6th infographic qualification techniques
       lieu: IATA, Namur
+      lieu_en: IATA, Namur
+    - periode: 2026 —
+      titre: Bac Techniques Graphiques - Techniques Infographiques
+      titre_en: Graphic Techniques Baccalaureate - Infographic Techniques
+      lieu: Haute Ecole Albert Jaquard
+      lieu_en: Albert Jacquard High School
+    - periode: 2026 —
+      titre: Graphiste pour le serveur français GTA RP FlashFA
+      titre_en: Graphic designer for the French GTA RP FlashFA server
+      lieu: télétravail
       lieu_en: ''
-    - periode: 2025 —
-      titre: Commandes freelance
-      titre_en: Freelance commissions
-      lieu: Identité, affiche, motion
-      lieu_en: Identity, poster, motion
   competences:
     - groupe: Print & édition
       groupe_en: Print & editorial
