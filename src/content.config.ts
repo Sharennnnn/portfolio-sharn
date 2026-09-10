@@ -14,6 +14,7 @@ const projets = defineCollection({
     couverture: z.string(),
     survol: z.string().optional(),
     galerie: z.array(z.string()).default([]),
+    video: z.string().optional(),
 
     contrainte: z.string(),
     contrainte_en: z.string(),

@@ -47,6 +47,10 @@ collections:
         widget: list
         required: false
         field: { name: image, label: Image, widget: image }
+      - name: video
+        label: 'Vidéo YouTube (lien complet, ex: https://youtu.be/XXXXXXXXXXX)'
+        widget: string
+        required: false
 
       - { name: contrainte, label: 'Le problème (FR)', widget: text }
       - { name: contrainte_en, label: 'The problem (EN)', widget: text }
