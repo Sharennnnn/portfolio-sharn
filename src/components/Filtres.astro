@@ -1,0 +1,43 @@
+---
+import { traduire } from '../i18n/utils.js';
+const { langue } = Astro.props;
+const t = traduire(langue);
+const cles = ['tous', 'print', 'identite', 'animation'];
+---
+
+<div class="filtres" role="group" aria-label="Filtrer par discipline">
+  {cles.map((cle) => (
+    <button class="filtre" type="button" data-filtre={cle} aria-pressed={cle === 'tous' ? 'true' : 'false'}>
+      {t(`projets.filtre.${cle}`)}
+    </button>
+  ))}
+</div>
+
+<p class="legende vide" hidden data-vide>{t('projets.vide')}</p>
+
+<script>
+  const boutons = document.querySelectorAll('[data-filtre]');
+  const cartes = document.querySelectorAll('.grille .carte');
+  const vide = document.querySelector('[data-vide]');
+
+  boutons.forEach((bouton) => {
+    bouton.addEventListener('click', () => {
+      const choix = bouton.dataset.filtre;
+      boutons.forEach((b) => b.setAttribute('aria-pressed', String(b === bouton)));
+
+      let visibles = 0;
+      cartes.forEach((carte) => {
+        const liste = (carte.dataset.disciplines || '').split(' ');
+        const montrer = choix === 'tous' || liste.includes(choix);
+        carte.hidden = !montrer;
+        if (montrer) visibles += 1;
+      });
+
+      if (vide) vide.hidden = visibles > 0;
+    });
+  });
+</script>
+
+<style>
+  .vide { margin: 2rem 0 0; }
+</style>

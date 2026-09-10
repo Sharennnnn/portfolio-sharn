@@ -1,0 +1,351 @@
+/* ==========================================================
+   Shar'N — Système de design
+   Tokens repris des variables Figma (fichier QfKasVXg5wih…)
+   Contrastes vérifiés WCAG 2.1 sur --fond
+   ========================================================== */
+
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/inter/wght-italic.css';
+
+:root {
+  /* Surfaces */
+  --fond: #0a0a0b;
+  --surface: #141416;
+  --bordure: #26262a;
+  --bordure-forte: #3a3a40;
+
+  /* Texte — ratios mesurés sur --fond */
+  --texte: #ededed;       /* 16.9:1  AAA */
+  --texte-doux: #8a8a90;  /*  5.77:1 AA  */
+  --accent: #e09a55;      /*  8.41:1 AAA */
+
+  /* Échelle typographique — ratio 1,25 */
+  --t-hero: clamp(2.5rem, 5.3vw, 4.75rem);
+  --t-h2: clamp(1.75rem, 2.8vw, 2.5rem);
+  --t-h3: clamp(1.25rem, 1.7vw, 1.5rem);
+  --t-chapeau: clamp(1.0625rem, 1.4vw, 1.25rem);
+  --t-corps: 1.0625rem;
+  --t-legende: 0.8125rem;
+  --t-eyebrow: 0.6875rem;
+
+  /* Rythme */
+  --gouttiere: clamp(1.25rem, 4.2vw, 3.75rem);
+  --largeur-max: 1440px;
+  --section: clamp(4rem, 8.5vw, 7.5rem);
+
+  /* Mouvement */
+  --duree: 350ms;
+  --courbe: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--texte);
+  font-family: 'Inter Variable', system-ui, sans-serif;
+  font-size: var(--t-corps);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- Conteneur ---------- */
+
+.enveloppe {
+  width: 100%;
+  max-width: var(--largeur-max);
+  margin-inline: auto;
+  padding-inline: var(--gouttiere);
+}
+
+/* ---------- Typographie ---------- */
+
+.hero-titre {
+  font-size: var(--t-hero);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.hero-titre em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+h2 {
+  font-size: var(--t-h2);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h3 {
+  font-size: var(--t-h3);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.eyebrow {
+  font-size: var(--t-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texte-doux);
+  margin: 0;
+}
+
+.legende {
+  font-size: var(--t-legende);
+  line-height: 1.4;
+  color: var(--texte-doux);
+  margin: 0;
+}
+
+.chapeau {
+  font-size: var(--t-chapeau);
+  line-height: 1.5;
+  color: var(--texte-doux);
+  max-width: 40rem;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ---------- Liens et boutons ---------- */
+
+.lien-accent {
+  color: var(--accent);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duree) var(--courbe);
+}
+
+.lien-accent:hover {
+  border-bottom-color: var(--accent);
+}
+
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--bordure-forte);
+  border-radius: 2px;
+  font-size: var(--t-legende);
+  font-weight: 500;
+  transition:
+    border-color var(--duree) var(--courbe),
+    color var(--duree) var(--courbe);
+}
+
+.bouton:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------- Grille de projets ---------- */
+
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: clamp(1.5rem, 2.5vw, 2.5rem) 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.carte-visuel {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+}
+
+.carte-visuel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    opacity var(--duree) var(--courbe),
+    transform 700ms var(--courbe);
+}
+
+.carte-visuel .survol {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.carte:hover .survol,
+.carte:focus-within .survol {
+  opacity: 1;
+}
+
+.carte:hover .carte-visuel img,
+.carte:focus-within .carte-visuel img {
+  transform: scale(1.04);
+}
+
+.carte-titre {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  margin: 0.75rem 0 0.125rem;
+  transition: color var(--duree) var(--courbe);
+}
+
+a.zone:hover .carte-titre,
+a.zone:focus-visible .carte-titre {
+  color: var(--accent);
+}
+
+.carte-meta {
+  font-size: var(--t-legende);
+  color: var(--texte-doux);
+  margin: 0;
+}
+
+/* ---------- Filtres ---------- */
+
+.filtres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filtre {
+  padding: 0.44rem 0.875rem;
+  background: none;
+  border: 1px solid var(--bordure);
+  border-radius: 2px;
+  color: var(--texte-doux);
+  font: inherit;
+  font-size: var(--t-legende);
+  cursor: pointer;
+  transition:
+    border-color var(--duree) var(--courbe),
+    color var(--duree) var(--courbe);
+}
+
+.filtre:hover {
+  border-color: var(--bordure-forte);
+  color: var(--texte);
+}
+
+.filtre[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ==========================================================
+   Animations — traduites des keyframes Figma
+   Figma joue une timeline de 3 s au chargement. Sur le web,
+   le déclencheur est le défilement : chaque bloc s'anime en
+   entrant dans le viewport, en conservant les amplitudes et
+   la courbe ease-out de la maquette.
+   ========================================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--dy, 28px)) scale(var(--s, 1));
+  transition:
+    opacity 600ms var(--courbe),
+    transform 600ms var(--courbe);
+  transition-delay: var(--retard, 0ms);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Amplitudes reprises de la maquette */
+.reveal--header { --dy: 14px; }
+.reveal--eyebrow { --dy: 32px; }
+.reveal--titre { --dy: 46px; }
+.reveal--carte { --dy: 40px; --s: 0.96; }
+.reveal--bloc { --dy: 28px; }
+.reveal--cta { --dy: 24px; }
+
+/* Cascade des vignettes : 100 ms entre chaque, comme en maquette */
+.grille > :nth-child(1) { --retard: 0ms; }
+.grille > :nth-child(2) { --retard: 100ms; }
+.grille > :nth-child(3) { --retard: 200ms; }
+.grille > :nth-child(4) { --retard: 300ms; }
+.grille > :nth-child(5) { --retard: 0ms; }
+.grille > :nth-child(6) { --retard: 100ms; }
+.grille > :nth-child(7) { --retard: 200ms; }
+.grille > :nth-child(8) { --retard: 300ms; }
+.grille > :nth-child(n + 9) { --retard: 0ms; }
+
+/* Séquence du hero, jouée au chargement */
+.hero .reveal { --retard: 0ms; }
+.hero .reveal:nth-child(1) { --retard: 120ms; }
+.hero .reveal:nth-child(2) { --retard: 250ms; }
+.hero .reveal:nth-child(3) { --retard: 380ms; }
+
+/* ---------- Accessibilité ---------- */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.saut-contenu {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 0.75rem 1.25rem;
+  background: var(--accent);
+  color: var(--fond);
+  z-index: 100;
+}
+
+.saut-contenu:focus {
+  left: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

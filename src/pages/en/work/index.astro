@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import CarteProjet from '../../../components/CarteProjet.astro';
+import Filtres from '../../../components/Filtres.astro';
+import { traduire, trier } from '../../../i18n/utils.js';
+
+const langue = 'en';
+const t = traduire(langue);
+const projets = trier(await getCollection('projets'));
+---
+
+<Base titre={t('projets.titre')} description={t('projets.chapeau')} equivalent="/projets">
+  <section class="enveloppe hero">
+    <h1 class="hero-titre reveal reveal--titre">{t('projets.titre')}</h1>
+    <p class="chapeau reveal reveal--eyebrow">{t('projets.chapeau')}</p>
+  </section>
+
+  <section class="enveloppe">
+    <div class="reveal reveal--bloc barre"><Filtres langue={langue} /></div>
+    <ul class="grille">
+      {projets.map((projet) => <CarteProjet projet={projet} langue={langue} />)}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+    padding-block: clamp(3rem, 6vw, 6.25rem) 3rem;
+  }
+  .barre { margin-bottom: 2.5rem; }
+</style>

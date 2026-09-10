@@ -1,0 +1,113 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import CarteProjet from '../components/CarteProjet.astro';
+import { traduire, route, trier } from '../i18n/utils.js';
+import { lireReglages, champR, listeR } from '../i18n/reglages.js';
+
+const langue = 'fr';
+const t = traduire(langue);
+const r = await lireReglages();
+const projets = trier(await getCollection('projets')).slice(0, 4);
+
+const h = r.hero;
+const style = `--accent:${r.theme.accent}`;
+---
+
+<Base titre={champR(h, 'eyebrow', langue)} description={champR(h, 'chapeau', langue)} equivalent="/en">
+  <div style={style}>
+    {r.banniere.visible && r.banniere.image && (
+      <section class="enveloppe banniere reveal reveal--bloc">
+        {r.banniere.lien ? (
+          <a href={r.banniere.lien}><img src={r.banniere.image} alt="" /></a>
+        ) : (
+          <img src={r.banniere.image} alt="" />
+        )}
+      </section>
+    )}
+
+    <section class="enveloppe hero">
+      <p class="eyebrow reveal reveal--eyebrow">{champR(h, 'eyebrow', langue)}</p>
+      <h1 class="hero-titre reveal reveal--titre">
+        {champR(h, 'titre1', langue)}<br />
+        {champR(h, 'titre2', langue)} <em>{champR(h, 'titre3', langue)}</em>
+      </h1>
+      <p class="chapeau reveal reveal--eyebrow">{champR(h, 'chapeau', langue)}</p>
+    </section>
+
+    {r.sections.filter((s) => s.visible).map((s) => {
+      if (s.cle === 'selection') return (
+        <section class="enveloppe bloc">
+          <div class="entete-bloc reveal reveal--bloc">
+            <p class="eyebrow">{t('accueil.selection')}</p>
+            <a class="lien-accent" href={route(langue, 'projets')}>{t('accueil.tout')} &rarr;</a>
+          </div>
+          <ul class="grille">
+            {projets.map((projet) => <CarteProjet projet={projet} langue={langue} />)}
+          </ul>
+        </section>
+      );
+      if (s.cle === 'duo') return (
+        <section class="enveloppe bloc">
+          <p class="eyebrow reveal reveal--bloc">{t('accueil.lignes')}</p>
+          <div class="duo reveal reveal--bloc">
+            <article>
+              <h2>{t('accueil.ligneA.titre')}</h2>
+              <p class="chapeau">{t('accueil.ligneA.texte')}</p>
+            </article>
+            <article>
+              <h2>{t('accueil.ligneB.titre')}</h2>
+              <p class="chapeau">{t('accueil.ligneB.texte')}</p>
+            </article>
+          </div>
+        </section>
+      );
+      if (s.cle === 'cta') return (
+        <section class="enveloppe cta">
+          <h2 class="reveal reveal--cta">{champR(h, 'cta_titre', langue)}</h2>
+          <p class="chapeau reveal reveal--cta">{champR(h, 'cta_texte', langue)}</p>
+          <a class="bouton reveal reveal--cta" href={route(langue, 'contact')}>{champR(h, 'cta_bouton', langue)}</a>
+        </section>
+      );
+      return null;
+    })}
+  </div>
+</Base>
+
+<style>
+  .banniere { padding-top: 1.5rem; }
+  .banniere img { width: 100%; border: 1px solid var(--bordure); }
+  .banniere a { display: block; }
+  .hero {
+    display: grid;
+    gap: 2rem;
+    justify-items: start;
+    padding-block: clamp(4rem, 9vw, 8.75rem) clamp(3rem, 5vw, 5rem);
+  }
+  .bloc { padding-block: 0 var(--section); }
+  .entete-bloc {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .entete-bloc a { font-size: var(--t-legende); }
+  .duo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: clamp(2rem, 4vw, 4rem);
+    border-top: 1px solid var(--bordure);
+    margin-top: 2rem;
+    padding-top: 2.5rem;
+  }
+  .duo h2 { margin-bottom: 1rem; }
+  .cta {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    border-top: 1px solid var(--bordure);
+    padding-top: 3rem;
+  }
+  .cta .bouton { margin-top: 0.5rem; }
+</style>

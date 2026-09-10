@@ -1,0 +1,147 @@
+backend:
+  name: github
+  repo: Sharennnnn/portfolio-sharn
+  base_url: https://sveltia-cms-auth.rennesoncharlie.workers.dev
+  
+
+media_folder: public/images/projets
+public_folder: /images/projets
+
+collections:
+  - name: projets
+    label: Projets
+    label_singular: Projet
+    folder: src/content/projets
+    create: true
+    slug: '{{slug}}'
+    summary: '{{annee}} — {{titre}}'
+    sortable_fields: [ordre, annee, titre]
+    fields:
+      - { name: titre, label: 'Titre (FR)', widget: string }
+      - { name: titre_en, label: 'Titre (EN)', widget: string }
+      - { name: annee, label: Année, widget: number, value_type: int, min: 2020, max: 2035 }
+
+      - name: origine
+        label: Provenance
+        widget: select
+        options:
+          - { label: 'Commande client', value: client }
+          - { label: 'Fan art', value: fanart }
+          - { label: 'Exercice académique', value: exercice }
+          - { label: 'Projet personnel', value: perso }
+
+      - name: disciplines
+        label: Disciplines
+        widget: select
+        multiple: true
+        options:
+          - { label: Print, value: print }
+          - { label: Identité, value: identite }
+          - { label: Animation, value: animation }
+
+      - { name: client, label: Client, widget: string, required: false }
+      - { name: couverture, label: 'Image de couverture (3:4)', widget: image }
+      - { name: survol, label: 'Image au survol', widget: image, required: false }
+      - name: galerie
+        label: Galerie
+        widget: list
+        required: false
+        field: { name: image, label: Image, widget: image }
+
+      - { name: contrainte, label: 'Le problème (FR)', widget: text }
+      - { name: contrainte_en, label: 'The problem (EN)', widget: text }
+      - { name: resolution, label: 'Ce que j''ai fait (FR)', widget: text }
+      - { name: resolution_en, label: 'What I did (EN)', widget: text }
+
+      - { name: livrables, label: 'Livrables (FR)', widget: string, required: false }
+      - { name: livrables_en, label: 'Deliverables (EN)', widget: string, required: false }
+      - { name: outils, label: Outils, widget: list, required: false }
+
+      - { name: phare, label: 'Projet phare (page dédiée)', widget: boolean, default: false }
+      - { name: ordre, label: 'Ordre d''affichage', widget: number, value_type: int, default: 50, hint: 'Plus petit = plus haut dans la grille' }
+      - { name: body, label: 'Texte long (facultatif)', widget: markdown, required: false }
+
+files:
+  - name: reglages
+    label: Réglages du site
+    file: src/content/reglages/site.yaml
+    fields:
+      - name: hero
+        label: Accueil — En-tête
+        widget: object
+        fields:
+          - { name: eyebrow, label: 'Sur-titre (FR)', widget: string }
+          - { name: eyebrow_en, label: 'Sur-titre (EN)', widget: string }
+          - { name: titre1, label: 'Titre — ligne 1 (FR)', widget: string }
+          - { name: titre1_en, label: 'Titre — ligne 1 (EN)', widget: string }
+          - { name: titre2, label: 'Titre — ligne 2, début (FR)', widget: string }
+          - { name: titre2_en, label: 'Titre — ligne 2, début (EN)', widget: string }
+          - { name: titre3, label: 'Titre — ligne 2, fin en italique (FR)', widget: string }
+          - { name: titre3_en, label: 'Titre — ligne 2, fin en italique (EN)', widget: string }
+          - { name: chapeau, label: 'Accroche (FR)', widget: text }
+          - { name: chapeau_en, label: 'Accroche (EN)', widget: text }
+          - { name: cta_titre, label: 'CTA — titre (FR)', widget: string }
+          - { name: cta_titre_en, label: 'CTA — titre (EN)', widget: string }
+          - { name: cta_texte, label: 'CTA — texte (FR)', widget: string }
+          - { name: cta_texte_en, label: 'CTA — texte (EN)', widget: string }
+          - { name: cta_bouton, label: 'CTA — bouton (FR)', widget: string }
+          - { name: cta_bouton_en, label: 'CTA — bouton (EN)', widget: string }
+
+      - name: banniere
+        label: Bannière (accueil, sous le menu)
+        widget: object
+        fields:
+          - { name: visible, label: Afficher la bannière, widget: boolean, default: false }
+          - { name: image, label: Image, widget: image, required: false }
+          - { name: lien, label: 'Lien au clic (optionnel)', widget: string, required: false }
+
+      - name: sections
+        label: Sections de l'accueil — ordre et visibilité
+        widget: list
+        hint: 'Fais glisser pour réordonner. Décoche pour masquer sans supprimer.'
+        fields:
+          - name: cle
+            label: Section
+            widget: select
+            options:
+              - { label: 'Sélection de projets', value: selection }
+              - { label: 'Deux façons de travailler', value: duo }
+              - { label: 'Appel à contact (CTA)', value: cta }
+          - { name: visible, label: Visible, widget: boolean, default: true }
+
+      - name: apropos
+        label: À propos
+        widget: object
+        fields:
+          - { name: bio, label: 'Paragraphes de bio (FR)', widget: list, field: { name: paragraphe, widget: text } }
+          - { name: bio_en, label: 'Paragraphes de bio (EN)', widget: list, field: { name: paragraphe, widget: text } }
+          - name: parcours
+            label: Parcours
+            widget: list
+            fields:
+              - { name: periode, label: Période, widget: string }
+              - { name: titre, label: 'Intitulé (FR)', widget: string }
+              - { name: titre_en, label: 'Intitulé (EN)', widget: string, required: false }
+              - { name: lieu, label: 'Lieu / détail (FR)', widget: string }
+              - { name: lieu_en, label: 'Lieu / détail (EN)', widget: string, required: false }
+          - name: competences
+            label: Compétences
+            widget: list
+            fields:
+              - { name: groupe, label: 'Catégorie (FR)', widget: string }
+              - { name: groupe_en, label: 'Catégorie (EN)', widget: string, required: false }
+              - { name: outils, label: Outils, widget: string }
+
+      - name: contact
+        label: Contact
+        widget: object
+        fields:
+          - { name: email, label: Email, widget: string }
+          - { name: instagram, label: 'Lien Instagram', widget: string, required: false }
+          - { name: linkedin, label: 'Lien LinkedIn', widget: string, required: false }
+
+      - name: theme
+        label: Apparence
+        widget: object
+        fields:
+          - { name: accent, label: 'Couleur d''accent', widget: color }

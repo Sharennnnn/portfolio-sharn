@@ -1,0 +1,106 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { traduire, champ, route } from '../../i18n/utils.js';
+
+export async function getStaticPaths() {
+  const projets = await getCollection('projets', ({ data }) => data.phare);
+  return projets.map((projet) => ({ params: { id: projet.id }, props: { projet } }));
+}
+
+const { projet } = Astro.props;
+const langue = 'fr';
+const t = traduire(langue);
+const d = projet.data;
+const titre = champ(projet, 'titre', langue);
+const contrainte = champ(projet, 'contrainte', langue);
+const resolution = champ(projet, 'resolution', langue);
+const livrables = champ(projet, 'livrables', langue);
+const { Content } = await render(projet);
+---
+
+<Base titre={titre} description={contrainte} equivalent={`/en/work/${projet.id}`}>
+  <article>
+    <header class="enveloppe tete">
+      <p class="eyebrow reveal reveal--eyebrow">{t(`origine.${d.origine}`)} &middot; {d.annee}</p>
+      <h1 class="hero-titre reveal reveal--titre">{titre}</h1>
+    </header>
+
+    <div class="enveloppe">
+      <img class="visuel reveal reveal--carte" src={d.couverture} alt={titre} width="1600" height="1200" />
+    </div>
+
+    <div class="enveloppe corps">
+      <div class="texte">
+        <section class="reveal reveal--bloc">
+          <h2>{t('projet.contrainte')}</h2>
+          <p>{contrainte}</p>
+        </section>
+        <section class="reveal reveal--bloc">
+          <h2>{t('projet.resolution')}</h2>
+          <p>{resolution}</p>
+        </section>
+        <div class="markdown reveal reveal--bloc"><Content /></div>
+      </div>
+
+      <aside class="fiche reveal reveal--bloc">
+        <p class="eyebrow">{t('projet.infos')}</p>
+        <dl>
+          {d.client && (<><dt>{t('projet.client')}</dt><dd>{d.client}</dd></>)}
+          <dt>{t('projet.annee')}</dt><dd>{d.annee}</dd>
+          {livrables && (<><dt>{t('projet.livrables')}</dt><dd>{livrables}</dd></>)}
+          {d.outils.length > 0 && (<><dt>{t('projet.outils')}</dt><dd>{d.outils.join(', ')}</dd></>)}
+        </dl>
+      </aside>
+    </div>
+
+    {d.galerie.length > 0 && (
+      <div class="enveloppe galerie">
+        {d.galerie.map((src) => (
+          <img class="reveal reveal--carte" src={src} alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+        ))}
+      </div>
+    )}
+
+    <div class="enveloppe retour">
+      <a class="lien-accent" href={route(langue, 'projets')}>&larr; {t('projet.retour')}</a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .tete {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    padding-block: clamp(3rem, 6vw, 5rem) 2rem;
+  }
+  .visuel { width: 100%; border: 1px solid var(--bordure); }
+  .corps {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+  @media (max-width: 45rem) {
+    .corps { grid-template-columns: 1fr; }
+  }
+  .texte section + section,
+  .texte .markdown { margin-top: 2.5rem; }
+  .texte h2 { font-size: var(--t-h3); margin-bottom: 0.75rem; }
+  .texte p { color: var(--texte-doux); max-width: 62ch; margin: 0; }
+  .fiche dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1.5rem;
+    font-size: var(--t-legende);
+    margin: 1rem 0 0;
+    border-top: 1px solid var(--bordure);
+    padding-top: 1rem;
+  }
+  .fiche dt { color: var(--texte-doux); }
+  .fiche dd { margin: 0; }
+  .galerie { display: grid; gap: 1.5rem; }
+  .galerie img { width: 100%; border: 1px solid var(--bordure); }
+  .retour { padding-block: 3rem; font-size: var(--t-legende); }
+</style>

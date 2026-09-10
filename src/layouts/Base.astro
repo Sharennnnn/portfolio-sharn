@@ -1,0 +1,67 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { langueDepuisUrl, traduire } from '../i18n/utils.js';
+
+const { titre, description, equivalent } = Astro.props;
+const langue = langueDepuisUrl(Astro.url);
+const t = traduire(langue);
+const canonique = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={langue}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titre} — Shar'N</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonique} />
+    <meta property="og:title" content={`${titre} — Shar'N`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0a0a0b" />
+    {equivalent && (
+      <link rel="alternate" hreflang={langue === 'fr' ? 'en' : 'fr'} href={new URL(equivalent, Astro.site)} />
+    )}
+    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site)} />
+  </head>
+
+  <body>
+    <a class="saut-contenu" href="#contenu">{t('a11y.saut')}</a>
+    <Header langue={langue} equivalent={equivalent} />
+    <main id="contenu"><slot /></main>
+    <Footer langue={langue} />
+
+    <script>
+      const cibles = document.querySelectorAll('.reveal');
+      const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduit) {
+        cibles.forEach((el) => el.classList.add('visible'));
+      } else {
+        // Le hero apparaît au chargement, comme la timeline Figma
+        document.querySelectorAll('.hero .reveal, .entete.reveal').forEach((el) => {
+          requestAnimationFrame(() => el.classList.add('visible'));
+        });
+
+        const obs = new IntersectionObserver(
+          (entrees) => {
+            entrees.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                obs.unobserve(e.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -12% 0px' }
+        );
+
+        cibles.forEach((el) => {
+          if (!el.classList.contains('visible')) obs.observe(el);
+        });
+      }
+    </script>
+  </body>
+</html>

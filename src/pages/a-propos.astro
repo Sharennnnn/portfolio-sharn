@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import { traduire } from '../i18n/utils.js';
+import { lireReglages, listeR, champR } from '../i18n/reglages.js';
+
+const langue = 'fr';
+const t = traduire(langue);
+const r = await lireReglages();
+const a = r.apropos;
+const bio = listeR(a, 'bio', langue);
+const style = `--accent:${r.theme.accent}`;
+---
+
+<Base titre={t('apropos.titre')} description="Charlie, infographiste basé à Namur." equivalent="/en/about">
+  <div style={style}>
+    <section class="enveloppe hero">
+      <h1 class="hero-titre reveal reveal--titre">{t('apropos.titre')}</h1>
+    </section>
+
+    <section class="enveloppe contenu">
+      <div class="bio reveal reveal--bloc">
+        {bio.map((p) => <p>{p}</p>)}
+        <a class="bouton" href="/cv-sharn.pdf" download>{t('apropos.cv')}</a>
+      </div>
+
+      <div class="colonnes">
+        <section class="reveal reveal--bloc">
+          <p class="eyebrow">{t('apropos.parcours')}</p>
+          <ul class="liste">
+            {a.parcours.map((item) => (
+              <li>
+                <span class="periode">{item.periode}</span>
+                <span class="intitule">{champR(item, 'titre', langue)}</span>
+                <span class="legende">{champR(item, 'lieu', langue)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="reveal reveal--bloc">
+          <p class="eyebrow">{t('apropos.competences')}</p>
+          <ul class="liste">
+            {a.competences.map((item) => (
+              <li>
+                <span class="intitule">{champR(item, 'groupe', langue)}</span>
+                <span class="legende">{item.outils}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero { padding-block: clamp(3rem, 6vw, 6.25rem) 2rem; }
+  .contenu {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+  @media (max-width: 48rem) {
+    .contenu { grid-template-columns: 1fr; }
+  }
+  .bio p { color: var(--texte-doux); max-width: 60ch; margin: 0 0 1.5rem; }
+  .bio .bouton { margin-top: 0.5rem; }
+  .colonnes section + section { margin-top: 3rem; }
+  .liste {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--bordure);
+  }
+  .liste li {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--bordure);
+  }
+  .periode { font-size: var(--t-legende); color: var(--accent); }
+  .intitule { font-size: 0.9375rem; font-weight: 500; }
+</style>

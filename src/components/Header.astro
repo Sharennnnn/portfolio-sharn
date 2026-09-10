@@ -1,0 +1,67 @@
+---
+import { traduire, route } from '../i18n/utils.js';
+const { langue, equivalent } = Astro.props;
+const t = traduire(langue);
+const autre = langue === 'fr' ? 'en' : 'fr';
+const lienAutre = equivalent ?? route(autre, 'accueil');
+---
+
+<header class="entete reveal reveal--header">
+  <div class="enveloppe entete-interne">
+    <a class="marque" href={route(langue, 'accueil')}>Shar&rsquo;N</a>
+    <nav class="nav" aria-label={t('a11y.nav')}>
+      <a href={route(langue, 'projets')}>{t('nav.projets')}</a>
+      <a href={route(langue, 'apropos')}>{t('nav.apropos')}</a>
+      <a href={route(langue, 'contact')}>{t('nav.contact')}</a>
+      <a class="langue" href={lienAutre} hreflang={autre} aria-label={t('a11y.langue')}>
+        {autre.toUpperCase()}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .entete {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--fond) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--bordure);
+  }
+  .entete-interne {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .marque {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2.4vw, 2rem);
+    font-size: var(--t-legende);
+  }
+  .nav a {
+    color: var(--texte-doux);
+    transition: color var(--duree) var(--courbe);
+  }
+  .nav a:hover {
+    color: var(--texte);
+  }
+  .langue {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--bordure);
+    border-radius: 2px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .langue:hover {
+    border-color: var(--accent);
+    color: var(--accent) !important;
+  }
+</style>

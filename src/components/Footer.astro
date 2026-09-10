@@ -1,0 +1,42 @@
+---
+import { traduire, route } from '../i18n/utils.js';
+import { lireReglages } from '../i18n/reglages.js';
+
+const { langue } = Astro.props;
+const t = traduire(langue);
+const r = await lireReglages();
+const annee = new Date().getFullYear();
+const reseaux = [
+  r.contact.instagram && { nom: 'Instagram', url: r.contact.instagram },
+  r.contact.linkedin && { nom: 'LinkedIn', url: r.contact.linkedin },
+].filter(Boolean);
+---
+
+<footer class="pied">
+  <div class="enveloppe pied-interne reveal reveal--bloc">
+    <div class="gauche">
+      <p class="marque">Shar&rsquo;N</p>
+      <p class="legende">{t('footer.mentions')}</p>
+    </div>
+    <nav class="liens" aria-label="Liens de pied de page">
+      <a href={route(langue, 'projets')}>{t('nav.projets')}</a>
+      <a href={route(langue, 'apropos')}>{t('nav.apropos')}</a>
+      <a href={route(langue, 'contact')}>{t('nav.contact')}</a>
+      {reseaux.map((r2) => <a href={r2.url} rel="me noopener" target="_blank">{r2.nom}</a>)}
+    </nav>
+  </div>
+  <div class="enveloppe bas">
+    <p class="legende">&copy; {annee} Shar&rsquo;N</p>
+  </div>
+</footer>
+
+<style>
+  .pied { margin-top: var(--section); background: var(--surface); border-top: 1px solid var(--bordure); padding-top: 3rem; }
+  .pied-interne { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; align-items: start; }
+  .marque { font-size: 0.9375rem; font-weight: 600; margin: 0 0 0.5rem; }
+  .gauche .legende { max-width: 24rem; }
+  .liens { display: flex; flex-direction: column; gap: 0.5rem; font-size: var(--t-legende); }
+  .liens a { color: var(--texte-doux); transition: color var(--duree) var(--courbe); }
+  .liens a:hover { color: var(--accent); }
+  .bas { margin-top: 3rem; padding-bottom: 2rem; }
+</style>

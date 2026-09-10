@@ -1,0 +1,126 @@
+export const langueDefaut = 'fr';
+
+export const chemins = {
+  fr: { accueil: '/', projets: '/projets', apropos: '/a-propos', contact: '/contact' },
+  en: { accueil: '/en', projets: '/en/work', apropos: '/en/about', contact: '/en/contact' },
+};
+
+export const ui = {
+  fr: {
+    'nav.projets': 'Projets',
+    'nav.apropos': 'À propos',
+    'nav.contact': 'Contact',
+
+    'accueil.eyebrow': 'Infographiste · Namur, Belgique',
+    'accueil.titre1': 'Affiches, identités',
+    'accueil.titre2': 'et images',
+    'accueil.titre3': 'qui tiennent.',
+    'accueil.chapeau': "Je conçois des visuels imprimés et animés pour des marques, des labels et des projets culturels. Chaque pièce part d'une contrainte réelle et se juge à l'écran comme sur papier.",
+    'accueil.selection': 'Sélection — 2024 / 2026',
+    'accueil.tout': 'Tous les projets',
+    'accueil.lignes': 'Deux façons de travailler',
+    'accueil.ligneA.titre': 'Print éditorial',
+    'accueil.ligneA.texte': "Typographie dominante, palettes réduites, grain assumé. Je construis l'image autour du texte plutôt que l'inverse : le titre porte la composition, la couleur sert la lisibilité.",
+    'accueil.ligneB.titre': 'Photoréalisme',
+    'accueil.ligneB.texte': "Montage, retouche et mise en situation produit. L'objectif est qu'on doute que l'image ait été fabriquée — lumière cohérente, matières crédibles, aucun raccourci visible.",
+    'accueil.cta.titre': 'Un projet en tête ?',
+    'accueil.cta.texte': 'Je prends des commandes en identité visuelle, affiche et motion.',
+    'accueil.cta.bouton': 'Me contacter',
+
+    'projets.titre': 'Projets',
+    'projets.chapeau': 'Commandes, exercices et travaux personnels. Chaque vignette indique sa discipline et sa provenance.',
+    'projets.filtre.tous': 'Tout',
+    'projets.filtre.print': 'Print',
+    'projets.filtre.identite': 'Identité',
+    'projets.filtre.animation': 'Animation',
+    'projets.vide': 'Aucun projet dans cette catégorie pour le moment.',
+
+    'projet.contrainte': 'Le problème',
+    'projet.resolution': 'Ce que j’ai fait',
+    'projet.infos': 'Fiche',
+    'projet.client': 'Client',
+    'projet.annee': 'Année',
+    'projet.outils': 'Outils',
+    'projet.livrables': 'Livrables',
+    'projet.retour': 'Tous les projets',
+
+    'origine.client': 'Client',
+    'origine.fanart': 'Fan art',
+    'origine.exercice': 'Exercice',
+    'origine.perso': 'Personnel',
+
+    'apropos.titre': 'À propos',
+    'apropos.parcours': 'Parcours',
+    'apropos.competences': 'Compétences',
+    'apropos.cv': 'Télécharger le CV (PDF)',
+
+    'contact.titre': 'Contact',
+    'contact.chapeau': "Disponible pour des commandes en freelance. Écris-moi avec le contexte, le format attendu et ton échéance — je réponds sous deux jours ouvrés.",
+    'contact.email': 'Email',
+    'contact.reseaux': 'Réseaux',
+
+    'footer.mentions': 'Fan art et exercices signalés comme tels. Marques citées à titre de référence.',
+    'a11y.saut': 'Aller au contenu',
+    'a11y.langue': 'Changer de langue',
+    'a11y.nav': 'Navigation principale',
+  },
+
+  en: {
+    'nav.projets': 'Work',
+    'nav.apropos': 'About',
+    'nav.contact': 'Contact',
+
+    'accueil.eyebrow': 'Graphic designer · Namur, Belgium',
+    'accueil.titre1': 'Posters, identities',
+    'accueil.titre2': 'and images',
+    'accueil.titre3': 'that hold up.',
+    'accueil.chapeau': 'I design printed and animated visuals for brands, labels and cultural projects. Every piece starts from a real constraint and has to work on screen as well as on paper.',
+    'accueil.selection': 'Selected work — 2024 / 2026',
+    'accueil.tout': 'All projects',
+    'accueil.lignes': 'Two ways of working',
+    'accueil.ligneA.titre': 'Editorial print',
+    'accueil.ligneA.texte': 'Type-led compositions, reduced palettes, visible grain. I build the image around the text rather than the other way round: the headline carries the layout, colour serves legibility.',
+    'accueil.ligneB.titre': 'Photorealism',
+    'accueil.ligneB.texte': 'Compositing, retouching and product staging. The goal is that you question whether the image was built at all — consistent light, believable materials, no visible shortcuts.',
+    'accueil.cta.titre': 'Got a project?',
+    'accueil.cta.texte': 'Available for visual identity, poster and motion commissions.',
+    'accueil.cta.bouton': 'Get in touch',
+
+    'projets.titre': 'Work',
+    'projets.chapeau': 'Commissions, exercises and personal work. Each thumbnail states its discipline and its origin.',
+    'projets.filtre.tous': 'All',
+    'projets.filtre.print': 'Print',
+    'projets.filtre.identite': 'Identity',
+    'projets.filtre.animation': 'Motion',
+    'projets.vide': 'Nothing in this category yet.',
+
+    'projet.contrainte': 'The problem',
+    'projet.resolution': 'What I did',
+    'projet.infos': 'Details',
+    'projet.client': 'Client',
+    'projet.annee': 'Year',
+    'projet.outils': 'Tools',
+    'projet.livrables': 'Deliverables',
+    'projet.retour': 'All projects',
+
+    'origine.client': 'Client',
+    'origine.fanart': 'Fan art',
+    'origine.exercice': 'Exercise',
+    'origine.perso': 'Personal',
+
+    'apropos.titre': 'About',
+    'apropos.parcours': 'Background',
+    'apropos.competences': 'Skills',
+    'apropos.cv': 'Download CV (PDF)',
+
+    'contact.titre': 'Contact',
+    'contact.chapeau': 'Available for freelance commissions. Send the context, the format you need and your deadline — I reply within two working days.',
+    'contact.email': 'Email',
+    'contact.reseaux': 'Elsewhere',
+
+    'footer.mentions': 'Fan art and exercises are labelled as such. Brands referenced for context only.',
+    'a11y.saut': 'Skip to content',
+    'a11y.langue': 'Switch language',
+    'a11y.nav': 'Main navigation',
+  },
+};
