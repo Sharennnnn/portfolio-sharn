@@ -15,9 +15,9 @@ galerie:
   - /images/projets/Mockup2_Restaurant_SIJUIN.jpg
   - /images/projets/01_LandingPage.png
   - /images/projets/08_Concept.jpg
+  - /images/projets/03_Menu.png
   - /images/projets/09_Contact.jpg
   - /images/projets/09_Contact_Confirme.jpg
-  - /images/projets/03_Menu.png
 video: ''
 contrainte: Faire la direction artistique d'un restaurant sur un thème non imposé.
 contrainte_en: Take on the art direction of a restaurant with a free theme.
