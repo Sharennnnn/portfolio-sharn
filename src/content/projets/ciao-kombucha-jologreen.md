@@ -3,19 +3,20 @@ titre: Ciao Kombucha x Jologreen
 titre_en: Ciao Kombucha x Jologreen
 annee: 2025
 origine: exercice
-disciplines: [identite]
-couverture: /images/projets/ciao-kombucha.jpg
-contrainte: >-
-  À COMPLÉTER — contexte de la collaboration, format attendu.
-contrainte_en: >-
-  TO COMPLETE — collaboration context, expected format.
-resolution: >-
-  À COMPLÉTER — comment tu as traité la mise en situation produit.
-resolution_en: >-
-  TO COMPLETE — how you handled the product staging.
+disciplines:
+  - identite
+client: ''
+couverture: /images/projets/RENCH_CV_SA01_Collab.jpg
+survol: ''
+galerie: []
+contrainte: Inventé une collaboration entre un artiste et une marque de boisson
+contrainte_en: Come up with a collaboration between an artist and a beverage brand
+resolution: J'ai fais une collaboration entre la boisson française Cia Kombucha et le rappeur français Jolagreen23.
+resolution_en: I did a collaboration between the French drink Cia Kombucha and the French rapper Jolagreen23.
 livrables: Visuel produit
 livrables_en: Product visual
-outils: [Photoshop]
+outils:
+  - Photoshop
 phare: true
 ordre: 30
 ---
