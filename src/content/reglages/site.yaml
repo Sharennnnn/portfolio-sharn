@@ -16,7 +16,7 @@ hero:
   cta_bouton: Me contacter
   cta_bouton_en: Get in touch
 banniere:
-  visible: false
+  visible: true
   image: /images/projets/channels4_banner.jpg
   lien: ''
 sections:
