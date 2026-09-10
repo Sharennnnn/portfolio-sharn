@@ -3,19 +3,20 @@ titre: L'Étrange Histoire de Mr. Anderson — Laylow
 titre_en: The Strange Story of Mr. Anderson — Laylow
 annee: 2026
 origine: fanart
-disciplines: [print]
-couverture: /images/projets/laylow-ambre.jpg
-contrainte: >-
-  À COMPLÉTER — pourquoi cet album, quelle contrainte tu t'es fixée.
-contrainte_en: >-
-  TO COMPLETE — why this album, what constraint you set yourself.
-resolution: >-
-  À COMPLÉTER — traitement chromatique et typographique retenu.
-resolution_en: >-
-  TO COMPLETE — colour and typographic treatment.
+disciplines:
+  - print
+client: ''
+couverture: /images/projets/Laylow_Ambre gothique.jpg
+survol: ''
+galerie: []
+contrainte: Faire une affiche pour l'album "L'étrange Histoire de Mr. Anderson" du rappeur français Laylow.
+contrainte_en: Make a poster for the album 'L'étrange Histoire de Mr. Anderson' by the French rapper Laylow.
+resolution: J'ai utilisé des visuelle de l'album et des image du cours métrage lié.
+resolution_en: I used visuals from the album and images from the related short film.
 livrables: Affiche, variantes chromatiques
 livrables_en: Poster, colour variants
-outils: [Photoshop]
+outils:
+  - Photoshop
 phare: true
 ordre: 40
 ---
