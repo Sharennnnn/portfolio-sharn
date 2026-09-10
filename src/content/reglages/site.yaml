@@ -1,32 +1,24 @@
 hero:
-  eyebrow: "Infographiste · Namur, Belgique"
-  eyebrow_en: "Graphic designer · Namur, Belgium"
-  titre1: "Affiches, identités"
-  titre1_en: "Posters, identities"
-  titre2: "et images"
-  titre2_en: "and images"
-  titre3: "qui tiennent."
-  titre3_en: "that hold up."
-  chapeau: >-
-    Je conçois des visuels imprimés et animés pour des marques, des labels et
-    des projets culturels. Chaque pièce part d'une contrainte réelle et se
-    juge à l'écran comme sur papier.
-  chapeau_en: >-
-    I design printed and animated visuals for brands, labels and cultural
-    projects. Every piece starts from a real constraint and has to work on
-    screen as well as on paper.
-  cta_titre: "Un projet en tête ?"
-  cta_titre_en: "Got a project?"
-  cta_texte: "Je prends des commandes en identité visuelle, affiche et motion."
-  cta_texte_en: "Available for visual identity, poster and motion commissions."
-  cta_bouton: "Me contacter"
-  cta_bouton_en: "Get in touch"
-
+  eyebrow: Infographiste · Namur, Belgique
+  eyebrow_en: Graphic designer · Namur, Belgium
+  titre1: Affiches, identités
+  titre1_en: Posters, identities
+  titre2: et images
+  titre2_en: and images
+  titre3: qui tiennent.
+  titre3_en: that hold up.
+  chapeau: Je conçois des visuels imprimés et animés pour des marques, des labels et des projets culturels. Chaque pièce part d'une contrainte réelle et se juge à l'écran comme sur papier.
+  chapeau_en: I design printed and animated visuals for brands, labels and cultural projects. Every piece starts from a real constraint and has to work on screen as well as on paper.
+  cta_titre: Un projet en tête ?
+  cta_titre_en: Got a project?
+  cta_texte: Je prends des commandes en identité visuelle, affiche et motion.
+  cta_texte_en: Available for visual identity, poster and motion commissions.
+  cta_bouton: Me contacter
+  cta_bouton_en: Get in touch
 banniere:
   visible: false
-  image: ""
-  lien: ""
-
+  image: /images/projets/channels4_banner.jpg
+  lien: ''
 sections:
   - cle: selection
     visible: true
@@ -34,39 +26,39 @@ sections:
     visible: true
   - cle: cta
     visible: true
-
 apropos:
   bio:
-    - "Je m'appelle Charlie et je travaille sous le nom de Shar'N. Je suis étudiant en techniques infographiques à l'IATA de Namur, et je conçois des affiches, des identités visuelles et des animations pour des marques, des labels et des projets culturels."
+    - Je m'appelle Charlie et je travaille sous le nom de Shar'N. Je suis étudiant en techniques infographiques à l'IATA de Namur, et je conçois des affiches, des identités visuelles et des animations pour des marques, des labels et des projets culturels.
     - "Mon travail se partage entre deux registres qui se nourrissent l'un l'autre : une pratique éditoriale où la typographie porte l'image, et une pratique de montage photoréaliste où la difficulté est de rendre la fabrication invisible."
-    - "Je vise à terme des postes de conception d'interface dans le jeu vidéo. En attendant, chaque commande est une occasion de tester ce qui tient hors de l'écran de travail."
+    - Je vise à terme des postes de conception d'interface dans le jeu vidéo. En attendant, chaque commande est une occasion de tester ce qui tient hors de l'écran de travail.
   bio_en:
-    - "My name is Charlie and I work under the name Shar'N. I'm studying graphic techniques at IATA in Namur, and I design posters, visual identities and animations for brands, labels and cultural projects."
-    - "My work splits across two registers that feed each other: an editorial practice where type carries the image, and a compositing practice where the difficulty is making the construction invisible."
-    - "Longer term I'm aiming at interface design roles in games. Until then, every commission is a chance to test what holds up outside the working canvas."
+    - My name is Charlie and I work under the name Shar'N. I'm studying graphic techniques at IATA in Namur, and I design posters, visual identities and animations for brands, labels and cultural projects.
+    - 'My work splits across two registers that feed each other: an editorial practice where type carries the image, and a compositing practice where the difficulty is making the construction invisible.'
+    - Longer term I'm aiming at interface design roles in games. Until then, every commission is a chance to test what holds up outside the working canvas.
   parcours:
-    - periode: "2024 — 2027"
-      titre: "Bachelier en techniques infographiques"
-      titre_en: "BA in Graphic Techniques"
-      lieu: "IATA, Namur"
-    - periode: "2025 —"
-      titre: "Commandes freelance"
-      titre_en: "Freelance commissions"
-      lieu: "Identité, affiche, motion"
-      lieu_en: "Identity, poster, motion"
+    - periode: 2024 — 2027
+      titre: Bachelier en techniques infographiques
+      titre_en: BA in Graphic Techniques
+      lieu: IATA, Namur
+      lieu_en: ''
+    - periode: 2025 —
+      titre: Commandes freelance
+      titre_en: Freelance commissions
+      lieu: Identité, affiche, motion
+      lieu_en: Identity, poster, motion
   competences:
-    - groupe: "Print & édition"
-      groupe_en: "Print & editorial"
-      outils: "Photoshop, Illustrator, InDesign"
-    - groupe: "Motion"
-      outils: "After Effects"
-    - groupe: "Interface"
-      outils: "Figma"
-
+    - groupe: Print & édition
+      groupe_en: Print & editorial
+      outils: Photoshop, Illustrator, InDesign
+    - groupe: Motion
+      groupe_en: ''
+      outils: After Effects
+    - groupe: Interface
+      groupe_en: ''
+      outils: Figma
 contact:
-  email: "contact@sharn.design"
-  instagram: "https://www.instagram.com/"
-  linkedin: "https://www.linkedin.com/"
-
+  email: contact@sharn.design
+  instagram: https://www.instagram.com/
+  linkedin: https://www.linkedin.com/
 theme:
-  accent: "#e09a55"
+  accent: '#e09a55'
