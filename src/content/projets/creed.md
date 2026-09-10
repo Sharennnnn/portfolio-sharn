@@ -9,6 +9,7 @@ client: ''
 couverture: /images/projets/Creed.jpg
 survol: ''
 galerie: []
+video: ''
 contrainte: Faire une affiche pour le film Creed
 contrainte_en: Make a poster for the movie Creed
 resolution: j'ai fait une affiche en A3 reprenant l'un des combats du film.
@@ -18,5 +19,5 @@ livrables_en: Poster
 outils:
   - Photoshop
 phare: true
-ordre: 10
+ordre: 1
 ---
