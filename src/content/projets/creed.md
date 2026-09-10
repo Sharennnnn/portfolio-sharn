@@ -3,22 +3,20 @@ titre: Creed
 titre_en: Creed
 annee: 2026
 origine: fanart
-disciplines: [print]
-couverture: /images/projets/creed.jpg
-contrainte: >-
-  À COMPLÉTER — quelle était la contrainte de départ de cette affiche ?
-  Format, support, exercice imposé ?
-contrainte_en: >-
-  TO COMPLETE — what was the starting constraint for this poster?
-resolution: >-
-  À COMPLÉTER — quelle décision de composition as-tu prise, et pourquoi ?
-resolution_en: >-
-  TO COMPLETE — what composition decision did you make, and why?
+disciplines:
+  - print
+client: ''
+couverture: /images/projets/Creed.jpg
+survol: ''
+galerie: []
+contrainte: Faire une affiche pour le film Creed
+contrainte_en: Make a poster for the movie Creed
+resolution: j'ai fait une affiche en A3 reprenant l'un des combats du film.
+resolution_en: I made an A3 poster featuring one of the fights from the movie.
 livrables: Affiche
 livrables_en: Poster
-outils: [Photoshop]
+outils:
+  - Photoshop
 phare: true
 ordre: 10
 ---
-
-Texte long facultatif — n'apparaît que sur les pages de projets phares.
