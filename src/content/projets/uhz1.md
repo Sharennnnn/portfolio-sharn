@@ -8,7 +8,8 @@ disciplines:
 client: ''
 couverture: /images/projets/Mockup_3_LOGO_SI2026.jpg
 survol: ''
-galerie: []
+galerie:
+  - /images/projets/Mockup_1_LOGO_SI.jpg
 contrainte: Faire la direction artistique d'un restaurant sur un thème non imposé.
 contrainte_en: Take on the art direction of a restaurant with a free theme.
 resolution: |-
