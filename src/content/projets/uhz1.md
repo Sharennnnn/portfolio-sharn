@@ -10,6 +10,8 @@ couverture: /images/projets/RENCH_SI_Juin2026_Charte_graphique_restaurant.png
 survol: /images/projets/Mockup_3_LOGO_SI2026.jpg
 galerie:
   - /images/projets/Mockup_1_LOGO_SI.jpg
+  - /images/projets/Mockup_3_LOGO_SI2026.jpg
+  - /images/projets/Mockup2_Restaurant_SIJUIN.jpg
 contrainte: Faire la direction artistique d'un restaurant sur un thème non imposé.
 contrainte_en: Take on the art direction of a restaurant with a free theme.
 resolution: |-
