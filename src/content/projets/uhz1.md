@@ -7,7 +7,7 @@ disciplines:
   - identite
 client: ''
 couverture: /images/projets/Mockup_3_LOGO_SI2026.jpg
-survol: /images/projets/RENCH_SI_Juin2026_Charte_graphique_restaurant7.png
+survol: /images/projets/RENCH_SI_Juin2026_Charte_graphique_restaurant.png
 galerie: []
 contrainte: À COMPLÉTER — énoncé de l'exercice, contraintes imposées.
 contrainte_en: TO COMPLETE — brief and imposed constraints.
