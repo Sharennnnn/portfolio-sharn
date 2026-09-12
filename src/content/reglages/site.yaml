@@ -28,11 +28,13 @@ sections:
     visible: true
 apropos:
   bio:
-    - Je m'appelle Charlie et je travaille sous le nom de Shar'N. Je suis étudiant en techniques infographiques à l'IATA de Namur, et je conçois des affiches, des identités visuelles et des animations pour des marques, des labels et des projets culturels.
+    - |-
+      Je m'appelle Charlie et je travaille sous le nom de Shar'N. Je suis étudiant en techniques graphique orientation infographie à la Haute École Albert Jacquard
+       de Namur, et je conçois des affiches, des identités visuelles et des animations pour des marques, des labels et des projets culturels.
     - "Mon travail se partage entre deux registres qui se nourrissent l'un l'autre : une pratique éditoriale où la typographie porte l'image, et une pratique de montage photoréaliste où la difficulté est de rendre la fabrication invisible."
     - Je vise à terme des postes de conception d'interface dans le jeu vidéo. En attendant, chaque commande est une occasion de tester ce qui tient hors de l'écran de travail.
   bio_en:
-    - My name is Charlie and I work under the name Shar'N. I'm studying graphic techniques at IATA in Namur, and I design posters, visual identities and animations for brands, labels and cultural projects.
+    - My name is Charlie, and I work under the name Shar'N. I am a student specializing in digital graphics at the Haute École Albert Jacquard in Namur, and I design posters, visual identities, and animations for brands, record labels, and cultural projects.
     - 'My work splits across two registers that feed each other: an editorial practice where type carries the image, and a compositing practice where the difficulty is making the construction invisible.'
     - Longer term I'm aiming at interface design roles in games. Until then, every commission is a chance to test what holds up outside the working canvas.
   parcours:
