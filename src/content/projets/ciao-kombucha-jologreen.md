@@ -6,7 +6,7 @@ origine: exercice
 disciplines:
   - identite
 client: ''
-couverture: /images/projets/RENCH_CV_SA01_Collab.jpg
+couverture: /images/projets/ciao-kombucha-x-jologreen-couverture.webp
 survol: ''
 galerie: []
 video: ''

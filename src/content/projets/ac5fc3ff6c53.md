@@ -6,7 +6,7 @@ origine: fanart
 disciplines:
   - print
 client: ''
-couverture: /images/projets/Sinners 1.png
+couverture: /images/projets/sinners-couverture.webp
 survol: ''
 galerie: []
 video: ''
@@ -19,5 +19,5 @@ livrables_en: ''
 outils:
   - Photoshop
 phare: false
-ordre: 13
+ordre: 14
 ---

@@ -7,6 +7,20 @@ backend:
 media_folder: public/images/projets
 public_folder: /images/projets
 
+# Images envoyées depuis l'admin : nom nettoyé, conversion WebP, 1600 px de large max.
+# Le poids max (2 Mo) s'applique après conversion (vérifié dans le code de Sveltia 0.246).
+media_libraries:
+  default:
+    config:
+      slugify_filename: true
+      max_file_size: 2097152
+      transformations:
+        raster_image:
+          format: webp
+          quality: 80
+          width: 1600
+          height: 2400
+
 collections:
   - name: projets
     label: Projets

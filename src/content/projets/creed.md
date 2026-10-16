@@ -6,7 +6,7 @@ origine: fanart
 disciplines:
   - print
 client: ''
-couverture: /images/projets/Creed.jpg
+couverture: /images/projets/creed-couverture.webp
 survol: ''
 galerie: []
 video: ''

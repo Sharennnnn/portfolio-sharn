@@ -17,7 +17,7 @@ hero:
   cta_bouton_en: Get in touch
 banniere:
   visible: true
-  image: /images/projets/channels4_banner.jpg
+  image: /images/projets/banniere.webp
   lien: ''
 sections:
   - cle: selection

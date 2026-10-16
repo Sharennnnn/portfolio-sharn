@@ -7,17 +7,17 @@ disciplines:
   - identite
   - print
 client: ''
-couverture: /images/projets/RENCH_SI_Juin2026_Charte_graphique_restaurant.png
-survol: /images/projets/Mockup_3_LOGO_SI2026.jpg
+couverture: /images/projets/uhz1-couverture.webp
+survol: /images/projets/uhz1-survol.webp
 galerie:
-  - /images/projets/Mockup_1_LOGO_SI.jpg
-  - /images/projets/Mockup_3_LOGO_SI2026.jpg
-  - /images/projets/Mockup2_Restaurant_SIJUIN.jpg
-  - /images/projets/01_LandingPage.png
-  - /images/projets/08_Concept.jpg
-  - /images/projets/03_Menu.png
-  - /images/projets/09_Contact.jpg
-  - /images/projets/09_Contact_Confirme.jpg
+  - /images/projets/uhz1-galerie-1.webp
+  - /images/projets/uhz1-survol.webp
+  - /images/projets/uhz1-galerie-3.webp
+  - /images/projets/uhz1-galerie-4.webp
+  - /images/projets/uhz1-galerie-5.webp
+  - /images/projets/uhz1-galerie-6.webp
+  - /images/projets/uhz1-galerie-7.webp
+  - /images/projets/uhz1-galerie-8.webp
 video: ''
 contrainte: Faire la direction artistique d'un restaurant sur un thème non imposé.
 contrainte_en: Take on the art direction of a restaurant with a free theme.

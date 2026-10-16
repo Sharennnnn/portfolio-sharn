@@ -6,7 +6,7 @@ origine: fanart
 disciplines:
   - print
 client: ''
-couverture: /images/projets/Laylow_Ambre gothique.jpg
+couverture: /images/projets/l-etrange-histoire-de-mr-anderson-laylow-couverture.webp
 survol: ''
 galerie: []
 video: ''

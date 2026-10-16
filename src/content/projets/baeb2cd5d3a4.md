@@ -6,7 +6,7 @@ origine: exercice
 disciplines:
   - print
 client: ''
-couverture: /images/projets/RENCH_SA04_PORTRAIT CUBISTE.jpg
+couverture: /images/projets/thomas-shelby-couverture.webp
 survol: ''
 galerie: []
 video: ''
@@ -18,5 +18,5 @@ livrables: ''
 livrables_en: ''
 outils: []
 phare: false
-ordre: 20
+ordre: 21
 ---

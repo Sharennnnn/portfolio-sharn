@@ -1,4 +1,5 @@
 ---
+import { existsSync } from 'node:fs';
 import Base from '../../layouts/Base.astro';
 import { traduire } from '../../i18n/utils.js';
 import { lireReglages, listeR, champR } from '../../i18n/reglages.js';
@@ -8,6 +9,8 @@ const t = traduire(langue);
 const r = await lireReglages();
 const a = r.apropos;
 const bio = listeR(a, 'bio', langue);
+// Le bouton CV n'apparaît que si public/cv-sharn.pdf existe.
+const cvDispo = existsSync('public/cv-sharn.pdf');
 const style = `--accent:${r.theme.accent}`;
 ---
 
@@ -20,7 +23,7 @@ const style = `--accent:${r.theme.accent}`;
     <section class="enveloppe contenu">
       <div class="bio reveal reveal--bloc">
         {bio.map((p) => <p>{p}</p>)}
-        <a class="bouton" href="/cv-sharn.pdf" download>{t('apropos.cv')}</a>
+        {cvDispo && <a class="bouton" href="/cv-sharn.pdf" download>{t('apropos.cv')}</a>}
       </div>
 
       <div class="colonnes">
