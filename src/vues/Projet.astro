@@ -11,11 +11,15 @@ const titre = champ(d, 'titre', langue);
 const contrainte = champ(d, 'contrainte', langue);
 const resolution = champ(d, 'resolution', langue);
 const livrables = champ(d, 'livrables', langue);
+// Un champ réduit à « . » ou vide n'est pas affiché.
+const rempli = (texte) => Boolean(texte && /[\p{L}\p{N}]/u.test(texte));
+const aDuTexte = rempli(contrainte) || rempli(resolution) || rempli(projet.body);
+const description = rempli(contrainte) ? contrainte : `${titre} — ${t(`origine.${d.origine}`)}, ${d.annee}`;
 const { Content } = await render(projet);
 const videoEmbed = urlIntegrationYoutube(d.video);
 ---
 
-<Base titre={titre} description={contrainte} equivalent={urlProjet(autreLangue(langue), projet.id)}>
+<Base titre={titre} description={description} equivalent={urlProjet(autreLangue(langue), projet.id)}>
   <article>
     <header class="enveloppe tete">
       <p class="eyebrow reveal reveal--eyebrow">{t(`origine.${d.origine}`)} &middot; {d.annee}</p>
@@ -26,20 +30,24 @@ const videoEmbed = urlIntegrationYoutube(d.video);
       <img class="visuel" src={d.couverture} alt={titre} width="1600" height="1200" style={`view-transition-name: affiche-${projet.id}`} />
     </div>
 
-    <div class="enveloppe corps">
-      <div class="texte">
-        <section class="reveal reveal--bloc">
-          <h2>{t('projet.contrainte')}</h2>
-          <p>{contrainte}</p>
-        </section>
-        <section class="reveal reveal--bloc">
-          <h2>{t('projet.resolution')}</h2>
-          <p>{resolution}</p>
-        </section>
-        <div class="markdown reveal reveal--bloc"><Content /></div>
-      </div>
+    <div class={aDuTexte ? 'enveloppe corps' : 'enveloppe corps seule'}>
+      {aDuTexte && <div class="texte">
+        {rempli(contrainte) && (
+          <section class="reveal reveal--bloc">
+            <h2>{t('projet.contrainte')}</h2>
+            <p>{contrainte}</p>
+          </section>
+        )}
+        {rempli(resolution) && (
+          <section class="reveal reveal--bloc">
+            <h2>{t('projet.resolution')}</h2>
+            <p>{resolution}</p>
+          </section>
+        )}
+        {rempli(projet.body) && <div class="markdown reveal reveal--bloc"><Content /></div>}
+      </div>}
 
-      <aside class="fiche reveal reveal--bloc">
+      <div class="fiche reveal reveal--bloc">
         <p class="eyebrow">{t('projet.infos')}</p>
         <dl>
           {d.client && (<><dt>{t('projet.client')}</dt><dd>{d.client}</dd></>)}
@@ -47,7 +55,7 @@ const videoEmbed = urlIntegrationYoutube(d.video);
           {livrables && (<><dt>{t('projet.livrables')}</dt><dd>{livrables}</dd></>)}
           {d.outils.length > 0 && (<><dt>{t('projet.outils')}</dt><dd>{d.outils.join(', ')}</dd></>)}
         </dl>
-      </aside>
+      </div>
     </div>
 
     {videoEmbed && (
@@ -55,7 +63,7 @@ const videoEmbed = urlIntegrationYoutube(d.video);
         <div class="video-cadre">
           <iframe
             src={videoEmbed}
-            title={titre}
+            title={`${t('projet.video')} : ${titre}`}
             loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -66,8 +74,8 @@ const videoEmbed = urlIntegrationYoutube(d.video);
 
     {d.galerie.length > 0 && (
       <div class="enveloppe galerie">
-        {d.galerie.map((src) => (
-          <img class="reveal reveal--carte" src={src} alt="" loading="lazy" decoding="async" width="1600" height="1200" />
+        {d.galerie.map((src, i) => (
+          <img class="reveal reveal--carte" src={src} alt={`${titre}, ${t('projet.visuel')} ${i + 1} / ${d.galerie.length}`} loading="lazy" decoding="async" width="1600" height="1200" />
         ))}
       </div>
     )}
@@ -93,6 +101,7 @@ const videoEmbed = urlIntegrationYoutube(d.video);
     gap: clamp(2rem, 5vw, 5rem);
     padding-block: clamp(2.5rem, 5vw, 4rem);
   }
+  .corps.seule { grid-template-columns: minmax(0, 26rem); }
   @media (max-width: 45rem) {
     .corps { grid-template-columns: 1fr; }
   }

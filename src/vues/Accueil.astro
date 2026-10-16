@@ -8,7 +8,10 @@ import { lireReglages } from '../i18n/reglages.js';
 const { langue } = Astro.props;
 const t = traduire(langue);
 const r = await lireReglages();
-const projets = trier(await getCollection('projets')).slice(0, 4);
+// Sélection : les projets cochés « phare » (4 premiers selon l'ordre), sinon les 4 premiers tout court.
+const tous = trier(await getCollection('projets'));
+const phares = tous.filter((p) => p.data.phare);
+const projets = (phares.length ? phares : tous).slice(0, 4);
 
 const h = r.hero;
 ---
@@ -40,7 +43,7 @@ const h = r.hero;
       if (s.cle === 'selection') return (
         <section class="enveloppe bloc">
           <div class="entete-bloc reveal reveal--bloc">
-            <p class="eyebrow">{t('accueil.selection')}</p>
+            <h2 class="eyebrow">{t('accueil.selection')}</h2>
             <a class="lien-accent" href={route(langue, 'projets')}>{t('accueil.tout')} &rarr;</a>
           </div>
           <ul class="grille">

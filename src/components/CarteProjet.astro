@@ -1,25 +1,24 @@
 ---
 import { traduire, urlProjet, champ } from '../i18n/utils.js';
-const { projet, langue } = Astro.props;
+const { projet, langue, niveau = 'h3' } = Astro.props;
 const t = traduire(langue);
 const d = projet.data;
 const titre = champ(d, 'titre', langue);
-const Balise = d.phare ? 'a' : 'div';
-const attrs = d.phare ? { href: urlProjet(langue, projet.id) } : {};
+const Titre = niveau;
 const disciplines = d.disciplines.map((x) => t(`projets.filtre.${x}`)).join(' · ');
 ---
 
 <li class="carte reveal reveal--carte" data-disciplines={d.disciplines.join(' ')}>
-  <Balise class="zone" {...attrs}>
-    <div class="carte-visuel" style={d.phare ? `view-transition-name: affiche-${projet.id}` : undefined}>
+  <a class="zone" href={urlProjet(langue, projet.id)}>
+    <div class="carte-visuel" style={`view-transition-name: affiche-${projet.id}`}>
       <img src={d.couverture} alt={titre} loading="lazy" decoding="async" width="900" height="1200" />
       {d.survol && (
         <img class="survol" src={d.survol} alt="" loading="lazy" decoding="async" width="900" height="1200" />
       )}
     </div>
-    <h3 class="carte-titre">{titre}</h3>
+    <Titre class="carte-titre">{titre}</Titre>
     <p class="carte-meta">{disciplines} · {t(`origine.${d.origine}`)} · {d.annee}</p>
-  </Balise>
+  </a>
 </li>
 
 <style>

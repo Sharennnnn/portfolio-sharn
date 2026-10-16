@@ -22,7 +22,7 @@ const reseaux = [
       <a href={route(langue, 'projets')}>{t('nav.projets')}</a>
       <a href={route(langue, 'apropos')}>{t('nav.apropos')}</a>
       <a href={route(langue, 'contact')}>{t('nav.contact')}</a>
-      {reseaux.map((r2) => <a href={r2.url} rel="me noopener" target="_blank">{r2.nom}</a>)}
+      {reseaux.map((r2) => <a href={r2.url} rel="me noopener" target="_blank">{r2.nom}<span class="sr-only"> {t('a11y.nouvelOnglet')}</span></a>)}
     </nav>
   </div>
   <div class="enveloppe bas">

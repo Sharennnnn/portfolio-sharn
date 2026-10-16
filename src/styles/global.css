@@ -46,6 +46,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Le menu collant fait 60 px : un élément focalisé ne doit jamais passer dessous (WCAG 2.4.11). */
+  scroll-padding-top: 5rem;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -425,6 +427,29 @@ body::before {
 }
 
 /* ---------- Accessibilité ---------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Cibles tactiles de 44 px sur mobile (recommandation Apple, WCAG 2.5.5 AAA). */
+@media (max-width: 40rem) {
+  .nav a:not(.langue),
+  .liens a,
+  .lien-accent {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
 
 :focus-visible {
   outline: 2px solid var(--accent);

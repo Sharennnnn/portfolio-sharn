@@ -82,7 +82,7 @@ collections:
       - { name: livrables_en, label: 'Deliverables (EN)', widget: string, required: false }
       - { name: outils, label: Outils, widget: list, required: false }
 
-      - { name: phare, label: 'Projet phare (page dédiée)', widget: boolean, default: false }
+      - { name: phare, label: 'Mis en avant sur l''accueil', hint: 'Les 4 premiers projets cochés (selon l''ordre) apparaissent dans la sélection de l''accueil', widget: boolean, default: false }
       - { name: ordre, label: 'Ordre d''affichage', widget: number, value_type: int, default: 50, hint: 'Plus petit = plus haut dans la grille' }
       - { name: body, label: 'Texte long (facultatif)', widget: markdown, required: false }
 singletons:

@@ -14,6 +14,7 @@ const cles = ['tous', 'print', 'identite', 'animation'];
 </div>
 
 <p class="legende vide" hidden data-vide>{t('projets.vide')}</p>
+<p class="sr-only" role="status" data-compte data-modele={t('projets.compte')}></p>
 
 <script>
   const boutons = document.querySelectorAll('[data-filtre]');
@@ -34,6 +35,8 @@ const cles = ['tous', 'print', 'identite', 'animation'];
       });
 
       if (vide) vide.hidden = visibles > 0;
+      const compte = document.querySelector('[data-compte]');
+      if (compte) compte.textContent = visibles > 0 ? compte.dataset.modele.replace('{n}', String(visibles)) : vide.textContent;
     });
   });
 </script>

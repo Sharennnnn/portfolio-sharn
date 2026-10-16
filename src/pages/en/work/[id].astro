@@ -2,9 +2,8 @@
 import { getCollection } from 'astro:content';
 import Projet from '../../../vues/Projet.astro';
 
-// Seuls les projets « phares » ont une page dédiée.
 export async function getStaticPaths() {
-  const projets = await getCollection('projets', ({ data }) => data.phare);
+  const projets = await getCollection('projets');
   return projets.map((projet) => ({ params: { id: projet.id }, props: { projet } }));
 }
 ---

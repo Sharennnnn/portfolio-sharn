@@ -26,6 +26,7 @@ export const ui = {
     'projets.filtre.identite': 'Identité',
     'projets.filtre.animation': 'Animation',
     'projets.vide': 'Aucun projet dans cette catégorie pour le moment.',
+    'projets.compte': '{n} projet(s) affiché(s)',
 
     'projet.contrainte': 'Le problème',
     'projet.resolution': 'Ce que j’ai fait',
@@ -35,6 +36,8 @@ export const ui = {
     'projet.outils': 'Outils',
     'projet.livrables': 'Livrables',
     'projet.retour': 'Tous les projets',
+    'projet.visuel': 'visuel',
+    'projet.video': 'Vidéo',
 
     'origine.client': 'Client',
     'origine.fanart': 'Fan art',
@@ -57,6 +60,7 @@ export const ui = {
     'a11y.nav': 'Navigation principale',
     'a11y.filtres': 'Filtrer par discipline',
     'a11y.pied': 'Liens de pied de page',
+    'a11y.nouvelOnglet': '(nouvel onglet)',
   },
 
   en: {
@@ -79,6 +83,7 @@ export const ui = {
     'projets.filtre.identite': 'Identity',
     'projets.filtre.animation': 'Motion',
     'projets.vide': 'Nothing in this category yet.',
+    'projets.compte': '{n} project(s) shown',
 
     'projet.contrainte': 'The problem',
     'projet.resolution': 'What I did',
@@ -88,6 +93,8 @@ export const ui = {
     'projet.outils': 'Tools',
     'projet.livrables': 'Deliverables',
     'projet.retour': 'All projects',
+    'projet.visuel': 'image',
+    'projet.video': 'Video',
 
     'origine.client': 'Client',
     'origine.fanart': 'Fan art',
@@ -110,5 +117,6 @@ export const ui = {
     'a11y.nav': 'Main navigation',
     'a11y.filtres': 'Filter by discipline',
     'a11y.pied': 'Footer links',
+    'a11y.nouvelOnglet': '(opens in a new tab)',
   },
 };

@@ -29,7 +29,7 @@ const reseaux = [
           <p class="eyebrow">{t('contact.reseaux')}</p>
           <ul class="liens">
             {reseaux.map((r2) => (
-              <li><a class="lien-accent" href={r2.url} rel="me noopener" target="_blank">{r2.nom}</a></li>
+              <li><a class="lien-accent" href={r2.url} rel="me noopener" target="_blank">{r2.nom}<span class="sr-only"> {t('a11y.nouvelOnglet')}</span></a></li>
             ))}
           </ul>
         </div>
