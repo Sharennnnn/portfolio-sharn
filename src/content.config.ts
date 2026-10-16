@@ -75,7 +75,8 @@ const reglages = defineCollection({
       linkedin: z.string().optional(),
     }),
     theme: z.object({
-      accent: z.string().default('#e09a55'),
+      // Injectée dans un attribut style : on n'accepte qu'une couleur hexadécimale.
+      accent: z.string().regex(/^#[0-9a-fA-F]{3,8}$/).default('#e09a55'),
     }),
   }),
 });

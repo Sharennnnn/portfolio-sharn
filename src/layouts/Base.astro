@@ -3,18 +3,22 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { langueDepuisUrl, traduire } from '../i18n/utils.js';
+import { lireReglages } from '../i18n/reglages.js';
 
 const { titre, description, equivalent } = Astro.props;
 const langue = langueDepuisUrl(Astro.url);
 const t = traduire(langue);
 const canonique = new URL(Astro.url.pathname, Astro.site);
+const { theme } = await lireReglages();
 ---
 
 <!doctype html>
-<html lang={langue}>
+<html lang={langue} style={`--accent:${theme.accent}`}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Signale que le JS tourne : sans lui, les blocs .reveal restent visibles. */}
+    <script is:inline>document.documentElement.classList.add('js')</script>
     <title>{titre} — Shar'N</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonique} />

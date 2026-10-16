@@ -11,11 +11,6 @@ export const ui = {
     'nav.apropos': 'À propos',
     'nav.contact': 'Contact',
 
-    'accueil.eyebrow': 'Infographiste · Namur, Belgique',
-    'accueil.titre1': 'Affiches, identités',
-    'accueil.titre2': 'et images',
-    'accueil.titre3': 'qui tiennent.',
-    'accueil.chapeau': "Je conçois des visuels imprimés et animés pour des marques, des labels et des projets culturels. Chaque pièce part d'une contrainte réelle et se juge à l'écran comme sur papier.",
     'accueil.selection': 'Sélection — 2024 / 2026',
     'accueil.tout': 'Tous les projets',
     'accueil.lignes': 'Deux façons de travailler',
@@ -23,9 +18,6 @@ export const ui = {
     'accueil.ligneA.texte': "Typographie dominante, palettes réduites, grain assumé. Je construis l'image autour du texte plutôt que l'inverse : le titre porte la composition, la couleur sert la lisibilité.",
     'accueil.ligneB.titre': 'Photoréalisme',
     'accueil.ligneB.texte': "Montage, retouche et mise en situation produit. L'objectif est qu'on doute que l'image ait été fabriquée — lumière cohérente, matières crédibles, aucun raccourci visible.",
-    'accueil.cta.titre': 'Un projet en tête ?',
-    'accueil.cta.texte': 'Je prends des commandes en identité visuelle, affiche et motion.',
-    'accueil.cta.bouton': 'Me contacter',
 
     'projets.titre': 'Projets',
     'projets.chapeau': 'Commandes, exercices et travaux personnels. Chaque vignette indique sa discipline et sa provenance.',
@@ -63,6 +55,8 @@ export const ui = {
     'a11y.saut': 'Aller au contenu',
     'a11y.langue': 'Changer de langue',
     'a11y.nav': 'Navigation principale',
+    'a11y.filtres': 'Filtrer par discipline',
+    'a11y.pied': 'Liens de pied de page',
   },
 
   en: {
@@ -70,11 +64,6 @@ export const ui = {
     'nav.apropos': 'About',
     'nav.contact': 'Contact',
 
-    'accueil.eyebrow': 'Graphic designer · Namur, Belgium',
-    'accueil.titre1': 'Posters, identities',
-    'accueil.titre2': 'and images',
-    'accueil.titre3': 'that hold up.',
-    'accueil.chapeau': 'I design printed and animated visuals for brands, labels and cultural projects. Every piece starts from a real constraint and has to work on screen as well as on paper.',
     'accueil.selection': 'Selected work — 2024 / 2026',
     'accueil.tout': 'All projects',
     'accueil.lignes': 'Two ways of working',
@@ -82,9 +71,6 @@ export const ui = {
     'accueil.ligneA.texte': 'Type-led compositions, reduced palettes, visible grain. I build the image around the text rather than the other way round: the headline carries the layout, colour serves legibility.',
     'accueil.ligneB.titre': 'Photorealism',
     'accueil.ligneB.texte': 'Compositing, retouching and product staging. The goal is that you question whether the image was built at all — consistent light, believable materials, no visible shortcuts.',
-    'accueil.cta.titre': 'Got a project?',
-    'accueil.cta.texte': 'Available for visual identity, poster and motion commissions.',
-    'accueil.cta.bouton': 'Get in touch',
 
     'projets.titre': 'Work',
     'projets.chapeau': 'Commissions, exercises and personal work. Each thumbnail states its discipline and its origin.',
@@ -122,5 +108,7 @@ export const ui = {
     'a11y.saut': 'Skip to content',
     'a11y.langue': 'Switch language',
     'a11y.nav': 'Main navigation',
+    'a11y.filtres': 'Filter by discipline',
+    'a11y.pied': 'Footer links',
   },
 };

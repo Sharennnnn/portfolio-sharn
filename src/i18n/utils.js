@@ -17,9 +17,14 @@ export function urlProjet(langue, id) {
   return langue === 'en' ? `/en/work/${id}` : `/projets/${id}`;
 }
 
-export function champ(projet, base, langue) {
-  if (langue === 'en' && projet.data[`${base}_en`]) return projet.data[`${base}_en`];
-  return projet.data[base];
+// Renvoie objet[`${base}_en`] en anglais s'il est rempli, sinon objet[base] (français).
+export function champ(objet, base, langue) {
+  if (langue === 'en' && objet[`${base}_en`]) return objet[`${base}_en`];
+  return objet[base];
+}
+
+export function autreLangue(langue) {
+  return langue === 'fr' ? 'en' : 'fr';
 }
 
 export function trier(projets) {

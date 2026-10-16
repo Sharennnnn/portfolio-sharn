@@ -3,7 +3,7 @@ import { traduire, urlProjet, champ } from '../i18n/utils.js';
 const { projet, langue } = Astro.props;
 const t = traduire(langue);
 const d = projet.data;
-const titre = champ(projet, 'titre', langue);
+const titre = champ(d, 'titre', langue);
 const Balise = d.phare ? 'a' : 'div';
 const attrs = d.phare ? { href: urlProjet(langue, projet.id) } : {};
 const disciplines = d.disciplines.map((x) => t(`projets.filtre.${x}`)).join(' · ');

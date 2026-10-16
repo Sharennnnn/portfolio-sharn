@@ -26,6 +26,8 @@ collections:
     label: Projets
     label_singular: Projet
     folder: src/content/projets
+    # Sans ce réglage, Sveltia nomme les nouveaux projets avec un identifiant aléatoire.
+    identifier_field: titre
     create: true
     slug: '{{slug}}'
     summary: '{{annee}} — {{titre}}'

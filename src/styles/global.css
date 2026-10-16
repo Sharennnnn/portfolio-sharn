@@ -272,7 +272,7 @@ a.zone:focus-visible .carte-titre {
    la courbe ease-out de la maquette.
    ========================================================== */
 
-.reveal {
+.js .reveal {
   opacity: 0;
   transform: translateY(var(--dy, 28px)) scale(var(--s, 1));
   transition:
@@ -281,7 +281,7 @@ a.zone:focus-visible .carte-titre {
   transition-delay: var(--retard, 0ms);
 }
 
-.reveal.visible {
+.js .reveal.visible {
   opacity: 1;
   transform: none;
 }
@@ -344,7 +344,7 @@ a.zone:focus-visible .carte-titre {
     transition-duration: 0.01ms !important;
   }
 
-  .reveal {
+  .js .reveal {
     opacity: 1;
     transform: none;
   }

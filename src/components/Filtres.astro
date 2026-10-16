@@ -5,7 +5,7 @@ const t = traduire(langue);
 const cles = ['tous', 'print', 'identite', 'animation'];
 ---
 
-<div class="filtres" role="group" aria-label="Filtrer par discipline">
+<div class="filtres" role="group" aria-label={t('a11y.filtres')}>
   {cles.map((cle) => (
     <button class="filtre" type="button" data-filtre={cle} aria-pressed={cle === 'tous' ? 'true' : 'false'}>
       {t(`projets.filtre.${cle}`)}
