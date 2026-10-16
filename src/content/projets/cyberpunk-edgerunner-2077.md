@@ -1,6 +1,6 @@
 ---
-titre: CyberPunk Edgerunner / 2077
-titre_en: CyberPunk Edgerunner / 2077
+titre: 'Cyberpunk: Edgerunners / 2077'
+titre_en: 'Cyberpunk: Edgerunners / 2077'
 annee: 2026
 origine: exercice
 disciplines:
@@ -10,14 +10,14 @@ couverture: /images/projets/cyberpunk-edgerunner-2077-couverture.webp
 survol: ''
 galerie: []
 video: https://youtu.be/tNghIXeNoFE
-contrainte: L’exercice était de faire un opening title
-contrainte_en: The exercise was to make an opening title
-resolution: J'ai construit cette animation sur la base des trailler du jeux Cyberpunk 2077 et de la série animé Cyberpunk Edgerunners
-resolution_en: I built this animation based on the trailers of the game Cyberpunk 2077 and the animated series Cyberpunk Edgerunners
+contrainte: 'Exercice : réaliser un générique d''ouverture (opening title).'
+contrainte_en: 'Exercise: create an opening title sequence.'
+resolution: 'J''ai construit l''animation à partir des bandes-annonces du jeu Cyberpunk 2077 et de la série animée Cyberpunk: Edgerunners.'
+resolution_en: 'I built the animation from the trailers of the game Cyberpunk 2077 and the animated series Cyberpunk: Edgerunners.'
 livrables: MP4
 livrables_en: MP4
 outils:
-  - After Effect
+  - After Effects
 phare: false
 ordre: 8
 ---

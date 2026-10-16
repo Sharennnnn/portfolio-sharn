@@ -1,6 +1,6 @@
 ---
-titre: CyberPunk 2077
-titre_en: CyberPunk 2077
+titre: Cyberpunk 2077
+titre_en: Cyberpunk 2077
 annee: 2026
 origine: fanart
 disciplines:

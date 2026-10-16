@@ -1,6 +1,6 @@
 ---
-titre: Flashing Light - Kanye West
-titre_en: Flashing Light - Kanye West
+titre: Flashing Lights - Kanye West
+titre_en: Flashing Lights - Kanye West
 annee: 2026
 origine: exercice
 disciplines:
@@ -10,14 +10,14 @@ couverture: /images/projets/flashing-light-kanye-west-couverture.webp
 survol: ''
 galerie: []
 video: https://youtu.be/cUqlplrckp4
-contrainte: L’exercice était de faire une animation kinetick dans After Effect
-contrainte_en: The exercise was to make a kinetic animation in After Effects
-resolution: J'ai construit la composition sur un axe central. J’ai animé les paroles de la musique Flashing Light de Kanye West
-resolution_en: I built the composition around a central axis. I animated the lyrics of Kanye West's song Flashing Light.
+contrainte: 'Exercice : réaliser une animation de typographie cinétique dans After Effects.'
+contrainte_en: 'Exercise: create a kinetic typography animation in After Effects.'
+resolution: J'ai construit la composition sur un axe central et animé les paroles de « Flashing Lights » de Kanye West.
+resolution_en: I built the composition around a central axis and animated the lyrics of Kanye West's “Flashing Lights”.
 livrables: MP4
 livrables_en: MP4
 outils:
-  - After Effect
+  - After Effects
 phare: true
 ordre: 7
 ---

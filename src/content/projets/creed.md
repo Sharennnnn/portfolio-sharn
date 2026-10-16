@@ -10,10 +10,10 @@ couverture: /images/projets/creed-couverture.webp
 survol: ''
 galerie: []
 video: ''
-contrainte: Faire une affiche pour le film Creed
-contrainte_en: Make a poster for the movie Creed
-resolution: j'ai fait une affiche en A3 reprenant l'un des combats du film.
-resolution_en: I made an A3 poster featuring one of the fights from the movie.
+contrainte: Créer une affiche pour le film Creed.
+contrainte_en: Create a poster for the film Creed.
+resolution: J'ai réalisé une affiche au format A3 autour de l'un des combats du film.
+resolution_en: I made an A3 poster built around one of the film's fights.
 livrables: Affiche
 livrables_en: Poster
 outils:

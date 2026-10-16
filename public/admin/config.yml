@@ -73,10 +73,12 @@ collections:
         widget: string
         required: false
 
-      - { name: contrainte, label: 'Le problème (FR)', widget: text }
-      - { name: contrainte_en, label: 'The problem (EN)', widget: text }
-      - { name: resolution, label: 'Ce que j''ai fait (FR)', widget: text }
-      - { name: resolution_en, label: 'What I did (EN)', widget: text }
+      - { name: contrainte, label: 'Le brief (FR)', widget: text, hint: 'Le problème posé et la contrainte de départ : consigne, client, format, délai. Mets « - » pour masquer la rubrique.' }
+      - { name: contrainte_en, label: 'The brief (EN)', widget: text }
+      - { name: resolution, label: 'Mes choix (FR)', widget: text, hint: 'Ta décision de conception et pourquoi. Mets « - » pour masquer la rubrique.' }
+      - { name: resolution_en, label: 'My approach (EN)', widget: text }
+      - { name: resultat, label: 'Résultat (FR, facultatif)', widget: text, required: false, hint: 'Ce qui a été livré ou utilisé, la note, le retour du client ou du jury.' }
+      - { name: resultat_en, label: 'Outcome (EN, optional)', widget: text, required: false }
 
       - { name: livrables, label: 'Livrables (FR)', widget: string, required: false }
       - { name: livrables_en, label: 'Deliverables (EN)', widget: string, required: false }

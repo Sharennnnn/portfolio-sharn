@@ -10,8 +10,8 @@ couverture: /images/projets/the-age-of-kings-couverture.webp
 survol: ''
 galerie: []
 video: ''
-contrainte: '-'
-contrainte_en: '-'
+contrainte: 'Projet personnel : une affiche originale, imaginée par moi.'
+contrainte_en: 'Personal project: an original poster of my own invention.'
 resolution: '-'
 resolution_en: '-'
 livrables: ''

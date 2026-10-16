@@ -20,6 +20,8 @@ const projets = defineCollection({
     contrainte_en: z.string(),
     resolution: z.string(),
     resolution_en: z.string(),
+    resultat: z.string().optional(),
+    resultat_en: z.string().optional(),
 
     livrables: z.string().optional(),
     livrables_en: z.string().optional(),

@@ -28,8 +28,9 @@ export const ui = {
     'projets.vide': 'Aucun projet dans cette catégorie pour le moment.',
     'projets.compte': '{n} projet(s) affiché(s)',
 
-    'projet.contrainte': 'Le problème',
-    'projet.resolution': 'Ce que j’ai fait',
+    'projet.contrainte': 'Le brief',
+    'projet.resolution': 'Mes choix',
+    'projet.resultat': 'Résultat',
     'projet.infos': 'Fiche',
     'projet.client': 'Client',
     'projet.annee': 'Année',
@@ -89,8 +90,9 @@ export const ui = {
     'projets.vide': 'Nothing in this category yet.',
     'projets.compte': '{n} project(s) shown',
 
-    'projet.contrainte': 'The problem',
-    'projet.resolution': 'What I did',
+    'projet.contrainte': 'The brief',
+    'projet.resolution': 'My approach',
+    'projet.resultat': 'Outcome',
     'projet.infos': 'Details',
     'projet.client': 'Client',
     'projet.annee': 'Year',
