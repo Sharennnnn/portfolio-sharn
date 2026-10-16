@@ -131,10 +131,10 @@ singletons:
           - { name: eyebrow_en, label: 'Sur-titre (EN)', widget: string }
           - { name: titre1, label: 'Titre — ligne 1 (FR)', widget: string }
           - { name: titre1_en, label: 'Titre — ligne 1 (EN)', widget: string }
-          - { name: titre2, label: 'Titre — ligne 2, début (FR)', widget: string }
-          - { name: titre2_en, label: 'Titre — ligne 2, début (EN)', widget: string }
-          - { name: titre3, label: 'Titre — ligne 2, fin en italique (FR)', widget: string }
-          - { name: titre3_en, label: 'Titre — ligne 2, fin en italique (EN)', widget: string }
+          - { name: titre2, label: 'Titre — ligne 2 (FR)', widget: string }
+          - { name: titre2_en, label: 'Titre — ligne 2 (EN)', widget: string }
+          - { name: titre3, label: 'Titre — ligne 3, mise en valeur (FR)', widget: string, hint: 'Serif italique orange, sur une seule ligne : garde-la courte (2 ou 3 mots).' }
+          - { name: titre3_en, label: 'Titre — ligne 3, mise en valeur (EN)', widget: string }
           - { name: chapeau, label: 'Accroche (FR)', widget: text }
           - { name: chapeau_en, label: 'Accroche (EN)', widget: text }
           - { name: cta_titre, label: 'CTA — titre (FR)', widget: string }
@@ -163,7 +163,7 @@ singletons:
             widget: select
             options:
               - { label: 'Sélection de projets', value: selection }
-              - { label: 'Deux façons de travailler', value: duo }
+              - { label: 'Façons de travailler', value: duo }
               - { label: 'Appel à contact (CTA)', value: cta }
           - { name: visible, label: Visible, widget: boolean, default: true }
 

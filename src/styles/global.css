@@ -8,6 +8,8 @@
 @import '@fontsource-variable/inter/wght-italic.css';
 /* Titres : Anton (OFL), condensée d'affiche. Sous-ensemble latin seulement (accents français inclus). */
 @import '@fontsource/anton/latin-400.css';
+/* Contraste du titre d'accueil : Instrument Serif italique (OFL). */
+@import '@fontsource/instrument-serif/latin-400-italic.css';
 
 :root {
   /* Surfaces */
@@ -114,9 +116,16 @@ h2 {
   letter-spacing: 0.005em;
 }
 
-/* Anton n'a pas d'italique : la fin du titre est marquée par la couleur, sans fausse italique. */
+/* Contraste typographique : la chute du titre passe en serif italique bas de casse, plus grande,
+   face aux capitales condensées. Toujours sur une seule ligne. */
 .hero-titre em {
-  font-style: normal;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-size: 1.14em;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  text-transform: none;
+  white-space: nowrap;
   color: var(--accent);
 }
 

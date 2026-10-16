@@ -17,6 +17,7 @@ const {
   imageHauteur = 630,
   schema,
   indexer = true,
+  preloads = [],
 } = Astro.props;
 const langue = langueDepuisUrl(Astro.url);
 const t = traduire(langue);
@@ -41,6 +42,7 @@ const jsonLd = schema && JSON.stringify(schema).replace(/</g, '\\u003c');
     <link rel="canonical" href={canonique} />
     <link rel="preload" href={policeInter} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={policeAnton} as="font" type="font/woff2" crossorigin />
+    {preloads.map((p) => <link rel="preload" href={p} as="font" type="font/woff2" crossorigin />)}
     <meta property="og:site_name" content="Shar'N" />
     <meta property="og:title" content={`${titre} — Shar'N`} />
     <meta property="og:description" content={description} />

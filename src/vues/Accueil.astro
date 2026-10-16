@@ -6,6 +6,8 @@ import { traduire, route, trier, champ, autreLangue, urlProjet } from '../i18n/u
 import { lireReglages } from '../i18n/reglages.js';
 import { personne } from '../lib/schema.js';
 import { srcsetVignette } from '../lib/images.js';
+// Serif italique du titre : utilisée sur cette page seulement, donc préchargée ici seulement.
+import policeSerif from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
 
 const { langue } = Astro.props;
 const t = traduire(langue);
@@ -30,7 +32,7 @@ const h = r.hero;
 const deuxChiffres = (n) => String(n).padStart(2, '0');
 ---
 
-<Base titre={champ(h, 'eyebrow', langue)} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
+<Base titre={champ(h, 'eyebrow', langue)} preloads={[policeSerif]} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
     {r.banniere.visible && r.banniere.image && (
       <section class="enveloppe banniere reveal reveal--bloc">
         {r.banniere.lien ? (
@@ -48,7 +50,8 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
           <p class="eyebrow reveal reveal--eyebrow"><span class="pastille" aria-hidden="true"></span>{champ(h, 'eyebrow', langue)}</p>
           <h1 class="hero-titre titre-masque reveal">
             <span class="ligne"><span>{champ(h, 'titre1', langue)}</span></span>
-            <span class="ligne"><span>{champ(h, 'titre2', langue)} <em>{champ(h, 'titre3', langue)}</em></span></span>
+            <span class="ligne"><span>{champ(h, 'titre2', langue)}</span></span>
+            <span class="ligne"><span><em>{champ(h, 'titre3', langue)}</em></span></span>
           </h1>
           <p class="chapeau reveal reveal--eyebrow">{champ(h, 'chapeau', langue)}</p>
           <div class="actions reveal reveal--eyebrow">
@@ -98,7 +101,7 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
         <section class="enveloppe bloc">
           <p class="eyebrow reveal reveal--bloc">{t('accueil.lignes')}</p>
           <div class="duo">
-            {['A', 'B'].map((x) => (
+            {['A', 'B', 'C'].map((x) => (
               <article class="reveal reveal--bloc">
                 <span class="lettre" aria-hidden="true">{x}</span>
                 <h2>{t(`accueil.ligne${x}.titre`)}</h2>
@@ -316,13 +319,17 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
   /* ---------- Deux façons de travailler ---------- */
   .duo {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
     gap: clamp(2.5rem, 5vw, 5rem);
     margin-top: 1.5rem;
   }
+  /* Sous-grille : lettres, titres et textes des trois colonnes partagent les mêmes rangées,
+     donc les textes démarrent à la même hauteur même si un titre passe sur deux lignes. */
   .duo article {
     display: grid;
-    gap: 1.25rem;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 1.25rem;
     align-content: start;
     padding-top: 1.5rem;
     border-top: 1px solid var(--bordure);
@@ -336,6 +343,7 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
     -webkit-text-stroke: 1px var(--bordure-forte);
     transition: color 600ms var(--courbe), -webkit-text-stroke-color 600ms var(--courbe);
   }
+  .duo h2 { align-self: end; }
   .duo article:hover .lettre { color: var(--accent); -webkit-text-stroke-color: var(--accent); }
 
   /* ---------- Appel à contact ---------- */
