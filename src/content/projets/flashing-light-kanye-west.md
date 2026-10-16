@@ -14,10 +14,12 @@ contrainte: 'Exercice : réaliser une animation de typographie cinétique dans A
 contrainte_en: 'Exercise: create a kinetic typography animation in After Effects.'
 resolution: J'ai construit la composition sur un axe central et animé les paroles de « Flashing Lights » de Kanye West.
 resolution_en: I built the composition around a central axis and animated the lyrics of Kanye West's “Flashing Lights”.
+resultat: ''
+resultat_en: ''
 livrables: MP4
 livrables_en: MP4
 outils:
   - After Effects
-phare: true
+phare: false
 ordre: 7
 ---
