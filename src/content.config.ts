@@ -59,6 +59,7 @@ const reglages = defineCollection({
       visible: z.boolean().default(true),
     })),
     apropos: z.object({
+      photo: z.string().optional(),
       bio: z.array(z.string()),
       bio_en: z.array(z.string()),
       parcours: z.array(z.object({

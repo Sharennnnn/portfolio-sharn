@@ -50,6 +50,7 @@ export const ui = {
     'apropos.parcours': 'Parcours',
     'apropos.competences': 'Compétences',
     'apropos.cv': 'Télécharger le CV (PDF)',
+    'apropos.photo': "Portrait de Charlie Renneson (Shar'N)",
 
     'contact.titre': 'Contact',
     'contact.chapeau': "Disponible pour des commandes en freelance. Écris-moi avec le contexte, le format attendu et ton échéance — je réponds sous deux jours ouvrés.",
@@ -112,6 +113,7 @@ export const ui = {
     'apropos.parcours': 'Background',
     'apropos.competences': 'Skills',
     'apropos.cv': 'Download CV (PDF)',
+    'apropos.photo': "Portrait of Charlie Renneson (Shar'N)",
 
     'contact.titre': 'Contact',
     'contact.chapeau': 'Available for freelance commissions. Send the context, the format you need and your deadline — I reply within two working days.',

@@ -11,6 +11,15 @@ slug:
   encoding: ascii
   clean_accents: true
 
+# Habillage de l'admin
+app_title: Shar'N — Admin
+logo:
+  src: /favicon.svg
+
+# Pas de modèle d'aperçu : le panneau montrerait un rendu brut. Le bouton « Voir sur le site » le remplace.
+editor:
+  preview: false
+
 media_folder: public/images/projets
 public_folder: /images/projets
 
@@ -32,13 +41,27 @@ collections:
   - name: projets
     label: Projets
     label_singular: Projet
+    icon: grid_view
+    description: 'Tes 25 projets. « Réorganiser » pour changer l''ordre de la grille par glisser-déposer.'
     folder: src/content/projets
     # Sans ce réglage, Sveltia nomme les nouveaux projets avec un identifiant aléatoire.
     identifier_field: titre
     create: true
     slug: '{{slug}}'
     summary: '{{annee}} — {{titre}}'
-    sortable_fields: [ordre, annee, titre]
+    thumbnail: couverture
+    preview_path: 'projets/{{slug}}/'
+    # Glisser-déposer : Sveltia renumérote « ordre » de 1 à N.
+    reorder: { key: ordre }
+    sortable_fields:
+      fields: [ordre, annee, titre]
+      default: { field: ordre }
+    view_filters:
+      - { label: 'Commandes client', field: origine, pattern: client }
+      - { label: 'Fan art', field: origine, pattern: fanart }
+      - { label: 'Exercices académiques', field: origine, pattern: exercice }
+      - { label: 'Projets personnels', field: origine, pattern: perso }
+      - { label: 'Mis en avant sur l''accueil', field: phare, pattern: true }
     fields:
       - { name: titre, label: 'Titre (FR)', widget: string }
       - { name: titre_en, label: 'Titre (EN)', widget: string }
@@ -62,16 +85,18 @@ collections:
           - { label: Identité, value: identite }
           - { label: Animation, value: animation }
 
-      - { name: client, label: Client, widget: string, required: false }
-      - { name: couverture, label: 'Image de couverture (3:4)', widget: image, accept: 'image/webp,image/jpeg,image/png,image/avif' }
-      - { name: survol, label: 'Image au survol', widget: image, required: false, accept: 'image/webp,image/jpeg,image/png,image/avif' }
+      - { name: client, label: 'Client (facultatif)', widget: string, required: false, hint: 'Laisse vide pour un fan art ou un exercice.' }
+      - { name: couverture, label: 'Image de couverture', hint: 'Image portrait : la grille l''affiche au format 3:4. Convertie en WebP à l''envoi.', widget: image, accept: 'image/webp,image/jpeg,image/png,image/avif' }
+      - { name: survol, label: 'Image au survol (facultatif)', hint: 'Remplace la couverture quand on passe la souris dessus.', widget: image, required: false, accept: 'image/webp,image/jpeg,image/png,image/avif' }
       - name: galerie
-        label: Galerie
+        label: 'Galerie (facultatif)'
+        hint: 'Images affichées sous les textes, dans cet ordre.'
         widget: list
         required: false
         field: { name: image, label: Image, widget: image, accept: 'image/webp,image/jpeg,image/png,image/avif' }
       - name: video
-        label: 'Vidéo YouTube (lien complet, ex: https://youtu.be/XXXXXXXXXXX)'
+        label: 'Vidéo YouTube (facultatif)'
+        hint: 'Lien complet, ex. https://youtu.be/XXXXXXXXXXX'
         widget: string
         required: false
 
@@ -84,18 +109,22 @@ collections:
 
       - { name: livrables, label: 'Livrables (FR)', widget: string, required: false }
       - { name: livrables_en, label: 'Deliverables (EN)', widget: string, required: false }
-      - { name: outils, label: Outils, widget: list, required: false }
+      - { name: outils, label: Outils, widget: list, required: false, hint: 'Un logiciel par élément (Photoshop, Illustrator…).' }
 
       - { name: phare, label: 'Mis en avant sur l''accueil', hint: 'Les 4 premiers projets cochés (selon l''ordre) apparaissent dans la sélection de l''accueil', widget: boolean, default: false }
-      - { name: ordre, label: 'Ordre d''affichage', widget: number, value_type: int, default: 50, hint: 'Plus petit = plus haut dans la grille' }
+      # Géré par « Réorganiser » dans la liste des projets ; un nouveau projet arrive en fin de grille.
+      - { name: ordre, widget: hidden, default: 50 }
       - { name: body, label: 'Texte long (facultatif)', widget: markdown, required: false }
 singletons:
   - name: reglages
     label: Réglages du site
+    icon: tune
     file: src/content/reglages/site.yaml
+    preview_path: '/'
     fields:
       - name: hero
-        label: Accueil — En-tête
+        collapsed: true
+        label: Accueil — En-tête et appel à contact
         widget: object
         fields:
           - { name: eyebrow, label: 'Sur-titre (FR)', widget: string }
@@ -116,6 +145,7 @@ singletons:
           - { name: cta_bouton_en, label: 'CTA — bouton (EN)', widget: string }
 
       - name: banniere
+        collapsed: true
         label: Bannière (accueil, sous le menu)
         widget: object
         fields:
@@ -138,14 +168,19 @@ singletons:
           - { name: visible, label: Visible, widget: boolean, default: true }
 
       - name: apropos
+        collapsed: true
         label: À propos
         widget: object
+        thumbnail: photo
         fields:
+          - { name: photo, label: 'Photo de profil (facultatif)', widget: image, required: false, hint: 'Portrait, affiché au format 3:4 en haut de la colonne de droite. Laisse vide pour ne pas afficher de photo.', accept: 'image/webp,image/jpeg,image/png,image/avif' }
           - { name: bio, label: 'Paragraphes de bio (FR)', widget: list, field: { name: paragraphe, widget: text } }
           - { name: bio_en, label: 'Paragraphes de bio (EN)', widget: list, field: { name: paragraphe, widget: text } }
           - name: parcours
             label: Parcours
             widget: list
+            collapsed: true
+            summary: '{{periode}} · {{titre}}'
             fields:
               - { name: periode, label: Période, widget: string }
               - { name: titre, label: 'Intitulé (FR)', widget: string }
@@ -155,12 +190,15 @@ singletons:
           - name: competences
             label: Compétences
             widget: list
+            collapsed: true
+            summary: '{{groupe}} : {{outils}}'
             fields:
               - { name: groupe, label: 'Catégorie (FR)', widget: string }
               - { name: groupe_en, label: 'Catégorie (EN)', widget: string, required: false }
               - { name: outils, label: Outils, widget: string }
 
       - name: contact
+        collapsed: true
         label: Contact
         widget: object
         fields:
@@ -169,6 +207,7 @@ singletons:
           - { name: linkedin, label: 'Lien LinkedIn', widget: string, required: false }
 
       - name: theme
+        collapsed: true
         label: Apparence
         widget: object
         fields:
