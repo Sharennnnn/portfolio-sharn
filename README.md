@@ -105,3 +105,17 @@ Contrastes mesurés sur le fond `#0a0a0b` (formule WCAG 2.1) :
 
 L'accent est une version éclaircie de l'orange de ta bannière (`#ce8a4b`, qui
 plafonnait à 6.94:1 et n'atteignait pas le seuil AAA de 7:1).
+
+## Sécurité
+
+- En-têtes (HSTS, anti-clickjacking, Permissions-Policy…) : `public/_headers`.
+- CSP : générée par Astro (`security.csp` dans `astro.config.mjs`) ; le build échoue
+  si un script de page n'a pas son empreinte (`src/lib/verifier-csp.js`).
+- L'admin charge une **version figée** de Sveltia CMS avec une empreinte SRI
+  (`public/admin/index.html`). Pour la mettre à jour, choisis une version publiée
+  depuis au moins deux semaines, puis recalcule l'empreinte :
+
+  ```bash
+  npm pack @sveltia/cms@X.Y.Z && tar xzf sveltia-cms-X.Y.Z.tgz
+  echo "sha384-$(openssl dgst -sha384 -binary package/dist/sveltia-cms.js | openssl base64 -A)"
+  ```

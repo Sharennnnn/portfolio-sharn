@@ -2,6 +2,8 @@ backend:
   name: github
   repo: Sharennnnn/portfolio-sharn
   base_url: https://sveltia-cms-auth.rennesoncharlie.workers.dev
+  # Dépôt public : le jeton n'a pas besoin d'accéder aux dépôts privés.
+  auth_scope: public_repo
   
 
 # Noms de fichiers sans accents ni caractères spéciaux (projets et images).
@@ -61,13 +63,13 @@ collections:
           - { label: Animation, value: animation }
 
       - { name: client, label: Client, widget: string, required: false }
-      - { name: couverture, label: 'Image de couverture (3:4)', widget: image }
-      - { name: survol, label: 'Image au survol', widget: image, required: false }
+      - { name: couverture, label: 'Image de couverture (3:4)', widget: image, accept: 'image/webp,image/jpeg,image/png,image/avif' }
+      - { name: survol, label: 'Image au survol', widget: image, required: false, accept: 'image/webp,image/jpeg,image/png,image/avif' }
       - name: galerie
         label: Galerie
         widget: list
         required: false
-        field: { name: image, label: Image, widget: image }
+        field: { name: image, label: Image, widget: image, accept: 'image/webp,image/jpeg,image/png,image/avif' }
       - name: video
         label: 'Vidéo YouTube (lien complet, ex: https://youtu.be/XXXXXXXXXXX)'
         widget: string
@@ -118,7 +120,7 @@ singletons:
         widget: object
         fields:
           - { name: visible, label: Afficher la bannière, widget: boolean, default: false }
-          - { name: image, label: Image, widget: image, required: false }
+          - { name: image, label: Image, widget: image, required: false, accept: 'image/webp,image/jpeg,image/png,image/avif' }
           - { name: lien, label: 'Lien au clic (optionnel)', widget: string, required: false }
 
       - name: sections

@@ -5,6 +5,7 @@ import { readdir, mkdir, rename, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { LARGEUR_VIGNETTE, LARGEUR_PARTAGE } from './images.js';
+import { verifierCsp } from './verifier-csp.js';
 
 export default function variantesImages() {
   return {
@@ -32,6 +33,8 @@ export default function variantesImages() {
         // Cloudflare Pages cherche en/404.html ; Astro ne produit 404.html qu'à la racine.
         await rename(path.join(racine, 'en/404/index.html'), path.join(racine, 'en/404.html'));
         await rm(path.join(racine, 'en/404'), { recursive: true });
+
+        logger.info(`CSP vérifiée sur ${await verifierCsp(racine)} pages`);
       },
     },
   };
