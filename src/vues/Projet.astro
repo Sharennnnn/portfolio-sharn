@@ -19,11 +19,11 @@ const videoEmbed = urlIntegrationYoutube(d.video);
   <article>
     <header class="enveloppe tete">
       <p class="eyebrow reveal reveal--eyebrow">{t(`origine.${d.origine}`)} &middot; {d.annee}</p>
-      <h1 class="hero-titre reveal reveal--titre">{titre}</h1>
+      <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{titre}</span></span></h1>
     </header>
 
     <div class="enveloppe">
-      <img class="visuel reveal reveal--carte" src={d.couverture} alt={titre} width="1600" height="1200" />
+      <img class="visuel" src={d.couverture} alt={titre} width="1600" height="1200" style={`view-transition-name: affiche-${projet.id}`} />
     </div>
 
     <div class="enveloppe corps">
@@ -85,7 +85,8 @@ const videoEmbed = urlIntegrationYoutube(d.video);
     justify-items: start;
     padding-block: clamp(3rem, 6vw, 5rem) 2rem;
   }
-  .visuel { width: 100%; border: 1px solid var(--bordure); }
+  /* Affiches verticales comme visuels horizontaux : jamais plus haut que l'écran. */
+  .visuel { width: auto; max-width: 100%; max-height: calc(100svh - 8rem); border: 1px solid var(--bordure); }
   .corps {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);

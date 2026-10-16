@@ -11,7 +11,7 @@ const disciplines = d.disciplines.map((x) => t(`projets.filtre.${x}`)).join(' ·
 
 <li class="carte reveal reveal--carte" data-disciplines={d.disciplines.join(' ')}>
   <Balise class="zone" {...attrs}>
-    <div class="carte-visuel">
+    <div class="carte-visuel" style={d.phare ? `view-transition-name: affiche-${projet.id}` : undefined}>
       <img src={d.couverture} alt={titre} loading="lazy" decoding="async" width="900" height="1200" />
       {d.survol && (
         <img class="survol" src={d.survol} alt="" loading="lazy" decoding="async" width="900" height="1200" />

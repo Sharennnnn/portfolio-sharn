@@ -15,7 +15,7 @@ const reseaux = [
 <footer class="pied">
   <div class="enveloppe pied-interne reveal reveal--bloc">
     <div class="gauche">
-      <p class="marque">Shar&rsquo;N</p>
+      <p class="marque">Shar<span class="apostrophe">&rsquo;</span>N</p>
       <p class="legende">{t('footer.mentions')}</p>
     </div>
     <nav class="liens" aria-label={t('a11y.pied')}>
@@ -33,7 +33,8 @@ const reseaux = [
 <style>
   .pied { margin-top: var(--section); background: var(--surface); border-top: 1px solid var(--bordure); padding-top: 3rem; }
   .pied-interne { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; align-items: start; }
-  .marque { font-size: 0.9375rem; font-weight: 600; margin: 0 0 0.5rem; }
+  .marque { font-size: 1.0625rem; font-weight: 780; letter-spacing: -0.045em; margin: 0 0 0.5rem; }
+  .apostrophe { color: var(--accent); }
   .gauche .legende { max-width: 24rem; }
   .liens { display: flex; flex-direction: column; gap: 0.5rem; font-size: var(--t-legende); }
   .liens a { color: var(--texte-doux); transition: color var(--duree) var(--courbe); }

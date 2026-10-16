@@ -170,6 +170,22 @@ h3 {
   color: var(--accent);
 }
 
+/* Action principale : pleine, pour se distinguer des liens secondaires. */
+.bouton--plein {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--fond);
+  font-weight: 600;
+  transition:
+    background-color var(--duree) var(--courbe),
+    color var(--duree) var(--courbe);
+}
+
+.bouton--plein:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
 /* ---------- Grille de projets ---------- */
 
 .grille {
@@ -181,12 +197,41 @@ h3 {
   padding: 0;
 }
 
+@media (max-width: 40rem) {
+  .grille {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 0.75rem;
+  }
+}
+
 .carte-visuel {
   position: relative;
   aspect-ratio: 3 / 4;
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--bordure);
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 500ms var(--courbe);
+}
+
+/* Inclinaison 3D (script dans Base.astro) : suivi rapide pendant le survol, retour lent. */
+.carte-visuel.incline {
+  transition-duration: 120ms;
+}
+
+.carte-visuel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / 0.2), transparent 55%);
+  mix-blend-mode: soft-light;
+  transition: opacity 400ms var(--courbe);
+}
+
+.carte-visuel.incline::after {
+  opacity: 1;
 }
 
 .carte-visuel img {
@@ -217,6 +262,9 @@ h3 {
 .carte-titre {
   font-size: 0.9375rem;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin: 0.75rem 0 0.125rem;
   transition: color var(--duree) var(--courbe);
 }
@@ -305,11 +353,76 @@ a.zone:focus-visible .carte-titre {
 .grille > :nth-child(8) { --retard: 300ms; }
 .grille > :nth-child(n + 9) { --retard: 0ms; }
 
+/* Titres : chaque ligne monte derrière un masque, comme un générique. */
+.titre-masque .ligne {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.1em;
+  margin-block: -0.1em;
+}
+
+.titre-masque .ligne > span {
+  display: block;
+}
+
+.js .reveal.titre-masque {
+  opacity: 1;
+  transform: none;
+}
+
+.js .titre-masque .ligne > span {
+  transform: translateY(110%);
+  transition: transform 900ms var(--courbe) var(--retard, 0ms);
+}
+
+.js .titre-masque .ligne:nth-child(2) > span {
+  transition-delay: calc(var(--retard, 0ms) + 110ms);
+}
+
+.js .titre-masque.visible .ligne > span {
+  transform: none;
+}
+
 /* Séquence du hero, jouée au chargement */
 .hero .reveal { --retard: 0ms; }
 .hero .reveal:nth-child(1) { --retard: 120ms; }
 .hero .reveal:nth-child(2) { --retard: 250ms; }
 .hero .reveal:nth-child(3) { --retard: 380ms; }
+
+/* ---------- Grain argentique (derrière le contenu, jamais sur les images) ---------- */
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+  will-change: transform;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 3%); }
+  40% { transform: translate(3%, -2%); }
+  60% { transform: translate(-2%, -4%); }
+  80% { transform: translate(4%, 2%); }
+}
+
+/* ---------- Transition entre les pages (0 JS ; Firefox : navigation classique) ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-group(*) {
+  animation-duration: 550ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
 
 /* ---------- Accessibilité ---------- */
 
@@ -347,5 +460,14 @@ a.zone:focus-visible .carte-titre {
   .js .reveal {
     opacity: 1;
     transform: none;
+  }
+
+  .js .titre-masque .ligne > span,
+  .carte-visuel {
+    transform: none;
+  }
+
+  body::before {
+    animation: none;
   }
 }

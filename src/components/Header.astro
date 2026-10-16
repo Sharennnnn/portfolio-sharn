@@ -6,9 +6,9 @@ const autre = langue === 'fr' ? 'en' : 'fr';
 const lienAutre = equivalent ?? route(autre, 'accueil');
 ---
 
-<header class="entete reveal reveal--header">
+<header class="entete reveal reveal--header" style="view-transition-name: entete">
   <div class="enveloppe entete-interne">
-    <a class="marque" href={route(langue, 'accueil')}>Shar&rsquo;N</a>
+    <a class="marque" href={route(langue, 'accueil')}>Shar<span class="apostrophe">&rsquo;</span>N</a>
     <nav class="nav" aria-label={t('a11y.nav')}>
       <a href={route(langue, 'projets')}>{t('nav.projets')}</a>
       <a href={route(langue, 'apropos')}>{t('nav.apropos')}</a>
@@ -36,10 +36,11 @@ const lienAutre = equivalent ?? route(autre, 'accueil');
     height: 60px;
   }
   .marque {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-size: 1.0625rem;
+    font-weight: 780;
+    letter-spacing: -0.045em;
   }
+  .apostrophe { color: var(--accent); }
   .nav {
     display: flex;
     align-items: center;

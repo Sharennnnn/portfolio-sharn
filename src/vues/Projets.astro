@@ -12,7 +12,7 @@ const projets = trier(await getCollection('projets'));
 
 <Base titre={t('projets.titre')} description={t('projets.chapeau')} equivalent={route(autreLangue(langue), 'projets')}>
   <section class="enveloppe hero">
-    <h1 class="hero-titre reveal reveal--titre">{t('projets.titre')}</h1>
+    <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{t('projets.titre')}</span></span></h1>
     <p class="chapeau reveal reveal--eyebrow">{t('projets.chapeau')}</p>
   </section>
 
