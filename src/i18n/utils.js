@@ -14,7 +14,7 @@ export function route(langue, nom) {
 }
 
 export function urlProjet(langue, id) {
-  return langue === 'en' ? `/en/work/${id}` : `/projets/${id}`;
+  return langue === 'en' ? `/en/work/${id}/` : `/projets/${id}/`;
 }
 
 // Renvoie objet[`${base}_en`] en anglais s'il est rempli, sinon objet[base] (français).

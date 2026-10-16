@@ -4,10 +4,12 @@ import Base from '../layouts/Base.astro';
 import CarteProjet from '../components/CarteProjet.astro';
 import { traduire, route, trier, champ, autreLangue } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
+import { personne } from '../lib/schema.js';
 
 const { langue } = Astro.props;
 const t = traduire(langue);
 const r = await lireReglages();
+const schema = { '@context': 'https://schema.org', ...personne(r, t('schema.metier'), Astro.site) };
 // Sélection : les projets cochés « phare » (4 premiers selon l'ordre), sinon les 4 premiers tout court.
 const tous = trier(await getCollection('projets'));
 const phares = tous.filter((p) => p.data.phare);
@@ -16,7 +18,7 @@ const projets = (phares.length ? phares : tous).slice(0, 4);
 const h = r.hero;
 ---
 
-<Base titre={champ(h, 'eyebrow', langue)} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')}>
+<Base titre={champ(h, 'eyebrow', langue)} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
     {r.banniere.visible && r.banniere.image && (
       <section class="enveloppe banniere reveal reveal--bloc">
         {r.banniere.lien ? (

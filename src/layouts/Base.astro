@@ -4,12 +4,27 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { langueDepuisUrl, traduire } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
+import policeInter from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
-const { titre, description, equivalent } = Astro.props;
+// image : chemin d'une image de partage (1200 px). schema : objet schema.org à publier en JSON-LD.
+const {
+  titre,
+  description,
+  equivalent,
+  image = '/og-default.png',
+  imageLargeur = 1200,
+  imageHauteur = 630,
+  schema,
+  indexer = true,
+} = Astro.props;
 const langue = langueDepuisUrl(Astro.url);
 const t = traduire(langue);
 const canonique = new URL(Astro.url.pathname, Astro.site);
+const urlAutre = equivalent && new URL(equivalent, Astro.site);
+const urlFr = langue === 'fr' ? canonique : urlAutre;
 const { theme } = await lireReglages();
+// « < » échappé : un titre saisi dans l'admin ne peut pas fermer la balise <script>.
+const jsonLd = schema && JSON.stringify(schema).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -21,17 +36,30 @@ const { theme } = await lireReglages();
     <script is:inline>document.documentElement.classList.add('js')</script>
     <title>{titre} — Shar'N</title>
     <meta name="description" content={description} />
+    {!indexer && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonique} />
+    <link rel="preload" href={policeInter} as="font" type="font/woff2" crossorigin />
+    <meta property="og:site_name" content="Shar'N" />
     <meta property="og:title" content={`${titre} — Shar'N`} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonique} />
+    <meta property="og:locale" content={langue === 'fr' ? 'fr_BE' : 'en_US'} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:image:width" content={String(imageLargeur)} />
+    <meta property="og:image:height" content={String(imageHauteur)} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#0a0a0b" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    {equivalent && (
-      <link rel="alternate" hreflang={langue === 'fr' ? 'en' : 'fr'} href={new URL(equivalent, Astro.site)} />
+    {urlAutre && (
+      <>
+        <link rel="alternate" hreflang={langue} href={canonique} />
+        <link rel="alternate" hreflang={langue === 'fr' ? 'en' : 'fr'} href={urlAutre} />
+        <link rel="alternate" hreflang="x-default" href={urlFr} />
+      </>
     )}
-    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site)} />
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
   </head>
 
   <body>

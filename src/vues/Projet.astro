@@ -3,6 +3,9 @@ import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { traduire, champ, route, urlProjet, autreLangue } from '../i18n/utils.js';
 import { urlIntegrationYoutube } from '../i18n/youtube.js';
+import { lireReglages } from '../i18n/reglages.js';
+import { dimensions, srcsetVignette, urlPartage, LARGEUR_PARTAGE } from '../lib/images.js';
+import { personne } from '../lib/schema.js';
 
 const { langue, projet } = Astro.props;
 const t = traduire(langue);
@@ -17,9 +20,29 @@ const aDuTexte = rempli(contrainte) || rempli(resolution) || rempli(projet.body)
 const description = rempli(contrainte) ? contrainte : `${titre} — ${t(`origine.${d.origine}`)}, ${d.annee}`;
 const { Content } = await render(projet);
 const videoEmbed = urlIntegrationYoutube(d.video);
+
+const couv = await dimensions(d.couverture);
+const srcsetCouv = await srcsetVignette(d.couverture);
+// Affiche verticale : jamais plus large que ~600 px (hauteur d'écran) ; visuel horizontal : pleine largeur.
+const taillesCouv = couv.width > couv.height ? '(max-width: 1440px) 100vw, 1320px' : '(max-width: 40rem) 100vw, 600px';
+const galerie = await Promise.all(d.galerie.map(async (src) => ({ src, ...(await dimensions(src)) })));
+const largeurPartage = Math.min(couv.width, LARGEUR_PARTAGE);
+const partage = import.meta.env.DEV ? d.couverture : urlPartage(d.couverture);
+const r = await lireReglages();
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: titre,
+  image: new URL(partage, Astro.site).href,
+  dateCreated: String(d.annee),
+  inLanguage: langue,
+  genre: d.disciplines.map((x) => t(`projets.filtre.${x}`)),
+  ...(rempli(contrainte) && { description: contrainte }),
+  creator: personne(r, t('schema.metier'), Astro.site),
+};
 ---
 
-<Base titre={titre} description={description} equivalent={urlProjet(autreLangue(langue), projet.id)}>
+<Base titre={titre} description={description} equivalent={urlProjet(autreLangue(langue), projet.id)} image={partage} imageLargeur={largeurPartage} imageHauteur={Math.round((couv.height * largeurPartage) / couv.width)} schema={schema}>
   <article>
     <header class="enveloppe tete">
       <p class="eyebrow reveal reveal--eyebrow">{t(`origine.${d.origine}`)} &middot; {d.annee}</p>
@@ -27,7 +50,7 @@ const videoEmbed = urlIntegrationYoutube(d.video);
     </header>
 
     <div class="enveloppe">
-      <img class="visuel" src={d.couverture} alt={titre} width="1600" height="1200" style={`view-transition-name: affiche-${projet.id}`} />
+      <img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}`} />
     </div>
 
     <div class={aDuTexte ? 'enveloppe corps' : 'enveloppe corps seule'}>
@@ -74,8 +97,8 @@ const videoEmbed = urlIntegrationYoutube(d.video);
 
     {d.galerie.length > 0 && (
       <div class="enveloppe galerie">
-        {d.galerie.map((src, i) => (
-          <img class="reveal reveal--carte" src={src} alt={`${titre}, ${t('projet.visuel')} ${i + 1} / ${d.galerie.length}`} loading="lazy" decoding="async" width="1600" height="1200" />
+        {galerie.map((img, i) => (
+          <img class="reveal reveal--carte" src={img.src} alt={`${titre}, ${t('projet.visuel')} ${i + 1} / ${galerie.length}`} loading="lazy" decoding="async" width={img.width} height={img.height} />
         ))}
       </div>
     )}

@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { traduire, route } from '../i18n/utils.js';
+
+const { langue } = Astro.props;
+const t = traduire(langue);
+---
+
+<Base titre={t('introuvable.titre')} description={t('introuvable.texte')} indexer={false}>
+  <section class="enveloppe hero">
+    <p class="eyebrow">404</p>
+    <h1 class="hero-titre">{t('introuvable.titre')}</h1>
+    <p class="chapeau">{t('introuvable.texte')}</p>
+    <p class="liens-404">
+      <a class="bouton bouton--plein" href={route(langue, 'projets')}>{t('accueil.tout')}</a>
+      <a class="lien-accent" href={route(langue, 'accueil')}>{langue === 'fr' ? "Retour à l'accueil" : 'Back to home'}</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+    padding-block: clamp(4rem, 9vw, 8rem);
+  }
+  .liens-404 { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin: 1rem 0 0; }
+</style>

@@ -3,17 +3,19 @@ import { existsSync } from 'node:fs';
 import Base from '../layouts/Base.astro';
 import { traduire, route, champ, autreLangue } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
+import { personne } from '../lib/schema.js';
 
 const { langue } = Astro.props;
 const t = traduire(langue);
 const r = await lireReglages();
+const schema = { '@context': 'https://schema.org', ...personne(r, t('schema.metier'), Astro.site) };
 const a = r.apropos;
 const bio = champ(a, 'bio', langue);
 // Le bouton CV n'apparaît que si public/cv-sharn.pdf existe.
 const cvDispo = existsSync('public/cv-sharn.pdf');
 ---
 
-<Base titre={t('apropos.titre')} description="Charlie, infographiste basé à Namur." equivalent={route(autreLangue(langue), 'apropos')}>
+<Base titre={t('apropos.titre')} description={t('apropos.description')} equivalent={route(autreLangue(langue), 'apropos')} schema={schema}>
     <section class="enveloppe hero">
       <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{t('apropos.titre')}</span></span></h1>
     </section>

@@ -19,7 +19,7 @@ const projets = trier(await getCollection('projets'));
   <section class="enveloppe">
     <div class="reveal reveal--bloc barre"><Filtres langue={langue} /></div>
     <ul class="grille">
-      {projets.map((projet) => <CarteProjet projet={projet} langue={langue} niveau="h2" />)}
+      {projets.map((projet, i) => <CarteProjet projet={projet} langue={langue} niveau="h2" prioritaire={i < 4} />)}
     </ul>
   </section>
 </Base>

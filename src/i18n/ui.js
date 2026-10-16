@@ -1,8 +1,8 @@
 export const langueDefaut = 'fr';
 
 export const chemins = {
-  fr: { accueil: '/', projets: '/projets', apropos: '/a-propos', contact: '/contact' },
-  en: { accueil: '/en', projets: '/en/work', apropos: '/en/about', contact: '/en/contact' },
+  fr: { accueil: '/', projets: '/projets/', apropos: '/a-propos/', contact: '/contact/' },
+  en: { accueil: '/en/', projets: '/en/work/', apropos: '/en/about/', contact: '/en/contact/' },
 };
 
 export const ui = {
@@ -45,6 +45,7 @@ export const ui = {
     'origine.perso': 'Personnel',
 
     'apropos.titre': 'À propos',
+    'apropos.description': "Charlie Renneson (Shar'N), infographiste à Namur : parcours et compétences.",
     'apropos.parcours': 'Parcours',
     'apropos.competences': 'Compétences',
     'apropos.cv': 'Télécharger le CV (PDF)',
@@ -61,6 +62,9 @@ export const ui = {
     'a11y.filtres': 'Filtrer par discipline',
     'a11y.pied': 'Liens de pied de page',
     'a11y.nouvelOnglet': '(nouvel onglet)',
+    'schema.metier': 'Infographiste',
+    'introuvable.titre': 'Page introuvable',
+    'introuvable.texte': "Cette adresse ne correspond à aucune page. Elle a peut-être changé, ou le lien contient une faute.",
   },
 
   en: {
@@ -102,6 +106,7 @@ export const ui = {
     'origine.perso': 'Personal',
 
     'apropos.titre': 'About',
+    'apropos.description': "Charlie Renneson (Shar'N), graphic designer in Namur: background and skills.",
     'apropos.parcours': 'Background',
     'apropos.competences': 'Skills',
     'apropos.cv': 'Download CV (PDF)',
@@ -118,5 +123,8 @@ export const ui = {
     'a11y.filtres': 'Filter by discipline',
     'a11y.pied': 'Footer links',
     'a11y.nouvelOnglet': '(opens in a new tab)',
+    'schema.metier': 'Graphic designer',
+    'introuvable.titre': 'Page not found',
+    'introuvable.texte': 'This address does not match any page. It may have changed, or the link has a typo.',
   },
 };
