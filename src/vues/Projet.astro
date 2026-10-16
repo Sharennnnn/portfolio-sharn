@@ -1,7 +1,7 @@
 ---
-import { render } from 'astro:content';
+import { render, getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { traduire, champ, route, urlProjet, autreLangue } from '../i18n/utils.js';
+import { traduire, champ, route, urlProjet, autreLangue, trier } from '../i18n/utils.js';
 import { urlIntegrationYoutube } from '../i18n/youtube.js';
 import { lireReglages } from '../i18n/reglages.js';
 import { dimensions, srcsetVignette, urlPartage, LARGEUR_PARTAGE } from '../lib/images.js';
@@ -30,6 +30,11 @@ const galerie = await Promise.all(d.galerie.map(async (src) => ({ src, ...(await
 const largeurPartage = Math.min(couv.width, LARGEUR_PARTAGE);
 const partage = import.meta.env.DEV ? d.couverture : urlPartage(d.couverture);
 const r = await lireReglages();
+// Projet suivant dans l'ordre de la grille (le dernier renvoie au premier).
+const tous = trier(await getCollection('projets'));
+const suivant = tous[(tous.findIndex((p) => p.id === projet.id) + 1) % tous.length];
+const srcsetSuivant = await srcsetVignette(suivant.data.couverture);
+const paysage = couv.width > couv.height;
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
@@ -50,41 +55,43 @@ const schema = {
       <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{titre}</span></span></h1>
     </header>
 
-    <div class="enveloppe">
-      <img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}`} />
-    </div>
+    <div class:list={['enveloppe scene', { paysage, 'sans-texte': !aDuTexte }]}>
+      <div class="affiche">
+        <img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}`} />
+      </div>
 
-    <div class={aDuTexte ? 'enveloppe corps' : 'enveloppe corps seule'}>
-      {aDuTexte && <div class="texte">
-        {rempli(contrainte) && (
-          <section class="reveal reveal--bloc">
-            <h2>{t('projet.contrainte')}</h2>
-            <p>{contrainte}</p>
-          </section>
-        )}
-        {rempli(resolution) && (
-          <section class="reveal reveal--bloc">
-            <h2>{t('projet.resolution')}</h2>
-            <p>{resolution}</p>
-          </section>
-        )}
-        {rempli(resultat) && (
-          <section class="reveal reveal--bloc">
-            <h2>{t('projet.resultat')}</h2>
-            <p>{resultat}</p>
-          </section>
-        )}
-        {rempli(projet.body) && <div class="markdown reveal reveal--bloc"><Content /></div>}
-      </div>}
+      <div class="corps">
+        {aDuTexte && <div class="texte">
+          {rempli(contrainte) && (
+            <section class="reveal reveal--bloc">
+              <h2>{t('projet.contrainte')}</h2>
+              <p>{contrainte}</p>
+            </section>
+          )}
+          {rempli(resolution) && (
+            <section class="reveal reveal--bloc">
+              <h2>{t('projet.resolution')}</h2>
+              <p>{resolution}</p>
+            </section>
+          )}
+          {rempli(resultat) && (
+            <section class="reveal reveal--bloc">
+              <h2>{t('projet.resultat')}</h2>
+              <p>{resultat}</p>
+            </section>
+          )}
+          {rempli(projet.body) && <div class="markdown reveal reveal--bloc"><Content /></div>}
+        </div>}
 
-      <div class="fiche reveal reveal--bloc">
-        <p class="eyebrow">{t('projet.infos')}</p>
-        <dl>
-          {d.client && (<><dt>{t('projet.client')}</dt><dd>{d.client}</dd></>)}
-          <dt>{t('projet.annee')}</dt><dd>{d.annee}</dd>
-          {livrables && (<><dt>{t('projet.livrables')}</dt><dd>{livrables}</dd></>)}
-          {d.outils.length > 0 && (<><dt>{t('projet.outils')}</dt><dd>{d.outils.join(', ')}</dd></>)}
-        </dl>
+        <div class="fiche reveal reveal--bloc">
+          <p class="eyebrow">{t('projet.infos')}</p>
+          <dl>
+            {d.client && (<><dt>{t('projet.client')}</dt><dd>{d.client}</dd></>)}
+            <dt>{t('projet.annee')}</dt><dd>{d.annee}</dd>
+            {livrables && (<><dt>{t('projet.livrables')}</dt><dd>{livrables}</dd></>)}
+            {d.outils.length > 0 && (<><dt>{t('projet.outils')}</dt><dd>{d.outils.join(', ')}</dd></>)}
+          </dl>
+        </div>
       </div>
     </div>
 
@@ -113,6 +120,17 @@ const schema = {
     <div class="enveloppe retour">
       <a class="lien-accent" href={route(langue, 'projets')}>&larr; {t('projet.retour')}</a>
     </div>
+
+    {/* Projet suivant : un grand titre d'affiche pour enchaîner sans repasser par la grille. */}
+    <a class="suivant" href={urlProjet(langue, suivant.id)}>
+      <span class="enveloppe suivant-interne">
+        <span class="suivant-texte">
+          <span class="eyebrow">{t('projet.suivant')} &rarr;</span>
+          <span class="suivant-titre">{champ(suivant.data, 'titre', langue)}</span>
+        </span>
+        <img src={suivant.data.couverture} srcset={srcsetSuivant} sizes="12rem" alt="" width="900" height="1200" loading="lazy" decoding="async" />
+      </span>
+    </a>
   </article>
 </Base>
 
@@ -121,24 +139,47 @@ const schema = {
     display: grid;
     gap: 1rem;
     justify-items: start;
-    padding-block: clamp(3rem, 6vw, 5rem) 2rem;
+    padding-block: clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 3rem);
   }
-  /* Affiches verticales comme visuels horizontaux : jamais plus haut que l'écran. */
-  .visuel { width: auto; max-width: 100%; max-height: calc(100svh - 8rem); border: 1px solid var(--bordure); }
-  .corps {
+  .tete .hero-titre { font-size: clamp(2.75rem, 7vw, 7rem); }
+
+  /* Affiche verticale collante à gauche, textes qui défilent à droite (mise en page éditoriale). */
+  .scene {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: clamp(2rem, 5vw, 5rem);
-    padding-block: clamp(2.5rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
   }
-  .corps.seule { grid-template-columns: minmax(0, 26rem); }
-  @media (max-width: 45rem) {
-    .corps { grid-template-columns: 1fr; }
+  .affiche { position: sticky; top: 5.5rem; }
+  .visuel {
+    width: auto;
+    max-width: 100%;
+    max-height: calc(100svh - 7.5rem);
+    border: 1px solid var(--bordure);
+    box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.9);
   }
+  /* Visuel horizontal, ou projet sans texte : l'image passe au-dessus, pleine largeur. */
+  .scene.paysage,
+  .scene.sans-texte { grid-template-columns: 1fr; }
+  .scene.paysage .affiche,
+  .scene.sans-texte .affiche { position: static; }
+  .scene.paysage .corps { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); }
+  @media (max-width: 48rem) {
+    .scene,
+    .scene.paysage .corps { grid-template-columns: 1fr; }
+    .affiche { position: static; }
+  }
+  .corps { padding-block: 0.5rem clamp(2.5rem, 5vw, 4rem); }
   .texte section + section,
-  .texte .markdown { margin-top: 2.5rem; }
-  .texte h2 { font-size: var(--t-h3); margin-bottom: 0.75rem; }
-  .texte p { color: var(--texte-doux); max-width: 62ch; margin: 0; white-space: pre-line; }
+  .texte .markdown { margin-top: clamp(2rem, 4vw, 3rem); }
+  .texte h2 {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    margin-bottom: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--bordure);
+  }
+  .texte p { color: var(--texte-doux); max-width: 62ch; margin: 0; white-space: pre-line; text-wrap: pretty; }
+  .fiche { margin-top: clamp(2.5rem, 5vw, 4rem); }
   .fiche dl {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -150,8 +191,9 @@ const schema = {
   }
   .fiche dt { color: var(--texte-doux); }
   .fiche dd { margin: 0; }
-  .galerie { display: grid; gap: 1.5rem; }
+  .galerie { display: grid; gap: 1.5rem; padding-top: clamp(2rem, 4vw, 3rem); }
   .galerie img { width: 100%; border: 1px solid var(--bordure); }
+  .video { padding-top: clamp(2rem, 4vw, 3rem); }
   .video-cadre {
     position: relative;
     aspect-ratio: 16 / 9;
@@ -167,4 +209,40 @@ const schema = {
     border: 0;
   }
   .retour { padding-block: 3rem; font-size: var(--t-legende); }
+
+  .suivant {
+    display: block;
+    border-top: 1px solid var(--bordure);
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+    margin-bottom: calc(-1 * var(--section));
+    overflow: hidden;
+  }
+  .suivant-interne {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+  .suivant-texte { display: grid; gap: 1rem; min-width: 0; }
+  .suivant-titre {
+    font-family: var(--police-titre);
+    font-size: clamp(2.5rem, 8vw, 7.5rem);
+    line-height: 1;
+    text-transform: uppercase;
+    text-wrap: balance;
+    transition: color var(--duree) var(--courbe), translate 700ms var(--courbe-ressort);
+  }
+  .suivant img {
+    flex: none;
+    width: clamp(6rem, 14vw, 12rem);
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border: 1px solid var(--bordure);
+    rotate: 4deg;
+    transition: rotate 700ms var(--courbe-ressort), scale 700ms var(--courbe-ressort);
+  }
+  .suivant:hover .suivant-titre,
+  .suivant:focus-visible .suivant-titre { color: var(--accent); translate: 1rem 0; }
+  .suivant:hover img,
+  .suivant:focus-visible img { rotate: -2deg; scale: 1.06; }
 </style>

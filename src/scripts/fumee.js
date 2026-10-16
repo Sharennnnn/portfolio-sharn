@@ -38,9 +38,9 @@ export function lancerFumee(canvas) {
   const uT = gl.getUniformLocation(prog, 't');
   gl.uniform3fv(gl.getUniformLocation(prog, 'acc'), couleurAccent());
 
-  // Demi-résolution : la fumée est floue par nature, ça divise le coût par 4.
+  // Tiers de résolution : la fumée est floue par nature (coût ÷ 9) ; le hero plein écran l'exige.
   const taille = () => {
-    const d = Math.min(devicePixelRatio, 2) * 0.5;
+    const d = Math.min(devicePixelRatio, 2) * 0.33;
     canvas.width = Math.max(1, Math.round(canvas.clientWidth * d));
     canvas.height = Math.max(1, Math.round(canvas.clientHeight * d));
     gl.viewport(0, 0, canvas.width, canvas.height);
@@ -48,7 +48,14 @@ export function lancerFumee(canvas) {
   const debut = performance.now();
   let visible = false;
   let boucle = 0;
-  const image = () => {
+  let derniere = 0;
+  const image = (maintenant) => {
+    // 30 images/s suffisent pour un mouvement aussi lent : on saute une image sur deux.
+    if (maintenant - derniere < 30) {
+      boucle = visible && !document.hidden ? requestAnimationFrame(image) : 0;
+      return;
+    }
+    derniere = maintenant;
     gl.uniform2f(uR, canvas.width, canvas.height);
     gl.uniform1f(uT, (performance.now() - debut) / 1000);
     gl.drawArrays(gl.TRIANGLES, 0, 3);

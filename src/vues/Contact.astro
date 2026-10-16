@@ -46,7 +46,7 @@ const reseaux = [
   }
   .blocs {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     gap: 2.5rem;
     border-top: 1px solid var(--bordure);
     padding-top: 2.5rem;
@@ -54,12 +54,15 @@ const reseaux = [
   .adresse {
     display: inline-block;
     margin-top: 1rem;
-    font-size: clamp(1.25rem, 2.4vw, 1.75rem);
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.5rem, 4.6vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
     border-bottom: 1px solid var(--bordure-forte);
     transition: color var(--duree) var(--courbe), border-color var(--duree) var(--courbe);
   }
   .adresse:hover { color: var(--accent); border-color: var(--accent); }
+  @media (max-width: 48rem) { .blocs { grid-template-columns: 1fr; } }
   .liens { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
 </style>
