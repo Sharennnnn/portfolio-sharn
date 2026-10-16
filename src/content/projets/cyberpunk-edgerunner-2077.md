@@ -18,6 +18,6 @@ livrables: MP4
 livrables_en: MP4
 outils:
   - After Effect
-phare: true
+phare: false
 ordre: 8
 ---
