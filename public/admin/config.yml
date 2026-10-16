@@ -173,7 +173,7 @@ singletons:
         widget: object
         thumbnail: photo
         fields:
-          - { name: photo, label: 'Photo de profil (facultatif)', widget: image, required: false, hint: 'Portrait, affiché au format 3:4 en haut de la colonne de droite. Laisse vide pour ne pas afficher de photo.', accept: 'image/webp,image/jpeg,image/png,image/avif' }
+          - { name: photo, label: 'Photo de profil (facultatif)', widget: image, required: false, hint: 'Portrait, affiché au format 3:4 sous le texte de la bio. Laisse vide pour ne pas afficher de photo.', accept: 'image/webp,image/jpeg,image/png,image/avif' }
           - { name: bio, label: 'Paragraphes de bio (FR)', widget: list, field: { name: paragraphe, widget: text } }
           - { name: bio_en, label: 'Paragraphes de bio (EN)', widget: list, field: { name: paragraphe, widget: text } }
           - name: parcours

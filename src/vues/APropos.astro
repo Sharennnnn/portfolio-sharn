@@ -23,13 +23,13 @@ const photo = a.photo ? { src: a.photo, ...(await dimensions(a.photo)), srcset: 
       <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{t('apropos.titre')}</span></span></h1>
     </section>
 
-    <section class:list={['enveloppe contenu', { 'avec-photo': photo }]}>
-      {photo && (
-        <img class="photo reveal reveal--bloc" src={photo.src} srcset={photo.srcset} sizes="(max-width: 48rem) 20rem, 24rem" alt={t('apropos.photo')} width={photo.width} height={photo.height} decoding="async" />
-      )}
+    <section class="enveloppe contenu">
       <div class="bio reveal reveal--bloc">
         {bio.map((p) => <p>{p}</p>)}
         {cvDispo && <a class="bouton" href="/cv-sharn.pdf" download>{t('apropos.cv')}</a>}
+        {photo && (
+          <img class="photo" src={photo.src} srcset={photo.srcset} sizes="(max-width: 48rem) 20rem, 24rem" alt={t('apropos.photo')} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
+        )}
       </div>
 
       <div class="colonnes">
@@ -68,12 +68,9 @@ const photo = a.photo ? { src: a.photo, ...(await dimensions(a.photo)), srcset: 
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     gap: clamp(2rem, 5vw, 5rem);
   }
-  /* Photo en haut de la colonne de droite ; sur mobile, sous le titre et avant la bio. */
-  .avec-photo { grid-template-areas: 'bio photo' 'bio colonnes'; grid-template-rows: auto 1fr; }
-  .avec-photo .bio { grid-area: bio; }
-  .avec-photo .photo { grid-area: photo; }
-  .avec-photo .colonnes { grid-area: colonnes; }
   .photo {
+    display: block;
+    margin-top: 1rem;
     width: 100%;
     max-width: 24rem;
     height: auto;
@@ -82,7 +79,6 @@ const photo = a.photo ? { src: a.photo, ...(await dimensions(a.photo)), srcset: 
   }
   @media (max-width: 48rem) {
     .contenu { grid-template-columns: 1fr; }
-    .avec-photo { grid-template-areas: 'photo' 'bio' 'colonnes'; grid-template-rows: auto; }
     .photo { max-width: 20rem; }
   }
   .bio p { color: var(--texte-doux); max-width: 60ch; margin: 0 0 1.5rem; }
