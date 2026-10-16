@@ -4,6 +4,11 @@ backend:
   base_url: https://sveltia-cms-auth.rennesoncharlie.workers.dev
   
 
+# Noms de fichiers sans accents ni caractères spéciaux (projets et images).
+slug:
+  encoding: ascii
+  clean_accents: true
+
 media_folder: public/images/projets
 public_folder: /images/projets
 

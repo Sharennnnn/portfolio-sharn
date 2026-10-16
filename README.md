@@ -10,47 +10,15 @@ npm run dev      # http://localhost:4321
 npm run build    # génère dist/
 ```
 
-## ⚠️ À FAIRE AVANT LE PREMIER LANCEMENT
+## Modifier le contenu
 
-### 1. Exporter les images depuis Figma
+Tout se fait depuis `/admin` (connexion GitHub) : projets, textes de l'accueil,
+bio, contact, couleur d'accent, bannière, ordre et visibilité des sections.
+Chaque enregistrement crée un commit et Cloudflare redéploie le site.
 
-Le code attend ces quatre fichiers dans `public/images/projets/` :
-
-| Fichier attendu | Calque Figma |
-|---|---|
-| `creed.jpg` | Creed 1 |
-| `uhz1.jpg` | Mockup_3_LOGO_SI2026 1 |
-| `ciao-kombucha.jpg` | RENCH_CV_SA01_Collab 1 |
-| `laylow-ambre.jpg` | Laylow_Ambre gothique 1 |
-
-**Comment exporter :** dans Figma, sélectionne le calque image → panneau Export
-(en bas à droite) → format JPG, échelle 2x → Export.
-
-**Optimisation avant mise en ligne :** vise 900 × 1200 px et moins de 300 Ko par
-image. Une affiche exportée en 300 dpi pèse souvent 15 à 40 Mo, ce qui est
-inutilisable sur le web. Utilise Squoosh (squoosh.app) ou l'export « Enregistrer
-pour le web » de Photoshop.
-
-### 2. Remplir les textes
-
-Les quatre fichiers de `src/content/projets/` contiennent des champs marqués
-`À COMPLÉTER`. Ce sont les deux champs qui comptent pour un recruteur :
-
-- `contrainte` : le problème posé (format, support, budget, exercice imposé)
-- `resolution` : ta décision de conception et son pourquoi
-
-Chaque champ existe en FR et en EN (suffixe `_en`).
-
-### 3. Configurer l'administration
-
-Dans `public/admin/config.yml`, remplace `TON-PSEUDO` par ton pseudo GitHub.
-L'interface sera accessible sur `/admin` — connexion par ton compte GitHub.
-
-### 4. Remplacer les adresses
-
-- Email : `src/pages/contact.astro` et `src/pages/en/contact.astro`
-- Instagram et LinkedIn : mêmes fichiers + `src/components/Footer.astro`
-- CV : dépose `cv-sharn.pdf` dans `public/`
+- Les images envoyées par l'admin sont converties en WebP (1600 px max) et
+  renommées sans accents ; au-delà de 2 Mo après conversion, l'envoi est refusé.
+- Le bouton CV de la page À propos n'apparaît que si `public/cv-sharn.pdf` existe.
 
 ## Ajouter un projet
 
@@ -67,7 +35,7 @@ titre_en: Project name
 annee: 2026
 origine: client        # client | fanart | exercice | perso
 disciplines: [print]   # print | identite | animation
-couverture: /images/projets/mon-projet.jpg
+couverture: /images/projets/mon-projet-couverture.webp
 contrainte: Le problème posé.
 contrainte_en: The problem.
 resolution: Ce que tu as fait.
@@ -84,10 +52,12 @@ Le nom du fichier devient l'URL : `mon-projet.md` → `/projets/mon-projet`.
 ```
 src/
   content/projets/     un fichier .md par projet (FR + EN)
+  content/reglages/    site.yaml : réglages modifiables depuis l'admin
   components/          Header, Footer, CarteProjet, Filtres
-  layouts/Base.astro   structure HTML, SEO, script d'animation
-  i18n/ui.js           tous les textes d'interface FR et EN
-  pages/               FR à la racine, EN sous /en/
+  layouts/Base.astro   structure HTML, SEO, couleur d'accent, script d'animation
+  i18n/                textes d'interface FR/EN (ui.js) et fonctions de langue
+  vues/                une vue par page, partagée par le FR et l'EN
+  pages/               FR à la racine, EN sous /en/ ; chaque page appelle sa vue
   styles/global.css    tokens, typographie, animations
 public/
   admin/               interface Sveltia CMS

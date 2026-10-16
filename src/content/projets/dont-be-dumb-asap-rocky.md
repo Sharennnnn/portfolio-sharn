@@ -6,7 +6,7 @@ origine: fanart
 disciplines:
   - print
 client: ''
-couverture: /images/projets/don-t-be-dumb-a-ap-rocky-couverture.webp
+couverture: /images/projets/dont-be-dumb-asap-rocky-couverture.webp
 survol: ''
 galerie: []
 video: ''
