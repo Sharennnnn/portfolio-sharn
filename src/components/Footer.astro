@@ -6,6 +6,8 @@ const { langue } = Astro.props;
 const t = traduire(langue);
 const r = await lireReglages();
 const annee = new Date().getFullYear();
+// Sur la page Contact, l'adresse est déjà le sujet de la page : pas de doublon dans le pied.
+const surContact = Astro.url.pathname === route(langue, 'contact');
 const reseaux = [
   r.contact.instagram && { nom: 'Instagram', url: r.contact.instagram },
   r.contact.linkedin && { nom: 'LinkedIn', url: r.contact.linkedin },
@@ -13,11 +15,13 @@ const reseaux = [
 ---
 
 <footer class="pied">
-  <div class="enveloppe pied-interne reveal reveal--bloc">
-    <div class="gauche">
-      <p class="marque">Shar<span class="apostrophe">&rsquo;</span>N</p>
-      <p class="legende">{t('footer.mentions')}</p>
-    </div>
+  <div class="enveloppe haut reveal reveal--bloc">
+    {!surContact && (
+      <div>
+        <p class="eyebrow">{t('footer.ecrire')}</p>
+        <a class="courriel" href={`mailto:${r.contact.email}`}>{r.contact.email}</a>
+      </div>
+    )}
     <nav class="liens" aria-label={t('a11y.pied')}>
       <a href={route(langue, 'projets')}>{t('nav.projets')}</a>
       <a href={route(langue, 'apropos')}>{t('nav.apropos')}</a>
@@ -25,19 +29,71 @@ const reseaux = [
       {reseaux.map((r2) => <a href={r2.url} rel="me noopener" target="_blank">{r2.nom}<span class="sr-only"> {t('a11y.nouvelOnglet')}</span></a>)}
     </nav>
   </div>
+
+  <!-- Wordmark W1 à l'échelle du pied de page : décoratif, le nom est déjà annoncé dans l'en-tête. -->
+  <p class="geant" aria-hidden="true">Shar<span class="apostrophe">&rsquo;</span>N</p>
+
   <div class="enveloppe bas">
     <p class="legende">&copy; {annee} Shar&rsquo;N</p>
+    <p class="legende">{t('footer.mentions')}</p>
   </div>
 </footer>
 
 <style>
-  .pied { margin-top: var(--section); background: var(--surface); border-top: 1px solid var(--bordure); padding-top: 3rem; }
-  .pied-interne { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: space-between; align-items: start; }
-  .marque { font-size: 1.0625rem; font-weight: 780; letter-spacing: -0.045em; margin: 0 0 0.5rem; }
-  .apostrophe { color: var(--accent); }
-  .gauche .legende { max-width: 24rem; }
-  .liens { display: flex; flex-direction: column; gap: 0.5rem; font-size: var(--t-legende); }
+  .pied {
+    margin-top: var(--section);
+    border-top: 1px solid var(--bordure);
+    padding-top: clamp(3rem, 6vw, 5rem);
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--fond), var(--surface));
+  }
+  .haut {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    justify-content: space-between;
+    align-items: end;
+  }
+  .courriel {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: clamp(1.5rem, 3.6vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0 2px;
+    transition: color var(--duree) var(--courbe), background-size 600ms var(--courbe-ressort);
+    overflow-wrap: anywhere;
+  }
+  .courriel:hover,
+  .courriel:focus-visible { color: var(--accent); background-size: 100% 2px; }
+  .liens { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: var(--t-legende); }
   .liens a { color: var(--texte-doux); transition: color var(--duree) var(--courbe); }
   .liens a:hover { color: var(--accent); }
-  .bas { margin-top: 3rem; padding-bottom: 2rem; }
+  .geant {
+    margin: clamp(2rem, 5vw, 4rem) 0 0;
+    text-align: center;
+    font-size: clamp(5rem, 25vw, 23rem);
+    font-weight: 780;
+    letter-spacing: -0.06em;
+    line-height: 0.78;
+    white-space: nowrap;
+    /* Le bas des lettres est coupé par le bord, comme un titre qui sort du cadre. */
+    margin-bottom: -0.12em;
+    color: transparent;
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--texte) 16%, transparent), color-mix(in srgb, var(--texte) 3%, transparent));
+    background-clip: text;
+    -webkit-background-clip: text;
+    user-select: none;
+  }
+  .geant .apostrophe { color: var(--accent); -webkit-text-fill-color: var(--accent); opacity: 0.55; }
+  .bas {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    justify-content: space-between;
+    padding-block: 1.25rem 1.75rem;
+    border-top: 1px solid var(--bordure);
+  }
 </style>

@@ -2,9 +2,12 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import CarteProjet from '../components/CarteProjet.astro';
-import { traduire, route, trier, champ, autreLangue } from '../i18n/utils.js';
+import { traduire, route, trier, champ, autreLangue, urlProjet } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
 import { personne } from '../lib/schema.js';
+import { srcsetVignette } from '../lib/images.js';
+// Serif italique du titre : utilisée sur cette page seulement, donc préchargée ici seulement.
+import policeSerif from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
 
 const { langue } = Astro.props;
 const t = traduire(langue);
@@ -15,10 +18,21 @@ const tous = trier(await getCollection('projets'));
 const phares = tous.filter((p) => p.data.phare);
 const projets = (phares.length ? phares : tous).slice(0, 4);
 
+// Mur d'affiches du hero : les 12 premiers projets répartis sur deux colonnes.
+const mur = await Promise.all(
+  tous.slice(0, 12).map(async (p) => ({
+    id: p.id,
+    src: p.data.couverture,
+    srcset: await srcsetVignette(p.data.couverture),
+  }))
+);
+const colonnes = [mur.filter((_, i) => i % 2 === 0), mur.filter((_, i) => i % 2 === 1)];
+
 const h = r.hero;
+const deuxChiffres = (n) => String(n).padStart(2, '0');
 ---
 
-<Base titre={champ(h, 'eyebrow', langue)} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
+<Base titre={champ(h, 'eyebrow', langue)} preloads={[policeSerif]} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
     {r.banniere.visible && r.banniere.image && (
       <section class="enveloppe banniere reveal reveal--bloc">
         {r.banniere.lien ? (
@@ -32,12 +46,34 @@ const h = r.hero;
     <div class="hero-scene">
       <canvas class="fumee" aria-hidden="true"></canvas>
       <section class="enveloppe hero">
-        <p class="eyebrow reveal reveal--eyebrow">{champ(h, 'eyebrow', langue)}</p>
-        <h1 class="hero-titre titre-masque reveal">
-          <span class="ligne"><span>{champ(h, 'titre1', langue)}</span></span>
-          <span class="ligne"><span>{champ(h, 'titre2', langue)} <em>{champ(h, 'titre3', langue)}</em></span></span>
-        </h1>
-        <p class="chapeau reveal reveal--eyebrow">{champ(h, 'chapeau', langue)}</p>
+        <div class="hero-texte">
+          <p class="eyebrow reveal reveal--eyebrow"><span class="pastille" aria-hidden="true"></span>{champ(h, 'eyebrow', langue)}</p>
+          <h1 class="hero-titre titre-masque reveal">
+            <span class="ligne"><span>{champ(h, 'titre1', langue)}</span></span>
+            <span class="ligne"><span>{champ(h, 'titre2', langue)}</span></span>
+            <span class="ligne ligne-chute"><span><em>{champ(h, 'titre3', langue)}</em></span></span>
+          </h1>
+          <p class="chapeau reveal reveal--eyebrow">{champ(h, 'chapeau', langue)}</p>
+          <div class="actions reveal reveal--eyebrow">
+            <a class="bouton bouton--plein" href={route(langue, 'projets')}>{t('accueil.tout')} <span class="fleche" aria-hidden="true">&rarr;</span></a>
+            <a class="lien-accent" href={route(langue, 'contact')}>{champ(h, 'cta_bouton', langue)}</a>
+          </div>
+        </div>
+
+        {/* Décor : les mêmes projets sont accessibles dans la sélection et sur la page Projets. */}
+        <div class="mur" aria-hidden="true">
+          {colonnes.map((col, c) => (
+            <div class="colonne">
+              <div class:list={['piste defile', { inverse: c === 1 }]}>
+                {[...col, ...col].map((a, i) => (
+                  <a href={urlProjet(langue, a.id)} tabindex="-1">
+                    <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) 9rem, 15rem" alt="" width="900" height="1200" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
     </div>
 
@@ -45,34 +81,45 @@ const h = r.hero;
       if (s.cle === 'selection') return (
         <section class="enveloppe bloc">
           <div class="entete-bloc reveal reveal--bloc">
-            <h2 class="eyebrow">{t('accueil.selection')}</h2>
+            <h2>{t('accueil.selection')}</h2>
             <a class="lien-accent" href={route(langue, 'projets')}>{t('accueil.tout')} &rarr;</a>
           </div>
-          <ul class="grille">
-            {projets.map((projet) => <CarteProjet projet={projet} langue={langue} />)}
+          <ul class="grille selection">
+            {projets.map((projet, i) => (
+              <CarteProjet projet={projet} langue={langue} numero={deuxChiffres(i + 1)} tailles={i === 0 ? '(max-width: 40rem) 100vw, 660px' : '(max-width: 40rem) 50vw, 320px'} />
+            ))}
+            <li class="tuile-tout reveal reveal--carte">
+              <a href={route(langue, 'projets')}>
+                <span class="tuile-nombre">{deuxChiffres(tous.length)}</span>
+                <span class="tuile-texte">{t('accueil.nombre').replace('{n}', String(tous.length))} <span aria-hidden="true">&rarr;</span></span>
+              </a>
+            </li>
           </ul>
         </section>
       );
       if (s.cle === 'duo') return (
         <section class="enveloppe bloc">
           <p class="eyebrow reveal reveal--bloc">{t('accueil.lignes')}</p>
-          <div class="duo reveal reveal--bloc">
-            <article>
-              <h2>{t('accueil.ligneA.titre')}</h2>
-              <p class="chapeau">{t('accueil.ligneA.texte')}</p>
-            </article>
-            <article>
-              <h2>{t('accueil.ligneB.titre')}</h2>
-              <p class="chapeau">{t('accueil.ligneB.texte')}</p>
-            </article>
+          <div class="duo">
+            {['A', 'B', 'C'].map((x) => (
+              <article class="reveal reveal--bloc">
+                <span class="lettre" aria-hidden="true">{x}</span>
+                <h2>{t(`accueil.ligne${x}.titre`)}</h2>
+                <p class="chapeau">{t(`accueil.ligne${x}.texte`)}</p>
+              </article>
+            ))}
           </div>
         </section>
       );
       if (s.cle === 'cta') return (
-        <section class="enveloppe cta">
-          <h2 class="reveal reveal--cta">{champ(h, 'cta_titre', langue)}</h2>
-          <p class="chapeau reveal reveal--cta">{champ(h, 'cta_texte', langue)}</p>
-          <a class="bouton bouton--plein reveal reveal--cta" href={route(langue, 'contact')}>{champ(h, 'cta_bouton', langue)}</a>
+        <section class="cta">
+          <div class="enveloppe cta-interne">
+            <h2 class="cta-titre titre-masque reveal"><span class="ligne"><span>{champ(h, 'cta_titre', langue)}</span></span></h2>
+            <div class="cta-bas reveal reveal--cta">
+              <p class="chapeau">{champ(h, 'cta_texte', langue)}</p>
+              <a class="bouton bouton--plein" href={route(langue, 'contact')}>{champ(h, 'cta_bouton', langue)} <span class="fleche" aria-hidden="true">&rarr;</span></a>
+            </div>
+          </div>
         </section>
       );
       return null;
@@ -83,6 +130,8 @@ const h = r.hero;
   .banniere { padding-top: 1.5rem; }
   .banniere img { width: 100%; border: 1px solid var(--bordure); }
   .banniere a { display: block; }
+
+  /* ---------- Hero ---------- */
   .hero-scene { position: relative; isolation: isolate; }
   .fumee {
     position: absolute;
@@ -97,39 +146,235 @@ const h = r.hero;
   .fumee.active { opacity: 1; }
   .hero {
     display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+    padding-block: clamp(2rem, 4vw, 3.5rem) clamp(3rem, 6vw, 6rem);
+    min-height: min(calc(100svh - 4rem), 52rem);
+  }
+  .hero-texte {
+    display: grid;
     gap: 2rem;
     justify-items: start;
-    padding-block: clamp(4rem, 9vw, 8.75rem) clamp(3rem, 5vw, 5rem);
   }
-  .bloc { padding-block: 0 var(--section); }
+  .eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; }
+  /* Pastille « disponible » : pulsation lente, arrêtée si les animations sont réduites. */
+  .pastille {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
+    animation: pulsation 2.4s var(--courbe) infinite;
+  }
+  @keyframes pulsation {
+    70% { box-shadow: 0 0 0 9px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    font-size: var(--t-legende);
+    font-weight: 500;
+  }
+
+  /* Mur d'affiches : deux colonnes qui défilent en sens inverse, légèrement inclinées. */
+  .mur {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    height: min(calc(100svh - 9rem), 44rem);
+    overflow: hidden;
+    rotate: -5deg;
+    scale: 1.08;
+  }
+  /* Fondu haut et bas par des voiles au lieu d'un mask-image : le masque obligeait à repeindre
+     tout le mur à chaque image de l'animation. */
+  .mur::before,
+  .mur::after {
+    content: '';
+    position: absolute;
+    inset-inline: -10%;
+    height: 16%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .mur::before { top: 0; background: linear-gradient(var(--fond), transparent); }
+  .mur::after { bottom: 0; background: linear-gradient(transparent, var(--fond)); }
+  .colonne { overflow: hidden; }
+  .piste {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* Le padding égal à l'écart rend la boucle exacte : -50 % = une série complète. */
+    padding-bottom: 1rem;
+    animation: defile-y 70s linear infinite;
+    will-change: transform;
+  }
+  .mur.hors-champ .piste { animation-play-state: paused; }
+  .piste.inverse { animation-direction: reverse; animation-duration: 85s; }
+  .mur:hover .piste { animation-play-state: paused; }
+  .piste a {
+    display: block;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border: 1px solid var(--bordure);
+    background: var(--surface);
+  }
+  .piste img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Assombri par l'opacité (sur fond sombre) plutôt qu'un filter, qui se repeint à chaque image. */
+    opacity: 0.78;
+    transition: opacity 600ms var(--courbe), transform 900ms var(--courbe-ressort);
+  }
+  .piste a:hover img { opacity: 1; transform: scale(1.05); }
+  @keyframes defile-y { to { transform: translateY(-50%); } }
+  @keyframes defile-x { to { transform: translateX(-50%); } }
+
+  @media (max-width: 48rem) {
+    .hero { grid-template-columns: 1fr; min-height: 0; padding-bottom: 2rem; }
+    /* Sur mobile : une seule bande horizontale sous le texte. */
+    .mur {
+      display: block;
+      height: auto;
+      rotate: none;
+      scale: none;
+      margin-inline: calc(-1 * var(--gouttiere));
+    }
+    .mur::before,
+    .mur::after { inset-block: 0; inset-inline: auto; width: 10%; height: auto; }
+    .mur::before { left: 0; background: linear-gradient(to right, var(--fond), transparent); }
+    .mur::after { right: 0; background: linear-gradient(to left, var(--fond), transparent); }
+    .colonne + .colonne { display: none; }
+    .piste { flex-direction: row; width: max-content; padding: 0 0.75rem 0 0; gap: 0.75rem; animation-name: defile-x; animation-duration: 45s; }
+    .piste a { width: 8.5rem; }
+  }
+
+  /* ---------- Sélection ---------- */
+  .bloc { padding-block: var(--section) 0; }
   .entete-bloc {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    align-items: end;
+    gap: 1rem 2rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
   }
-  .entete-bloc a { font-size: var(--t-legende); }
+  .entete-bloc a { font-size: var(--t-legende); font-weight: 500; }
+  /* Grille asymétrique : une grande affiche, trois petites et une tuile vers tout le catalogue. */
+  @media (min-width: 40.0625rem) {
+    .selection {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: clamp(1.5rem, 2.5vw, 2.5rem) clamp(1rem, 2vw, 1.5rem);
+      align-items: start;
+    }
+    .selection > :global(:nth-child(1)) { grid-column: 1 / span 6; grid-row: span 2; }
+    .selection > :global(:nth-child(2)) { grid-column: 7 / span 3; }
+    .selection > :global(:nth-child(3)) { grid-column: 10 / span 3; }
+    .selection > :global(:nth-child(4)) { grid-column: 7 / span 3; }
+    .selection > :global(:nth-child(5)) { grid-column: 10 / span 3; }
+    .selection > :global(:nth-child(1) .carte-titre) { font-size: var(--t-h3); margin-top: 1rem; }
+  }
+  @media (max-width: 40rem) {
+    .selection > :global(:nth-child(1)) { grid-column: 1 / -1; }
+  }
+  .tuile-tout a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    aspect-ratio: 3 / 4;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    border: 1px solid var(--bordure-forte);
+    overflow: hidden;
+    isolation: isolate;
+    transition: color var(--duree) var(--courbe), border-color var(--duree) var(--courbe);
+  }
+  .tuile-tout a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 600ms var(--courbe-ressort);
+  }
+  .tuile-tout a:hover,
+  .tuile-tout a:focus-visible { color: var(--fond); border-color: var(--accent); }
+  .tuile-tout a:hover::before,
+  .tuile-tout a:focus-visible::before { transform: scaleY(1); }
+  .tuile-nombre {
+    font-family: var(--police-titre);
+    font-size: clamp(4rem, 9vw, 7.5rem);
+    line-height: 0.85;
+  }
+  .tuile-texte { font-size: var(--t-legende); font-weight: 600; }
+
+  /* ---------- Deux façons de travailler ---------- */
   .duo {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
-    gap: clamp(2rem, 4vw, 4rem);
-    border-top: 1px solid var(--bordure);
-    margin-top: 2rem;
-    padding-top: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: clamp(2.5rem, 5vw, 5rem);
+    margin-top: 1.5rem;
   }
-  .duo h2 { margin-bottom: 1rem; }
-  .cta {
+  /* Sous-grille : lettres, titres et textes des trois colonnes partagent les mêmes rangées,
+     donc les textes démarrent à la même hauteur même si un titre passe sur deux lignes. */
+  .duo article {
     display: grid;
-    gap: 1rem;
-    justify-items: start;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 1.25rem;
+    align-content: start;
+    padding-top: 1.5rem;
     border-top: 1px solid var(--bordure);
-    padding-top: 3rem;
   }
-  .cta .bouton { margin-top: 0.5rem; }
+  /* Lettre en contour qui se remplit au survol de la colonne. */
+  .lettre {
+    font-family: var(--police-titre);
+    font-size: clamp(5rem, 11vw, 9rem);
+    line-height: 0.8;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--bordure-forte);
+    transition: color 600ms var(--courbe), -webkit-text-stroke-color 600ms var(--courbe);
+  }
+  .duo h2 { align-self: end; }
+  .duo article:hover .lettre { color: var(--accent); -webkit-text-stroke-color: var(--accent); }
+
+  /* ---------- Appel à contact ---------- */
+  .cta {
+    position: relative;
+    margin-top: var(--section);
+    padding-block: clamp(4rem, 9vw, 8rem) clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--bordure);
+    /* Halo d'accent qui s'éteint avant les bords de la section (pas de coupure nette). */
+    background: radial-gradient(45% 55% at 12% 70%, color-mix(in srgb, var(--accent) 8%, transparent), transparent);
+  }
+  .cta-interne { display: grid; gap: clamp(2rem, 4vw, 3rem); }
+  .cta-titre { font-size: clamp(3.5rem, 11.5vw, 11rem); }
+  .cta-bas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem 3rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pastille { animation: none; }
+  }
 </style>
 
 <script>
   import { lancerFumee } from '../scripts/fumee.js';
   lancerFumee(document.querySelector('.fumee'));
+
+  // Le mur d'affiches s'arrête quand il sort de l'écran : aucun calcul pour un décor invisible.
+  const mur = document.querySelector('.mur');
+  if (mur) new IntersectionObserver(([e]) => mur.classList.toggle('hors-champ', !e.isIntersecting)).observe(mur);
 </script>

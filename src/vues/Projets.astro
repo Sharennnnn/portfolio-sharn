@@ -3,25 +3,62 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import CarteProjet from '../components/CarteProjet.astro';
 import Filtres from '../components/Filtres.astro';
-import { traduire, trier, route, autreLangue } from '../i18n/utils.js';
+import { traduire, trier, route, autreLangue, urlProjet, champ } from '../i18n/utils.js';
+import { srcsetVignette } from '../lib/images.js';
 
 const { langue } = Astro.props;
 const t = traduire(langue);
 const projets = trier(await getCollection('projets'));
+const deuxChiffres = (n) => String(n).padStart(2, '0');
+const lignes = await Promise.all(
+  projets.map(async (p, i) => ({
+    id: p.id,
+    numero: deuxChiffres(i + 1),
+    titre: champ(p.data, 'titre', langue),
+    disciplines: p.data.disciplines,
+    meta: `${p.data.disciplines.map((x) => t(`projets.filtre.${x}`)).join(' · ')} · ${t(`origine.${p.data.origine}`)}`,
+    annee: p.data.annee,
+    src: p.data.couverture,
+    srcset: await srcsetVignette(p.data.couverture),
+  }))
+);
 ---
 
 <Base titre={t('projets.titre')} description={t('projets.chapeau')} equivalent={route(autreLangue(langue), 'projets')}>
   <section class="enveloppe hero">
-    <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{t('projets.titre')}</span></span></h1>
+    <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{t('projets.titre')} <sup class="total">{deuxChiffres(projets.length)}</sup></span></span></h1>
     <p class="chapeau reveal reveal--eyebrow">{t('projets.chapeau')}</p>
   </section>
 
   <section class="enveloppe">
-    <div class="reveal reveal--bloc barre"><Filtres langue={langue} /></div>
-    <ul class="grille">
-      {projets.map((projet, i) => <CarteProjet projet={projet} langue={langue} niveau="h2" prioritaire={i < 4} />)}
+    <div class="reveal reveal--bloc barre">
+      <Filtres langue={langue} />
+      <div class="vues" role="group" aria-label={t('a11y.vue')}>
+        <button class="filtre" type="button" data-vue="grille" aria-pressed="true">{t('projets.vue.grille')}</button>
+        <button class="filtre" type="button" data-vue="index" aria-pressed="false">{t('projets.vue.index')}</button>
+      </div>
+    </div>
+
+    <ul class="grille" data-liste="grille">
+      {projets.map((projet, i) => <CarteProjet projet={projet} langue={langue} niveau="h2" prioritaire={i < 4} numero={deuxChiffres(i + 1)} />)}
     </ul>
+
+    {/* Vue Index : liste façon générique ; même contenu que la grille, masquée par défaut. */}
+    <ol class="index" data-liste="index" hidden>
+      {lignes.map((l) => (
+        <li data-disciplines={l.disciplines.join(' ')} data-src={l.src} data-srcset={l.srcset}>
+          <a href={urlProjet(langue, l.id)}>
+            <span class="index-numero" aria-hidden="true">{l.numero}</span>
+            <span class="index-titre">{l.titre}</span>
+            <span class="index-meta">{l.meta}</span>
+            <span class="index-annee">{l.annee}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
   </section>
+
+  <img class="apercu" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" aria-hidden="true" width="900" height="1200" sizes="15rem" decoding="async" />
 </Base>
 
 <style>
@@ -31,5 +68,124 @@ const projets = trier(await getCollection('projets'));
     justify-items: start;
     padding-block: clamp(3rem, 6vw, 6.25rem) 3rem;
   }
-  .barre { margin-bottom: 2.5rem; }
+  .total {
+    font-family: var(--police-texte);
+    font-size: 0.16em;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    vertical-align: super;
+  }
+  .barre {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  /* Le choix de vue n'a de sens qu'avec JavaScript. */
+  .vues { display: none; gap: 0.5rem; }
+  :global(.js) .vues { display: flex; }
+
+  .index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--bordure);
+  }
+  /* display: grid de .grille l'emporterait sur l'attribut hidden. */
+  [data-liste][hidden],
+  .index li[hidden] { display: none; }
+  .index a {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto 4rem;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding-block: clamp(0.9rem, 1.6vw, 1.4rem);
+    border-bottom: 1px solid var(--bordure);
+    color: var(--texte-doux);
+    transition: color var(--duree) var(--courbe);
+  }
+  .index-numero,
+  .index-annee { font-size: var(--t-legende); font-variant-numeric: tabular-nums; }
+  .index-annee { text-align: right; }
+  .index-titre {
+    font-family: var(--police-titre);
+    font-size: clamp(1.75rem, 4.2vw, 3.5rem);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--texte);
+    transition: color var(--duree) var(--courbe), translate 600ms var(--courbe-ressort);
+  }
+  .index-meta { font-size: var(--t-legende); }
+  .index a:hover,
+  .index a:focus-visible { color: var(--texte); }
+  .index a:hover .index-titre,
+  .index a:focus-visible .index-titre { color: var(--accent); translate: 0.75rem 0; }
+  @media (max-width: 40rem) {
+    .index a { grid-template-columns: 2rem minmax(0, 1fr) auto; gap: 0.75rem; }
+    .index-meta { display: none; }
+  }
+
+  /* Aperçu qui suit la souris (vue Index, souris uniquement). */
+  .apercu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--z-apercu);
+    width: 15rem;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    pointer-events: none;
+    opacity: 0;
+    scale: 0.85;
+    rotate: -4deg;
+    translate: var(--x, 0) var(--y, 0);
+    box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.7);
+    transition: opacity 300ms var(--courbe), scale 500ms var(--courbe-ressort), rotate 500ms var(--courbe-ressort);
+  }
+  .apercu.visible { opacity: 1; scale: 1; rotate: 2deg; }
 </style>
+
+<script>
+  const boutons = document.querySelectorAll<HTMLButtonElement>('[data-vue]');
+  const listes = document.querySelectorAll<HTMLElement>('[data-liste]');
+  boutons.forEach((bouton) => {
+    bouton.addEventListener('click', () => {
+      boutons.forEach((b) => b.setAttribute('aria-pressed', String(b === bouton)));
+      listes.forEach((l) => (l.hidden = l.dataset.liste !== bouton.dataset.vue));
+      // Les vignettes de la grille masquée n'ont pas pu apparaître : on les rend visibles au retour.
+      document.querySelectorAll('.grille .reveal').forEach((el) => el.classList.add('visible'));
+    });
+  });
+
+  // Aperçu au survol des lignes de l'Index : souris uniquement, et pas si les animations sont réduites.
+  const apercu = document.querySelector<HTMLImageElement>('.apercu');
+  const fin = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (apercu && fin && !reduit) {
+    let cx = 0, cy = 0, x = 0, y = 0, boucle = 0;
+    // Le suivi est amorti (12 % de l'écart par image) pour que l'affiche « flotte » derrière la souris.
+    const suivre = () => {
+      x += (cx - x) * 0.12;
+      y += (cy - y) * 0.12;
+      apercu.style.setProperty('--x', `${x.toFixed(1)}px`);
+      apercu.style.setProperty('--y', `${y.toFixed(1)}px`);
+      boucle = Math.abs(cx - x) + Math.abs(cy - y) > 0.5 ? requestAnimationFrame(suivre) : 0;
+    };
+    document.querySelectorAll<HTMLElement>('.index li').forEach((li) => {
+      li.addEventListener('pointerenter', () => {
+        apercu.srcset = li.dataset.srcset || '';
+        apercu.src = li.dataset.src || '';
+        apercu.classList.add('visible');
+      });
+      li.addEventListener('pointerleave', () => apercu.classList.remove('visible'));
+    });
+    document.addEventListener('pointermove', (e) => {
+      cx = e.clientX + 24;
+      cy = e.clientY - apercu.offsetHeight / 2;
+      if (!boucle) boucle = requestAnimationFrame(suivre);
+    });
+  }
+</script>

@@ -18,7 +18,8 @@ const cles = ['tous', 'print', 'identite', 'animation'];
 
 <script>
   const boutons = document.querySelectorAll('[data-filtre]');
-  const cartes = document.querySelectorAll('.grille .carte');
+  // Grille et vue Index portent les mêmes projets : on filtre les deux, on ne compte que la grille.
+  const cartes = document.querySelectorAll('.grille .carte, .index li');
   const vide = document.querySelector('[data-vide]');
 
   boutons.forEach((bouton) => {
@@ -31,7 +32,7 @@ const cles = ['tous', 'print', 'identite', 'animation'];
         const liste = (carte.dataset.disciplines || '').split(' ');
         const montrer = choix === 'tous' || liste.includes(choix);
         carte.hidden = !montrer;
-        if (montrer) visibles += 1;
+        if (montrer && carte.matches('.carte')) visibles += 1;
       });
 
       if (vide) vide.hidden = visibles > 0;
