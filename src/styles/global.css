@@ -288,8 +288,7 @@ h3 {
   background: var(--surface);
   border: 1px solid var(--bordure);
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  /* clip-path : ouverture « rideau » à l'apparition (voir Animations), décalée comme la cascade des cartes. */
-  transition: transform 500ms var(--courbe), clip-path 1100ms var(--courbe) var(--retard, 0ms);
+  transition: transform 500ms var(--courbe);
 }
 
 /* Inclinaison 3D (script dans Base.astro) : suivi rapide pendant le survol, retour lent. */
@@ -434,16 +433,6 @@ a.zone:focus-visible .carte-titre {
 .grille > :nth-child(7) { --retard: 200ms; }
 .grille > :nth-child(8) { --retard: 300ms; }
 .grille > :nth-child(n + 9) { --retard: 0ms; }
-
-/* Affiches : le visuel s'ouvre du centre vers les bords, comme le rideau d'une salle de cinéma.
-   Sans JS, la classe .js manque et l'affiche est visible d'emblée. */
-.js .carte.reveal .carte-visuel {
-  clip-path: inset(0 50% 0 50%);
-}
-
-.js .carte.reveal.visible .carte-visuel {
-  clip-path: inset(0 0 0 0);
-}
 
 /* Titres : chaque ligne monte derrière un masque, comme un générique.
    En flex, les marges négatives des lignes ne fusionnent pas : l'interligne reste régulier. */
@@ -594,10 +583,6 @@ body::before {
   .js .titre-masque .ligne > span,
   .carte-visuel {
     transform: none;
-  }
-
-  .js .carte.reveal .carte-visuel {
-    clip-path: none;
   }
 
   body::before {
