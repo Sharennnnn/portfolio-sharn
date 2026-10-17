@@ -78,7 +78,7 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
         {/* WCAG 2.2.2 : tout ce qui bouge seul plus de 5 s doit pouvoir être arrêté (mur, fumée, pastille).
             Caché sans JavaScript (il ne ferait rien) et quand les animations sont déjà réduites. */}
         <button class="pause-anim" type="button" hidden data-pause={t('a11y.pause')} data-lecture={t('a11y.lecture')}>
-          <span class="icone" aria-hidden="true"></span><span class="libelle">{t('a11y.pause')}</span>
+          <span class="icone" aria-hidden="true"></span><span class="libelle sr-only">{t('a11y.pause')}</span>
         </button>
       </section>
     </div>
@@ -391,23 +391,22 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
     gap: 1.5rem 3rem;
   }
 
-  /* Bouton pause : discret, dans la marge basse du hero (cible 44 px). */
+  /* Bouton pause : icône seule (libellé pour les lecteurs d'écran), dans le coin bas du mur, cible 44 px. */
+  .hero { position: relative; }
   .pause-anim {
     position: absolute;
-    right: var(--gouttiere);
-    bottom: 0.5rem;
+    right: calc(var(--gouttiere) + 0.5rem);
+    bottom: calc(clamp(3rem, 6vw, 6rem) + 0.75rem);
     z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-height: 44px;
-    padding: 0 0.9rem;
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
     border: 1px solid var(--bordure-forte);
     border-radius: 2px;
     background: var(--fond);
     color: var(--texte-doux);
-    font: inherit;
-    font-size: var(--t-legende);
     cursor: pointer;
     transition: color var(--duree) var(--courbe), border-color var(--duree) var(--courbe);
   }
@@ -427,7 +426,7 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
   .en-pause .piste,
   .en-pause .pastille { animation-play-state: paused; }
   @media (max-width: 48rem) {
-    .pause-anim { position: static; justify-self: end; margin-top: -1rem; }
+    .pause-anim { position: static; justify-self: end; margin-top: -1.25rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
