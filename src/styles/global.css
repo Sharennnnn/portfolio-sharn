@@ -20,7 +20,7 @@
 
   /* Texte — ratios mesurés sur --fond */
   --texte: #ededed;       /* 16.9:1  AAA */
-  --texte-doux: #8a8a90;  /*  5.77:1 AA  */
+  --texte-doux: #a1a1a7;  /*  7.7:1 AAA (7.16:1 sur --surface) ; avant #8a8a90, 5.77:1 */
   --accent: #e09a55;      /*  8.41:1 AAA */
 
   /* Polices */
