@@ -99,7 +99,7 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
         </section>
       );
       if (s.cle === 'duo') return (
-        <section class="enveloppe bloc">
+        <section class="enveloppe bloc generique">
           <p class="eyebrow reveal reveal--bloc">{t('accueil.lignes')}</p>
           <div class="duo">
             {['A', 'B', 'C'].map((x) => (
@@ -394,6 +394,35 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
 <script>
   import { lancerFumee } from '../scripts/fumee.js';
   lancerFumee(document.querySelector('.fumee'));
+
+  // F1 — « Générique de fin » : la section des trois façons de travailler reste épinglée et les colonnes
+  // montent l'une après l'autre au défilement. GSAP n'est chargé qu'à l'approche de la section, sur grand
+  // écran et si les animations ne sont pas réduites ; sinon (ou sans JS) la section reste statique.
+  const generique = document.querySelector<HTMLElement>('.generique');
+  const condition = '(min-width: 48rem) and (prefers-reduced-motion: no-preference)';
+  if (generique && matchMedia(condition).matches) {
+    new IntersectionObserver(async ([e], obs) => {
+      if (!e.isIntersecting) return;
+      obs.disconnect();
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')]);
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.matchMedia().add(condition, () => {
+        const colonnes = generique.querySelectorAll<HTMLElement>('.duo article');
+        const lettres = generique.querySelectorAll<HTMLElement>('.lettre');
+        const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        // Les transitions CSS des blocs .reveal lisseraient chaque image de GSAP : coupées pendant l'effet.
+        gsap.set([colonnes, lettres], { transition: 'none' });
+        colonnes.forEach((c) => c.classList.add('visible'));
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: generique, start: 'top 80px', end: '+=120%', scrub: 0.6, pin: true },
+        });
+        colonnes.forEach((c, i) => {
+          tl.from(c, { yPercent: 70, autoAlpha: 0, ease: 'power2.out', duration: 1 }, i * 0.8);
+          tl.to(lettres[i], { color: accent, duration: 0.4 }, i * 0.8 + 0.6);
+        });
+      });
+    }, { rootMargin: '600px 0px' }).observe(generique);
+  }
 
   // Le mur d'affiches s'arrête quand il sort de l'écran : aucun calcul pour un décor invisible.
   const mur = document.querySelector('.mur');
