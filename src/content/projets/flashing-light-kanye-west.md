@@ -1,6 +1,6 @@
 ---
-titre: Flashing Lights - Kanye West
-titre_en: Flashing Lights - Kanye West
+titre: Flashing Lights — Kanye West
+titre_en: Flashing Lights — Kanye West
 annee: 2026
 origine: exercice
 disciplines:

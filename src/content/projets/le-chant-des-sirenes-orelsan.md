@@ -1,6 +1,6 @@
 ---
-titre: Le chant des sirènes - Orelsan
-titre_en: Le chant des sirènes - Orelsan
+titre: Le chant des sirènes — Orelsan
+titre_en: Le chant des sirènes — Orelsan
 annee: 2026
 origine: fanart
 disciplines:
