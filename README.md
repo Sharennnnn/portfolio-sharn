@@ -8,6 +8,7 @@ Site statique Astro, bilingue FR/EN, déployé sur Cloudflare Pages.
 npm install
 npm run dev      # http://localhost:4321
 npm run build    # génère dist/
+npm test         # tests (lecture des liens YouTube)
 ```
 
 ## Modifier le contenu
@@ -40,7 +41,10 @@ contrainte: Le problème posé.
 contrainte_en: The problem.
 resolution: Ce que tu as fait.
 resolution_en: What you did.
-phare: false           # true = page dédiée
+resultat: Ce que ça a donné.   # facultatif ; « - » masque la rubrique
+resultat_en: What came out of it.
+video: https://youtu.be/…      # facultatif (youtu.be, watch, embed, shorts, live)
+phare: false           # true = dans la sélection de l'accueil (chaque projet a sa page)
 ordre: 50              # plus petit = plus haut dans la grille
 ---
 ```

@@ -49,8 +49,9 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
         <div class="hero-texte">
           <p class="eyebrow reveal reveal--eyebrow"><span class="pastille" aria-hidden="true"></span>{champ(h, 'eyebrow', langue)}</p>
           <h1 class="hero-titre titre-masque reveal">
-            <span class="ligne"><span>{champ(h, 'titre1', langue)}</span></span>
-            <span class="ligne"><span>{champ(h, 'titre2', langue)}</span></span>
+            {/* {' '} : espace entre les lignes pour Google et les lecteurs d'écran (invisible en flex). */}
+            <span class="ligne"><span>{champ(h, 'titre1', langue)}</span></span>{' '}
+            <span class="ligne"><span>{champ(h, 'titre2', langue)}</span></span>{' '}
             <span class="ligne ligne-chute"><span><em>{champ(h, 'titre3', langue)}</em></span></span>
           </h1>
           <p class="chapeau reveal reveal--eyebrow">{champ(h, 'chapeau', langue)}</p>

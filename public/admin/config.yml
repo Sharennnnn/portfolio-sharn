@@ -42,7 +42,7 @@ collections:
     label: Projets
     label_singular: Projet
     icon: grid_view
-    description: 'Tes 25 projets. « Réorganiser » pour changer l''ordre de la grille par glisser-déposer.'
+    description: 'Tes projets. « Réorganiser » pour changer l''ordre de la grille par glisser-déposer.'
     folder: src/content/projets
     # Sans ce réglage, Sveltia nomme les nouveaux projets avec un identifiant aléatoire.
     identifier_field: titre
@@ -203,8 +203,8 @@ singletons:
         widget: object
         fields:
           - { name: email, label: Email, widget: string }
-          - { name: instagram, label: 'Lien Instagram', widget: string, required: false }
-          - { name: linkedin, label: 'Lien LinkedIn', widget: string, required: false }
+          - { name: instagram, label: 'Lien Instagram', widget: string, required: false, pattern: ['^(https://\S+)?$', 'Adresse complète, qui commence par https://'] }
+          - { name: linkedin, label: 'Lien LinkedIn', widget: string, required: false, pattern: ['^(https://\S+)?$', 'Adresse complète, qui commence par https://'] }
 
       - name: theme
         collapsed: true

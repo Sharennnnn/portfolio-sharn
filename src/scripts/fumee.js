@@ -19,8 +19,9 @@ function couleurAccent() {
 
 export function lancerFumee(canvas) {
   if (!canvas || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const gl = canvas.getContext('webgl', { antialias: false, premultipliedAlpha: true, powerPreference: 'low-power' });
-  if (!gl) return; // pas de WebGL : le fond noir reste
+  // failIfMajorPerformanceCaveat : pas de fumée en rendu logiciel (PC sans GPU), où elle saturerait le processeur.
+  const gl = canvas.getContext('webgl', { antialias: false, premultipliedAlpha: true, powerPreference: 'low-power', failIfMajorPerformanceCaveat: true });
+  if (!gl) return; // pas de WebGL (ou seulement logiciel) : le fond noir reste
 
   const shader = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
   const prog = gl.createProgram();

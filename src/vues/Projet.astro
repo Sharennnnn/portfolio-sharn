@@ -35,6 +35,8 @@ const tous = trier(await getCollection('projets'));
 const suivant = tous[(tous.findIndex((p) => p.id === projet.id) + 1) % tous.length];
 const srcsetSuivant = await srcsetVignette(suivant.data.couverture);
 const paysage = couv.width > couv.height;
+// Largeur max de l'affiche verticale : la même que dans « sizes » (600 px), pour garder le rendu d'avant le correctif CLS.
+const largeurAffiche = paysage ? couv.width : Math.min(couv.width, 600);
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'CreativeWork',
@@ -57,7 +59,7 @@ const schema = {
 
     <div class:list={['enveloppe scene', { paysage, 'sans-texte': !aDuTexte }]}>
       <div class="affiche">
-        <img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}`} />
+        <img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}; --ratio: ${(couv.width / couv.height).toFixed(4)}; --largeur: ${largeurAffiche}px`} />
       </div>
 
       <div class="corps">
@@ -151,10 +153,11 @@ const schema = {
     align-items: start;
   }
   .affiche { position: sticky; top: 5.5rem; }
+  /* Largeur calculée d'avance (jamais plus haute que l'écran, jamais agrandie au-delà de sa taille réelle) :
+     avec width: auto, l'image ne réserve aucune place avant d'être chargée et tout le texte descend à son
+     arrivée (CLS 0,41 sur mobile). */
   .visuel {
-    width: auto;
-    max-width: 100%;
-    max-height: calc(100svh - 7.5rem);
+    width: min(100%, calc(var(--largeur) + 2px), calc((100svh - 7.5rem) * var(--ratio)));
     border: 1px solid var(--bordure);
     box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.9);
   }
