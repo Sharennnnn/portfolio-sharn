@@ -48,25 +48,28 @@ export function lancerFumee(canvas) {
   };
   const debut = performance.now();
   let visible = false;
+  let enPause = false;
   let boucle = 0;
   let derniere = 0;
   const image = (maintenant) => {
     // 30 images/s suffisent pour un mouvement aussi lent : on saute une image sur deux.
     if (maintenant - derniere < 30) {
-      boucle = visible && !document.hidden ? requestAnimationFrame(image) : 0;
+      boucle = visible && !document.hidden && !enPause ? requestAnimationFrame(image) : 0;
       return;
     }
     derniere = maintenant;
     gl.uniform2f(uR, canvas.width, canvas.height);
     gl.uniform1f(uT, (performance.now() - debut) / 1000);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-    boucle = visible && !document.hidden ? requestAnimationFrame(image) : 0;
+    boucle = visible && !document.hidden && !enPause ? requestAnimationFrame(image) : 0;
   };
-  const relancer = () => { if (visible && !document.hidden && !boucle) boucle = requestAnimationFrame(image); };
+  const relancer = () => { if (visible && !document.hidden && !enPause && !boucle) boucle = requestAnimationFrame(image); };
 
   new ResizeObserver(taille).observe(canvas);
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; relancer(); }).observe(canvas);
   document.addEventListener('visibilitychange', relancer);
   taille();
   canvas.classList.add('active');
+  // Bouton pause du hero (WCAG 2.2.2) : la fumée se fige sur l'image en cours.
+  return (pause) => { enPause = pause; relancer(); };
 }

@@ -68,13 +68,18 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
               <div class:list={['piste defile', { inverse: c === 1 }]}>
                 {[...col, ...col].map((a, i) => (
                   <a href={urlProjet(langue, a.id)} tabindex="-1">
-                    <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) 9rem, 15rem" alt="" width="900" height="1200" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" />
+                    <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) 9rem, 15rem" alt="" width="900" height="1200" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={c === 0 && i === 0 ? 'high' : undefined} decoding="async" />
                   </a>
                 ))}
               </div>
             </div>
           ))}
         </div>
+        {/* WCAG 2.2.2 : tout ce qui bouge seul plus de 5 s doit pouvoir être arrêté (mur, fumée, pastille).
+            Caché sans JavaScript (il ne ferait rien) et quand les animations sont déjà réduites. */}
+        <button class="pause-anim" type="button" hidden data-pause={t('a11y.pause')} data-lecture={t('a11y.lecture')}>
+          <span class="icone" aria-hidden="true"></span><span class="libelle sr-only">{t('a11y.pause')}</span>
+        </button>
       </section>
     </div>
 
@@ -386,14 +391,65 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
     gap: 1.5rem 3rem;
   }
 
+  /* Bouton pause : icône seule (libellé pour les lecteurs d'écran), dans le coin bas du mur, cible 44 px. */
+  .hero { position: relative; }
+  .pause-anim {
+    position: absolute;
+    right: calc(var(--gouttiere) + 0.5rem);
+    bottom: calc(clamp(3rem, 6vw, 6rem) + 0.75rem);
+    z-index: 2;
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--bordure-forte);
+    border-radius: 2px;
+    background: var(--fond);
+    color: var(--texte-doux);
+    cursor: pointer;
+    transition: color var(--duree) var(--courbe), border-color var(--duree) var(--courbe);
+  }
+  .pause-anim[hidden] { display: none; }
+  .pause-anim:hover { color: var(--texte); border-color: var(--accent); }
+  /* Icône dessinée en CSS : deux barres (pause), un triangle (lecture). */
+  .icone {
+    width: 10px;
+    height: 12px;
+    border-inline: 3px solid currentColor;
+  }
+  .en-pause .icone {
+    border: 0;
+    background: currentColor;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+  }
+  .en-pause .piste,
+  .en-pause .pastille { animation-play-state: paused; }
+  @media (max-width: 48rem) {
+    .pause-anim { position: static; justify-self: end; margin-top: -1.25rem; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .pastille { animation: none; }
+    .pause-anim { display: none; }
   }
 </style>
 
 <script>
   import { lancerFumee } from '../scripts/fumee.js';
-  lancerFumee(document.querySelector('.fumee'));
+  const pauseFumee = lancerFumee(document.querySelector('.fumee'));
+
+  // Pause / lecture de tout ce qui bouge dans le hero. Le libellé change, donc pas d'aria-pressed (motif APG).
+  const scene = document.querySelector('.hero-scene');
+  const bouton = document.querySelector('.pause-anim');
+  if (scene && bouton) {
+    bouton.hidden = false;
+    bouton.addEventListener('click', () => {
+      const pause = scene.classList.toggle('en-pause');
+      bouton.querySelector('.libelle').textContent = pause ? bouton.dataset.lecture : bouton.dataset.pause;
+      pauseFumee?.(pause);
+    });
+  }
 
   // Le mur d'affiches s'arrête quand il sort de l'écran : aucun calcul pour un décor invisible.
   const mur = document.querySelector('.mur');
