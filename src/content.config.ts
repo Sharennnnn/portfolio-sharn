@@ -74,8 +74,9 @@ const reglages = defineCollection({
     }),
     contact: z.object({
       email: z.string(),
-      instagram: z.string().optional(),
-      linkedin: z.string().optional(),
+      // Liens publiés tels quels dans des href : adresse https:// ou champ vide, rien d'autre.
+      instagram: z.string().regex(/^(https:\/\/\S+)?$/).optional(),
+      linkedin: z.string().regex(/^(https:\/\/\S+)?$/).optional(),
     }),
     theme: z.object({
       // Injectée dans un attribut style : on n'accepte qu'une couleur hexadécimale.

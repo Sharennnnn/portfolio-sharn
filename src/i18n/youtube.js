@@ -1,19 +1,10 @@
-// Extrait l'ID d'une vidéo YouTube depuis n'importe quel format de lien courant
-// (youtu.be/ID, youtube.com/watch?v=ID, youtube.com/embed/ID) et renvoie
-// l'URL d'intégration prête pour un <iframe>. Renvoie null si le lien ne
-// correspond à aucun format reconnu.
+// Extrait l'ID d'une vidéo YouTube depuis les formats de lien courants (youtu.be/ID, watch?…v=ID,
+// embed/ID, shorts/ID, live/ID, youtube-nocookie) et renvoie l'URL d'intégration prête pour un <iframe>.
+// Renvoie null si le lien ne correspond à aucun format reconnu. Tests : youtube.test.js.
+const MOTIF = /(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/;
+
 export function idYoutube(lien) {
-  if (!lien) return null;
-  const motifs = [
-    /youtu\.be\/([\w-]{11})/,
-    /youtube\.com\/watch\?v=([\w-]{11})/,
-    /youtube\.com\/embed\/([\w-]{11})/,
-  ];
-  for (const motif of motifs) {
-    const trouve = lien.match(motif);
-    if (trouve) return trouve[1];
-  }
-  return null;
+  return lien?.match(MOTIF)?.[1] ?? null;
 }
 
 export function urlIntegrationYoutube(lien) {
