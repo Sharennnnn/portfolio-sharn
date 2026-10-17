@@ -6,6 +6,8 @@ export default defineConfig({
   // Les pages sont des dossiers (/projets/creed/) : les liens finissent par « / » pour éviter une redirection.
   trailingSlash: 'always',
   build: { inlineStylesheets: 'always' },
+  // Aucun bloc de code dans les textes : Shiki ne sert à rien et ses styles en ligne gênent la CSP.
+  markdown: { syntaxHighlight: false },
   // CSP en <meta> : Astro y met l'empreinte de chaque script et style qu'il génère.
   // frame-ancestors est dans public/_headers (ignoré par les navigateurs dans une <meta>).
   security: {
