@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- Modèle de la carte de partage par défaut (1200 × 630). Rendu par scripts/carte-partage.py :
+     ?l=fr → public/og-default.png, ?l=en → public/og-default-en.png. Textes repris de site.yaml. -->
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face { font-family: 'Inter'; src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; font-style: normal; }
+  @font-face { font-family: 'Inter'; src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-italic.woff2') format('woff2'); font-weight: 100 900; font-style: italic; }
+  html, body { margin: 0; }
+  body {
+    width: 1200px; height: 630px; overflow: hidden; position: relative;
+    background: radial-gradient(60% 75% at 92% 0%, #261c14, transparent 70%), #0a0a0b;
+    color: #ededed; font-family: 'Inter', sans-serif;
+  }
+  .marque { position: absolute; left: 80px; top: 76px; font-size: 31px; font-weight: 780; letter-spacing: -0.045em; }
+  .marque span { color: #e09a55; }
+  h1 { position: absolute; left: 80px; top: 345px; margin: 0; font-size: 84px; font-weight: 600; line-height: 0.975; letter-spacing: -0.02em; }
+  h1 em { color: #e09a55; font-weight: 400; }
+  p { position: absolute; left: 80px; top: 535px; margin: 0; font-size: 19px; font-weight: 500; letter-spacing: 0.155em; text-transform: uppercase; color: #8a8a90; }
+</style>
+</head>
+<body>
+  <div class="marque">Shar<span>’</span>N</div>
+  <h1 id="titre"></h1>
+  <p id="eyebrow"></p>
+  <script>
+    const t = {
+      fr: ['Affiches, identités<br>et images <em>qui tiennent.</em>', 'Infographiste · Namur, Belgique'],
+      en: ['Posters, identities<br>and images <em>that hold up.</em>', 'Graphic designer · Namur, Belgium'],
+    }[new URLSearchParams(location.search).get('l') || 'fr'];
+    document.getElementById('titre').innerHTML = t[0];
+    document.getElementById('eyebrow').textContent = t[1];
+  </script>
+</body>
+</html>
