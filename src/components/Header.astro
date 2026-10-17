@@ -103,4 +103,14 @@ const liens = ['projets', 'apropos', 'contact'].map((nom) => ({
     .ilot { padding-inline: 0.875rem 0.375rem; }
     .nav a:not(.langue) { padding-inline: 0.5rem; }
   }
+  /* Très petits écrans (320 px, WCAG 1.4.10) : « À propos » passait à la ligne et l'îlot débordait
+     de 22 px. On resserre les espacements, pas le texte ; les cibles gardent ≥ 24 px de large. */
+  .nav a { white-space: nowrap; }
+  @media (max-width: 23rem) {
+    .entete { padding-inline: 0.75rem; }
+    .ilot { gap: 0.5rem; padding-inline: 0.625rem 0.25rem; }
+    .nav { gap: 0; }
+    .nav a:not(.langue) { padding-inline: 0.3rem; }
+    .langue { margin-left: 0.125rem; }
+  }
 </style>
