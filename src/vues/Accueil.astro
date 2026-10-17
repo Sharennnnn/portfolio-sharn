@@ -216,7 +216,11 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
   }
   .mur.hors-champ .piste { animation-play-state: paused; }
   .piste.inverse { animation-direction: reverse; animation-duration: 85s; }
-  .mur:hover .piste { animation-play-state: paused; }
+  /* Pause au survol pour la souris seulement : sur iPhone, un toucher laisse :hover « collé »
+     et le défilement resterait arrêté. */
+  @media (hover: hover) and (pointer: fine) {
+    .mur:hover .piste { animation-play-state: paused; }
+  }
   .piste a {
     display: block;
     aspect-ratio: 3 / 4;
