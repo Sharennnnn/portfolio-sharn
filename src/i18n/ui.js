@@ -41,6 +41,8 @@ export const ui = {
     'projet.retour': 'Tous les projets',
     'projet.visuel': 'visuel',
     'projet.video': 'Vidéo',
+    'projet.agrandir': 'Voir l’affiche en grand :',
+    'projet.fermer': 'Fermer',
 
     'origine.client': 'Client',
     'origine.fanart': 'Fan art',
@@ -112,6 +114,8 @@ export const ui = {
     'projet.retour': 'All projects',
     'projet.visuel': 'image',
     'projet.video': 'Video',
+    'projet.agrandir': 'View the poster full size:',
+    'projet.fermer': 'Close',
 
     'origine.client': 'Client',
     'origine.fanart': 'Fan art',

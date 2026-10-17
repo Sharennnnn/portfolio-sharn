@@ -18,9 +18,9 @@ const tous = trier(await getCollection('projets'));
 const phares = tous.filter((p) => p.data.phare);
 const projets = (phares.length ? phares : tous).slice(0, 4);
 
-// Mur d'affiches du hero : les 12 premiers projets répartis sur deux colonnes.
+// Mur d'affiches du hero : 12 projets hors sélection (sinon les mêmes affiches s'affichent deux fois de suite).
 const mur = await Promise.all(
-  tous.slice(0, 12).map(async (p) => ({
+  tous.filter((p) => !projets.includes(p)).slice(0, 12).map(async (p) => ({
     id: p.id,
     src: p.data.couverture,
     srcset: await srcsetVignette(p.data.couverture),
@@ -288,6 +288,21 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
   @media (max-width: 40rem) {
     .selection > :global(:nth-child(1)) { grid-column: 1 / -1; }
   }
+  /* Profondeur : au défilement, la grande affiche glisse moins que les petites, comme des plans
+     à des distances différentes. CSS natif (animation-timeline) ; navigateur sans support : rien ne bouge. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 40.0625rem) {
+      .selection > :global(.carte) { animation: profondeur linear both; }
+      /* Règle séparée : le minifieur fusionnerait sinon la timeline dans le raccourci « animation », que Chrome rejette. */
+      .selection > :global(li.carte) { animation-timeline: view(); }
+      .selection > :global(.carte:nth-child(1)) { --profondeur: 1.5rem; }
+      .selection > :global(.carte:nth-child(n + 2)) { --profondeur: 4rem; }
+    }
+  }
+  @keyframes profondeur {
+    from { translate: 0 var(--profondeur); }
+    to { translate: 0 calc(-1 * var(--profondeur)); }
+  }
   .tuile-tout a {
     position: relative;
     display: flex;
@@ -339,17 +354,18 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
     padding-top: 1.5rem;
     border-top: 1px solid var(--bordure);
   }
-  /* Lettre en contour qui se remplit au survol de la colonne. */
+  /* Lettre pleine en gris de bordure (le contour de 1 px était presque invisible), accent au survol. */
   .lettre {
     font-family: var(--police-titre);
     font-size: clamp(5rem, 11vw, 9rem);
     line-height: 0.8;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--bordure-forte);
-    transition: color 600ms var(--courbe), -webkit-text-stroke-color 600ms var(--courbe);
+    color: var(--bordure-forte);
+    transition: color 600ms var(--courbe);
   }
   .duo h2 { align-self: end; }
-  .duo article:hover .lettre { color: var(--accent); -webkit-text-stroke-color: var(--accent); }
+  @media (hover: hover) and (pointer: fine) {
+    .duo article:hover .lettre { color: var(--accent); }
+  }
 
   /* ---------- Appel à contact ---------- */
   .cta {

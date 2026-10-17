@@ -104,10 +104,10 @@ Contrastes mesurés sur le fond `#0a0a0b` (formule WCAG 2.1) :
 | Token | Valeur | Ratio |
 |---|---|---|
 | `--texte` | `#ededed` | 16.9:1 — AAA |
-| `--texte-doux` | `#8a8a90` | 5.77:1 — AA |
+| `--texte-doux` | `#a1a1a7` | 7.7:1 — AAA |
 | `--accent` | `#e09a55` | 8.41:1 — AAA |
 
-L'accent est une version éclaircie de l'orange de ta bannière (`#ce8a4b`, qui
+L'accent est une version éclaircie de l'orange de ta bannière (`#ce8b4b`, qui
 plafonnait à 6.94:1 et n'atteignait pas le seuil AAA de 7:1).
 
 ## Sécurité

@@ -59,7 +59,8 @@ const schema = {
 
     <div class:list={['enveloppe scene', { paysage, 'sans-texte': !aDuTexte }]}>
       <div class="affiche">
-        <img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}; --ratio: ${(couv.width / couv.height).toFixed(4)}; --largeur: ${largeurAffiche}px`} />
+        {/* Sans JS, le lien ouvre l'image seule ; avec JS, la même image s'affiche en grand dans la visionneuse. */}
+        <a class="agrandir" href={d.couverture} aria-label={`${t('projet.agrandir')} ${titre}`}><img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}; --ratio: ${(couv.width / couv.height).toFixed(4)}; --largeur: ${largeurAffiche}px`} /></a>
       </div>
 
       <div class="corps">
@@ -134,7 +135,37 @@ const schema = {
       </span>
     </a>
   </article>
+
+  <dialog class="visionneuse" aria-label={titre}>
+    <form method="dialog"><button class="fermer" aria-label={t('projet.fermer')}>&times;</button></form>
+    <img src={d.couverture} alt={titre} width={couv.width} height={couv.height} loading="lazy" decoding="async" />
+  </dialog>
 </Base>
+
+<script>
+  // Visionneuse : un clic sur l'affiche l'ouvre en grand (dialog natif : Échap, focus piégé puis rendu au lien).
+  const lien = document.querySelector<HTMLAnchorElement>('.agrandir');
+  const visionneuse = document.querySelector<HTMLDialogElement>('.visionneuse');
+  // PROTOTYPE F2 : affiche en 3D (Three.js chargé à la demande), grand écran + souris + animations non réduites.
+  const visuel = document.querySelector<HTMLImageElement>('.visuel');
+  if (visuel && matchMedia('(min-width: 48rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    new IntersectionObserver(async ([e], obs) => {
+      if (!e.isIntersecting) return;
+      obs.disconnect();
+      const { lancerAffiche3d } = await import('../scripts/affiche-3d.js');
+      lancerAffiche3d(visuel);
+    }).observe(visuel);
+  }
+
+  if (lien && visionneuse?.showModal) {
+    lien.addEventListener('click', (e) => {
+      e.preventDefault();
+      visionneuse.showModal();
+    });
+    // Un clic n'importe où (fond ou image) referme : on regarde l'affiche, il n'y a rien d'autre à faire.
+    visionneuse.addEventListener('click', () => visionneuse.close());
+  }
+</script>
 
 <style>
   .tete {
@@ -172,7 +203,73 @@ const schema = {
     .scene.paysage .corps { grid-template-columns: 1fr; }
     .affiche { position: static; }
   }
+  /* Profondeur (mobile, où l'affiche n'est pas collante) : elle recule légèrement en quittant l'écran. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (max-width: 48rem) {
+      .visuel { animation: recul linear both; }
+      /* Règle séparée : le minifieur fusionnerait sinon la timeline dans le raccourci « animation », que Chrome rejette. */
+      img.visuel { animation-timeline: view(); animation-range: exit 0% exit 100%; }
+    }
+  }
+  @keyframes recul {
+    to { scale: 0.92; translate: 0 2rem; opacity: 0.6; }
+  }
   .corps { padding-block: 0.5rem clamp(2.5rem, 5vw, 4rem); }
+
+  /* Lien d'agrandissement : l'anneau de focus entoure l'affiche, pas toute la colonne. */
+  .agrandir { display: block; position: relative; }
+  /* F2 : le canvas 3D remplace visuellement l'image, qui reste en place (invisible) pour le reste. */
+  .agrandir :global(.affiche-3d) { position: absolute; pointer-events: none; }
+  .agrandir:global(.en-3d) .visuel { opacity: 0; box-shadow: none; }
+  .agrandir:focus-visible { outline: none; }
+  .agrandir:focus-visible .visuel { outline: 2px solid var(--accent); outline-offset: 3px; }
+  @media (hover: hover) and (pointer: fine) {
+    .agrandir { cursor: zoom-in; }
+  }
+
+  /* Visionneuse plein écran : l'affiche entière, nette, sur fond noir. */
+  .visionneuse[open] {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: clamp(1rem, 3vw, 2rem);
+    border: 0;
+    background: rgb(0 0 0 / 0.94);
+    color: var(--texte);
+    overscroll-behavior: contain;
+    cursor: zoom-out;
+    opacity: 1;
+    transition: opacity 250ms var(--courbe);
+  }
+  @starting-style {
+    .visionneuse[open] { opacity: 0; }
+  }
+  .visionneuse::backdrop { background: transparent; }
+  .visionneuse img {
+    width: auto;
+    max-width: 100%;
+    max-height: calc(100svh - 2 * clamp(1rem, 3vw, 2rem));
+    object-fit: contain;
+  }
+  .fermer {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--bordure-forte);
+    border-radius: 2px;
+    background: var(--fond);
+    color: var(--texte);
+    font: inherit;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
   .texte section + section,
   .texte .markdown { margin-top: clamp(2rem, 4vw, 3rem); }
   .texte h2 {
