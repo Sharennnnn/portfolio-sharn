@@ -1,6 +1,6 @@
 ---
-titre: Don't be dumb - A$AP Rocky
-titre_en: Don't be dumb - A$AP Rocky
+titre: Don't be dumb — A$AP Rocky
+titre_en: Don't be dumb — A$AP Rocky
 annee: 2026
 origine: fanart
 disciplines:

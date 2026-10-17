@@ -11,13 +11,13 @@ export const ui = {
     'nav.apropos': 'À propos',
     'nav.contact': 'Contact',
 
-    'accueil.selection': 'Sélection — 2024 / 2026',
+    'accueil.selection': 'Sélection — 2025 / 2026',
     'accueil.tout': 'Tous les projets',
     'accueil.lignes': 'Trois façons de travailler',
     'accueil.ligneA.titre': 'Print éditorial',
     'accueil.ligneA.texte': "Typographie dominante, palettes réduites, grain assumé. Je construis l'image autour du texte plutôt que l'inverse : le titre porte la composition, la couleur sert la lisibilité.",
     'accueil.ligneB.titre': 'Photoréalisme',
-    'accueil.ligneB.texte': "Montage, retouche et mise en situation produit. L'objectif est qu'on doute que l'image ait été fabriquée — lumière cohérente, matières crédibles, aucun raccourci visible.",
+    'accueil.ligneB.texte': "Montage, retouche et mise en situation produit. Je veux qu'on doute que l'image ait été fabriquée : la lumière reste cohérente, les matières crédibles, sans raccourci visible.",
     'accueil.ligneC.titre': 'Branding & communication',
     'accueil.ligneC.texte': "Identité visuelle et communication graphique d'une marque : logo, charte, déclinaisons. Je pars de ce que la marque doit dire, puis je fixe des règles simples — couleurs, typographies, usages — pour qu'elle reste reconnaissable sur chaque support.",
 
@@ -87,13 +87,13 @@ export const ui = {
     'nav.apropos': 'About',
     'nav.contact': 'Contact',
 
-    'accueil.selection': 'Selected work — 2024 / 2026',
+    'accueil.selection': 'Selected work — 2025 / 2026',
     'accueil.tout': 'All projects',
     'accueil.lignes': 'Three ways of working',
     'accueil.ligneA.titre': 'Editorial print',
     'accueil.ligneA.texte': 'Type-led compositions, reduced palettes, visible grain. I build the image around the text rather than the other way round: the headline carries the layout, colour serves legibility.',
     'accueil.ligneB.titre': 'Photorealism',
-    'accueil.ligneB.texte': 'Compositing, retouching and product staging. The goal is that you question whether the image was built at all — consistent light, believable materials, no visible shortcuts.',
+    'accueil.ligneB.texte': 'Compositing, retouching and product staging. I want you to doubt the image was built at all: the light stays consistent, the materials believable, with no visible shortcuts.',
     'accueil.ligneC.titre': 'Branding & communication',
     'accueil.ligneC.texte': 'A brand\u2019s visual identity and graphic communication: logo, guidelines, applications. I start from what the brand needs to say, then set simple rules — colours, typefaces, usage — so it stays recognisable on every medium.',
 

@@ -14,6 +14,8 @@ contrainte: Créer une affiche pour l'album « L'Étrange Histoire de Mr. Anders
 contrainte_en: Create a poster for the album “L'Étrange Histoire de Mr. Anderson” by the French rapper Laylow.
 resolution: J'ai travaillé à partir des visuels de l'album et d'images du court métrage qui l'accompagne.
 resolution_en: I worked from the album's visuals and from stills of the short film that accompanies it.
+resultat: Les quatre variantes de couleur ont été publiées sur Instagram.
+resultat_en: All four colourways were published on Instagram.
 livrables: Affiche, variantes chromatiques
 livrables_en: Poster, colour variants
 outils:
