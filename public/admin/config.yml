@@ -24,7 +24,7 @@ media_folder: public/images/projets
 public_folder: /images/projets
 
 # Images envoyées depuis l'admin : nom nettoyé, conversion WebP, 1600 px de large max.
-# Le poids max (2 Mo) s'applique après conversion (vérifié dans le code de Sveltia 0.246).
+# Le poids max (2 Mo) s'applique après conversion (vérifié dans le code de Sveltia 0.227.2, la version figée).
 media_libraries:
   default:
     config:
