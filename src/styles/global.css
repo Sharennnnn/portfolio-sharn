@@ -129,6 +129,16 @@ h2 {
   color: var(--accent);
 }
 
+/* Interligne resserré au-dessus de la chute : le bas de casse n'a pas de capitales ni d'accents
+   à protéger, la ligne peut remonter vers « et images ». */
+.hero-titre .ligne-chute {
+  margin-top: -0.34em;
+}
+
+.hero-titre .ligne-chute > span {
+  line-height: 0.95;
+}
+
 h2 {
   font-size: var(--t-h2);
   line-height: 1;
