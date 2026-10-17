@@ -28,7 +28,7 @@ export function lancerAffiche3d(img) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 
   const scene = new Scene();
-  const camera = new PerspectiveCamera(FOV, 1, 0.1, 100);
+  const camera = new PerspectiveCamera(FOV, 1, 1, 100000); // distances en pixels (plan à ~1 500 px de la caméra)
   const uniforms = { carte: { value: null }, lumiere: { value: new Vector2(0.5, 0.5) }, intensite: { value: 0 } };
   const plan = new Mesh(new PlaneGeometry(1, 1), new ShaderMaterial({ vertexShader: VS, fragmentShader: FS, uniforms, transparent: true }));
   scene.add(plan);
