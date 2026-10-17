@@ -18,9 +18,9 @@ const tous = trier(await getCollection('projets'));
 const phares = tous.filter((p) => p.data.phare);
 const projets = (phares.length ? phares : tous).slice(0, 4);
 
-// Mur d'affiches du hero : les 12 premiers projets répartis sur deux colonnes.
+// Mur d'affiches du hero : 12 projets hors sélection (sinon les mêmes affiches s'affichent deux fois de suite).
 const mur = await Promise.all(
-  tous.slice(0, 12).map(async (p) => ({
+  tous.filter((p) => !projets.includes(p)).slice(0, 12).map(async (p) => ({
     id: p.id,
     src: p.data.couverture,
     srcset: await srcsetVignette(p.data.couverture),
