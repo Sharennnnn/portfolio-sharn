@@ -288,6 +288,21 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
   @media (max-width: 40rem) {
     .selection > :global(:nth-child(1)) { grid-column: 1 / -1; }
   }
+  /* Profondeur : au défilement, la grande affiche glisse moins que les petites, comme des plans
+     à des distances différentes. CSS natif (animation-timeline) ; navigateur sans support : rien ne bouge. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 40.0625rem) {
+      .selection > :global(.carte) { animation: profondeur linear both; }
+      /* Règle séparée : le minifieur fusionnerait sinon la timeline dans le raccourci « animation », que Chrome rejette. */
+      .selection > :global(li.carte) { animation-timeline: view(); }
+      .selection > :global(.carte:nth-child(1)) { --profondeur: 1.5rem; }
+      .selection > :global(.carte:nth-child(n + 2)) { --profondeur: 4rem; }
+    }
+  }
+  @keyframes profondeur {
+    from { translate: 0 var(--profondeur); }
+    to { translate: 0 calc(-1 * var(--profondeur)); }
+  }
   .tuile-tout a {
     position: relative;
     display: flex;

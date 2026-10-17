@@ -172,6 +172,17 @@ const schema = {
     .scene.paysage .corps { grid-template-columns: 1fr; }
     .affiche { position: static; }
   }
+  /* Profondeur (mobile, où l'affiche n'est pas collante) : elle recule légèrement en quittant l'écran. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (max-width: 48rem) {
+      .visuel { animation: recul linear both; }
+      /* Règle séparée : le minifieur fusionnerait sinon la timeline dans le raccourci « animation », que Chrome rejette. */
+      img.visuel { animation-timeline: view(); animation-range: exit 0% exit 100%; }
+    }
+  }
+  @keyframes recul {
+    to { scale: 0.92; translate: 0 2rem; opacity: 0.6; }
+  }
   .corps { padding-block: 0.5rem clamp(2.5rem, 5vw, 4rem); }
   .texte section + section,
   .texte .markdown { margin-top: clamp(2rem, 4vw, 3rem); }
