@@ -146,6 +146,17 @@ const schema = {
   // Visionneuse : un clic sur l'affiche l'ouvre en grand (dialog natif : Échap, focus piégé puis rendu au lien).
   const lien = document.querySelector<HTMLAnchorElement>('.agrandir');
   const visionneuse = document.querySelector<HTMLDialogElement>('.visionneuse');
+  // PROTOTYPE F2 : affiche en 3D (Three.js chargé à la demande), grand écran + souris + animations non réduites.
+  const visuel = document.querySelector<HTMLImageElement>('.visuel');
+  if (visuel && matchMedia('(min-width: 48rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    new IntersectionObserver(async ([e], obs) => {
+      if (!e.isIntersecting) return;
+      obs.disconnect();
+      const { lancerAffiche3d } = await import('../scripts/affiche-3d.js');
+      lancerAffiche3d(visuel);
+    }).observe(visuel);
+  }
+
   if (lien && visionneuse?.showModal) {
     lien.addEventListener('click', (e) => {
       e.preventDefault();
@@ -206,7 +217,10 @@ const schema = {
   .corps { padding-block: 0.5rem clamp(2.5rem, 5vw, 4rem); }
 
   /* Lien d'agrandissement : l'anneau de focus entoure l'affiche, pas toute la colonne. */
-  .agrandir { display: block; }
+  .agrandir { display: block; position: relative; }
+  /* F2 : le canvas 3D remplace visuellement l'image, qui reste en place (invisible) pour le reste. */
+  .agrandir :global(.affiche-3d) { position: absolute; pointer-events: none; }
+  .agrandir:global(.en-3d) .visuel { opacity: 0; box-shadow: none; }
   .agrandir:focus-visible { outline: none; }
   .agrandir:focus-visible .visuel { outline: 2px solid var(--accent); outline-offset: 3px; }
   @media (hover: hover) and (pointer: fine) {
