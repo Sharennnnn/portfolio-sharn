@@ -1,4 +1,5 @@
 ---
+ordre: 2
 titre: UHZ1
 titre_en: UHZ1
 annee: 2026
@@ -19,7 +20,7 @@ galerie:
   - /images/projets/uhz1-galerie-7.webp
   - /images/projets/uhz1-galerie-8.webp
 video: ''
-contrainte: 'Exercice : créer la direction artistique d''un restaurant, sur un thème libre.'
+contrainte: "Exercice : créer la direction artistique d'un restaurant, sur un thème libre."
 contrainte_en: 'Exercise: create the art direction for a restaurant, with a free theme.'
 resolution: |-
   J'ai imaginé un restaurant sur le thème de l'espace. Je l'ai appelé UHZ1, du nom de l'un des plus anciens trous noirs jamais observés (découvert en 2023).
@@ -30,13 +31,13 @@ resolution_en: |-
   From that name, I designed the logo, then staged it on several planets.
   I also designed the website prototype in Figma, including its ordering flow.
 resultat: 'Présenté au jury de juin 2026 : mention « coup de cœur » du jury et 363/500.'
-resultat_en: 'Presented to the June 2026 jury: the jury''s “coup de cœur” (favourite) mention and 363/500.'
+resultat_en: "Presented to the June 2026 jury: the jury's “coup de cœur” (favourite) mention and 363/500."
 livrables: Identité, mockup
 livrables_en: Identity, mockup
 outils:
   - Illustrator
   - Photoshop
   - Figma
+  - Autodesk Maya
 phare: true
-ordre: 2
 ---
