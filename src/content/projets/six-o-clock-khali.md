@@ -9,7 +9,10 @@ disciplines:
 client: ''
 couverture: /images/projets/khali_sixoclock.webp
 survol: ''
-galerie: []
+galerie:
+  - /images/projets/khali_sixoclock_violet-orange.webp
+  - /images/projets/khali_sixoclock_violet.webp
+  - /images/projets/khali_sixoclock_b-n.webp
 video: ''
 contrainte: Une proposition de pochette non officielle pour le rappeur Khali, construite à partir de l’analyse de six de ses covers et de dix-sept de ses textes.
 contrainte_en: An unofficial album cover proposal for French rapper Khali, built from a study of six of his covers and seventeen of his lyrics.
