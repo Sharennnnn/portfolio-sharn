@@ -1,4 +1,5 @@
 ---
+ordre: 26
 titre: Urban Jersey
 titre_en: Urban Jersey
 annee: 2025
@@ -20,5 +21,4 @@ livrables: Moodboard, logo (PNG, SVG, AI), mockup
 livrables_en: Moodboard, logo (PNG, SVG, AI), mockup
 outils: []
 phare: false
-ordre: 25
 ---

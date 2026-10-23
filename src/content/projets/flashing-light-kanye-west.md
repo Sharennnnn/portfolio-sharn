@@ -1,4 +1,5 @@
 ---
+ordre: 8
 titre: Flashing Lights — Kanye West
 titre_en: Flashing Lights — Kanye West
 annee: 2026
@@ -21,5 +22,4 @@ livrables_en: MP4
 outils:
   - After Effects
 phare: false
-ordre: 7
 ---

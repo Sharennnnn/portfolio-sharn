@@ -1,4 +1,5 @@
 ---
+ordre: 23
 titre: Nightwave
 titre_en: Nightwave
 annee: 2026
@@ -18,5 +19,4 @@ livrables: Design de canette, mockup
 livrables_en: Can design, mockup
 outils: []
 phare: false
-ordre: 22
 ---

@@ -1,4 +1,5 @@
 ---
+ordre: 25
 titre: Les Bijoux de Fafi
 titre_en: Les Bijoux de Fafi
 annee: 2026
@@ -22,5 +23,4 @@ livrables: Moodboard, logo (PNG, SVG, AI), mockup
 livrables_en: Moodboard, logo (PNG, SVG, AI), mockup
 outils: []
 phare: true
-ordre: 24
 ---
