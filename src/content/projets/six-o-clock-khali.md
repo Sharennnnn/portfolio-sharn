@@ -10,6 +10,7 @@ client: ''
 couverture: /images/projets/khali_sixoclock.webp
 survol: ''
 galerie:
+  - /images/projets/khali_sixoclock.webp
   - /images/projets/khali_sixoclock_violet-orange.webp
   - /images/projets/khali_sixoclock_violet.webp
   - /images/projets/khali_sixoclock_b-n.webp
