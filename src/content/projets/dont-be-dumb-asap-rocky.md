@@ -1,5 +1,5 @@
 ---
-ordre: 7
+ordre: 6
 titre: Don't be dumb — A$AP Rocky
 titre_en: Don't be dumb — A$AP Rocky
 annee: 2026

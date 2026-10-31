@@ -1,5 +1,5 @@
 ---
-ordre: 25
+ordre: 24
 titre: Les Bijoux de Fafi
 titre_en: Les Bijoux de Fafi
 annee: 2026
