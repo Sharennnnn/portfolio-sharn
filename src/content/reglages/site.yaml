@@ -52,6 +52,16 @@ apropos:
       titre_en: Graphic designer for the French GTA RP FlashFA server
       lieu: Télétravail
       lieu_en: Remote
+    - periode: '2026'
+      titre: Mise en page du portfolio de Cyril Derviendt
+      titre_en: Layout of Cyril Derviendt’s portfolio
+      lieu: Client freelance
+      lieu_en: Freelance client
+    - periode: '2026'
+      titre: Mise en page du manuscrit de Benoît Renneson
+      titre_en: Layout of Benoît Renneson’s manuscript
+      lieu: Client freelance
+      lieu_en: Freelance client
   competences:
     - groupe: Print & édition
       groupe_en: Print & editorial
