@@ -1,5 +1,5 @@
 ---
-ordre: 7
+ordre: 8
 titre: Flashing Lights — Kanye West
 titre_en: Flashing Lights — Kanye West
 annee: 2026

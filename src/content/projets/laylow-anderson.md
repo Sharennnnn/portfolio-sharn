@@ -1,4 +1,5 @@
 ---
+ordre: 5
 titre: L'Étrange Histoire de Mr. Anderson — Laylow
 titre_en: The Strange Story of Mr. Anderson — Laylow
 annee: 2026
@@ -21,5 +22,4 @@ livrables_en: Poster, colour variants
 outils:
   - Photoshop
 phare: true
-ordre: 4
 ---

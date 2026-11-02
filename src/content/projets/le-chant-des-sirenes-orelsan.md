@@ -1,5 +1,5 @@
 ---
-ordre: 5
+ordre: 6
 titre: Le chant des sirènes — Orelsan
 titre_en: Le chant des sirènes — Orelsan
 annee: 2026

@@ -1,5 +1,5 @@
 ---
-ordre: 23
+ordre: 24
 titre: Logo Infographie
 titre_en: Logo Infographie
 annee: 2026
