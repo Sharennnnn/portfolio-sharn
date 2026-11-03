@@ -1,7 +1,7 @@
 ---
 ordre: 4
-titre: He Waits — Affiche Halloween
-titre_en: He Waits — Halloween Poster
+titre: He Waits
+titre_en: He Waits
 annee: 2026
 origine: perso
 disciplines:
@@ -35,3 +35,5 @@ phare: false
 
 - **Photo :** @cxdevv._ 
 - **Modèle :** @titi.s.baglio
+
+Retouching: Camera Raw, masks, dodge & burn, layer styles.
