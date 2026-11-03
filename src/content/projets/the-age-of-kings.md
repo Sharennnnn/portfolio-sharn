@@ -11,12 +11,15 @@ couverture: /images/projets/the-age-of-kings-couverture.webp
 survol: ''
 galerie: []
 video: ''
-contrainte: 'Projet personnel : une affiche originale, imaginée par moi.'
-contrainte_en: 'Personal project: an original poster of my own invention.'
-resolution: '-'
-resolution_en: '-'
-livrables: ''
-livrables_en: ''
-outils: []
+contrainte: 'Projet personnel : une affiche originale, sans film ni marque derrière.'
+contrainte_en: 'Personal project: an original poster, with no film or brand behind it.'
+resolution: Une affiche au ton médiéval, dans un seul rouge brique sur noir. Le titre en grand serif italique est encadré d’une accroche (« Thrones of Power »), d’un code-barres et de colonnes de texte, comme une couverture de magazine. En bas, la figure d’un roi couronné et voilé apparaît deux fois, en plein cadre et dans une vignette, comme un écho.
+resolution_en: A medieval-toned poster in a single brick red on black. The large italic serif title is framed by a tagline (“Thrones of Power”), a barcode and columns of text, like a magazine cover. Below, a crowned and veiled king appears twice, full-frame and in an inset, like an echo.
+resultat: ''
+resultat_en: ''
+livrables: Affiche
+livrables_en: Poster
+outils:
+  - Photoshop
 phare: false
 ---
