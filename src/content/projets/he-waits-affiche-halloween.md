@@ -26,10 +26,10 @@ resolution_en: |-
   - Storytelling: the title never says “Halloween”. The date only shows in “Route 31”.
 resultat: ''
 resultat_en: ''
-livrables: ''
-livrables_en: ''
+livrables: Affiche
+livrables_en: Poster
 outils:
-  - Photohop (Camera Raw, masques, dodge & burn, style de calque)
+  - Photohop
 phare: false
 ---
 
