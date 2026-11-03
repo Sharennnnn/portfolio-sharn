@@ -11,14 +11,14 @@ couverture: /images/projets/flashing-light-kanye-west-couverture.webp
 survol: ''
 galerie: []
 video: https://youtu.be/cUqlplrckp4
-contrainte: 'Exercice : réaliser une animation de typographie cinétique dans After Effects.'
-contrainte_en: 'Exercise: create a kinetic typography animation in After Effects.'
-resolution: J'ai construit la composition sur un axe central et animé les paroles de « Flashing Lights » de Kanye West.
-resolution_en: I built the composition around a central axis and animated the lyrics of Kanye West's “Flashing Lights”.
+contrainte: 'Exercice : animer un texte en typographie cinétique dans After Effects.'
+contrainte_en: 'Exercise: animate text as kinetic typography in After Effects.'
+resolution: 'J’ai animé les paroles de « Flashing Lights » de Kanye West autour d’un axe central : chaque mot arrive au centre de l’écran, au rythme du morceau.'
+resolution_en: 'I animated the lyrics of Kanye West’s “Flashing Lights” around a central axis: each word lands in the middle of the frame, on the beat.'
 resultat: ''
 resultat_en: ''
-livrables: MP4
-livrables_en: MP4
+livrables: Vidéo MP4
+livrables_en: MP4 video
 outils:
   - After Effects
 phare: false
