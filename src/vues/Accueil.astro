@@ -5,7 +5,7 @@ import CarteProjet from '../components/CarteProjet.astro';
 import { traduire, route, trier, champ, autreLangue, urlProjet } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
 import { personne } from '../lib/schema.js';
-import { srcsetVignette } from '../lib/images.js';
+import { srcsetVignette, couleurAttente } from '../lib/images.js';
 // Serif italique du titre : utilisée sur cette page seulement, donc préchargée ici seulement.
 import policeSerif from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
 
@@ -24,6 +24,7 @@ const mur = await Promise.all(
     id: p.id,
     src: p.data.couverture,
     srcset: await srcsetVignette(p.data.couverture),
+    couleur: await couleurAttente(p.data.couverture),
   }))
 );
 const colonnes = [mur.filter((_, i) => i % 2 === 0), mur.filter((_, i) => i % 2 === 1)];
@@ -68,7 +69,7 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
               <div class:list={['piste defile', { inverse: c === 1 }]}>
                 {[...col, ...col].map((a, i) => (
                   <a href={urlProjet(langue, a.id)} tabindex="-1">
-                    <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) 9rem, 15rem" alt="" width="900" height="1200" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={c === 0 && i === 0 ? 'high' : undefined} decoding="async" />
+                    <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) 9rem, 15rem" style={`background:${a.couleur}`} alt="" width="900" height="1200" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={c === 0 && i === 0 ? 'high' : undefined} decoding="async" />
                   </a>
                 ))}
               </div>

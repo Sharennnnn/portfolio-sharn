@@ -23,6 +23,11 @@ export function champ(objet, base, langue) {
   return objet[base];
 }
 
+// Un champ vide ou réduit à « - », « — », « . » (sans lettre ni chiffre) masque sa rubrique dans l'admin.
+export function rempli(texte) {
+  return Boolean(texte && /[\p{L}\p{N}]/u.test(texte));
+}
+
 export function autreLangue(langue) {
   return langue === 'fr' ? 'en' : 'fr';
 }

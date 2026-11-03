@@ -1,10 +1,10 @@
 ---
 import { render, getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { traduire, champ, route, urlProjet, autreLangue, trier } from '../i18n/utils.js';
+import { traduire, champ, route, urlProjet, autreLangue, trier, rempli } from '../i18n/utils.js';
 import { urlIntegrationYoutube } from '../i18n/youtube.js';
 import { lireReglages } from '../i18n/reglages.js';
-import { dimensions, srcsetVignette, urlPartage, LARGEUR_PARTAGE } from '../lib/images.js';
+import { dimensions, srcsetVignette, urlPartage, couleurAttente, LARGEUR_PARTAGE } from '../lib/images.js';
 import { personne } from '../lib/schema.js';
 
 const { langue, projet } = Astro.props;
@@ -15,8 +15,6 @@ const contrainte = champ(d, 'contrainte', langue);
 const resolution = champ(d, 'resolution', langue);
 const livrables = champ(d, 'livrables', langue);
 const resultat = champ(d, 'resultat', langue);
-// Un champ réduit à « . » ou vide n'est pas affiché.
-const rempli = (texte) => Boolean(texte && /[\p{L}\p{N}]/u.test(texte));
 const aDuTexte = [contrainte, resolution, resultat, projet.body].some(rempli);
 const description = rempli(contrainte) ? contrainte : `${titre} — ${t(`origine.${d.origine}`)}, ${d.annee}`;
 const { Content } = await render(projet);
@@ -24,9 +22,10 @@ const videoEmbed = urlIntegrationYoutube(d.video);
 
 const couv = await dimensions(d.couverture);
 const srcsetCouv = await srcsetVignette(d.couverture);
+const couleurCouv = await couleurAttente(d.couverture);
 // Affiche verticale : jamais plus large que ~600 px (hauteur d'écran) ; visuel horizontal : pleine largeur.
 const taillesCouv = couv.width > couv.height ? '(max-width: 1440px) 100vw, 1320px' : '(max-width: 40rem) 100vw, 600px';
-const galerie = await Promise.all(d.galerie.map(async (src) => ({ src, ...(await dimensions(src)) })));
+const galerie = await Promise.all(d.galerie.map(async (src) => ({ src, srcset: await srcsetVignette(src), ...(await dimensions(src)) })));
 const largeurPartage = Math.min(couv.width, LARGEUR_PARTAGE);
 const partage = import.meta.env.DEV ? d.couverture : urlPartage(d.couverture);
 const r = await lireReglages();
@@ -60,7 +59,7 @@ const schema = {
     <div class:list={['enveloppe scene', { paysage, 'sans-texte': !aDuTexte }]}>
       <div class="affiche">
         {/* Sans JS, le lien ouvre l'image seule ; avec JS, la même image s'affiche en grand dans la visionneuse. */}
-        <a class="agrandir" href={d.couverture} aria-label={`${t('projet.agrandir')} ${titre}`}><img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}; --ratio: ${(couv.width / couv.height).toFixed(4)}; --largeur: ${largeurAffiche}px`} /></a>
+        <a class="agrandir" href={d.couverture} aria-label={`${t('projet.agrandir')} ${titre}`}><img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}; background: ${couleurCouv}; --ratio: ${(couv.width / couv.height).toFixed(4)}; --largeur: ${largeurAffiche}px`} /></a>
       </div>
 
       <div class="corps">
@@ -89,10 +88,10 @@ const schema = {
         <div class="fiche reveal reveal--bloc">
           <p class="eyebrow">{t('projet.infos')}</p>
           <dl>
-            {d.client && (<><dt>{t('projet.client')}</dt><dd>{d.client}</dd></>)}
-            <dt>{t('projet.annee')}</dt><dd>{d.annee}</dd>
-            {livrables && (<><dt>{t('projet.livrables')}</dt><dd>{livrables}</dd></>)}
-            {d.outils.length > 0 && (<><dt>{t('projet.outils')}</dt><dd>{d.outils.join(', ')}</dd></>)}
+            {d.client && (<div><dt>{t('projet.client')}</dt><dd>{d.client}</dd></div>)}
+            <div><dt>{t('projet.annee')}</dt><dd>{d.annee}</dd></div>
+            {livrables && (<div><dt>{t('projet.livrables')}</dt><dd>{livrables}</dd></div>)}
+            {d.outils.length > 0 && (<div><dt>{t('projet.outils')}</dt><dd>{d.outils.join(', ')}</dd></div>)}
           </dl>
         </div>
       </div>
@@ -115,7 +114,7 @@ const schema = {
     {d.galerie.length > 0 && (
       <div class="enveloppe galerie">
         {galerie.map((img, i) => (
-          <img class="reveal reveal--carte" src={img.src} alt={`${titre}, ${t('projet.visuel')} ${i + 1} / ${galerie.length}`} loading="lazy" decoding="async" width={img.width} height={img.height} />
+          <img class="reveal reveal--carte" src={img.src} srcset={img.srcset} sizes="(max-width: 1440px) 92vw, 1320px" alt={`${titre}, ${t('projet.visuel')} ${i + 1} / ${galerie.length}`} loading="lazy" decoding="async" width={img.width} height={img.height} />
         ))}
       </div>
     )}
@@ -280,16 +279,31 @@ const schema = {
   }
   .texte p { color: var(--texte-doux); max-width: 62ch; margin: 0; white-space: pre-line; text-wrap: pretty; }
   .fiche { margin-top: clamp(2.5rem, 5vw, 4rem); }
+  /* Fiche en « bloc de crédits » d'affiche de cinéma : rôles en petit, noms en capitales condensées, à la suite. */
   .fiche dl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.5rem 1.5rem;
-    font-size: var(--t-legende);
     margin: 1rem 0 0;
-    border-top: 1px solid var(--bordure);
-    padding-top: 1rem;
+    padding-block: 1.25rem;
+    border-block: 1px solid var(--bordure);
+    text-align: center;
+    text-wrap: balance;
+    font-family: var(--police-titre);
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
   }
-  .fiche dt { color: var(--texte-doux); }
+  /* Chaque paire rôle / valeur passe à la ligne d'un bloc (<div> autorisé dans un <dl>). */
+  .fiche dl div { display: inline-block; margin: 0 0.6em; }
+  .fiche dt,
+  .fiche dd { display: inline; }
+  .fiche dt {
+    font-family: var(--police-texte);
+    font-size: 0.55em;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--texte-doux);
+    margin-right: 0.5em;
+  }
   .fiche dd { margin: 0; }
   .galerie { display: grid; gap: 1.5rem; padding-top: clamp(2rem, 4vw, 3rem); }
   .galerie img { width: 100%; border: 1px solid var(--bordure); }

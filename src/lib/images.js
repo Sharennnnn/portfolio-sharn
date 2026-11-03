@@ -18,6 +18,19 @@ export async function dimensions(src) {
   return cache.get(src);
 }
 
+// Couleur moyenne (calculée au build) : fond de la case tant que l'image n'est pas chargée.
+// La moyenne plutôt que la « dominante » de sharp, qui donne du noir pour la plupart des affiches sombres.
+const couleurs = new Map();
+export async function couleurAttente(src) {
+  if (!couleurs.has(src)) {
+    const { isOpaque, channels } = await sharp(path.join('public', src)).stats();
+    const [r, g, b] = channels.slice(0, 3).map((c) => Math.round(c.mean));
+    // Image avec transparence : le fond coloré resterait visible derrière elle une fois chargée.
+    couleurs.set(src, isOpaque ? `rgb(${r} ${g} ${b})` : 'transparent');
+  }
+  return couleurs.get(src);
+}
+
 const nom = (src) => path.basename(src, path.extname(src));
 export const urlVignette = (src, largeur = LARGEUR_VIGNETTE) => `/images/vignettes/${nom(src)}-${largeur}.webp`;
 export const urlPartage = (src) => `/images/partage/${nom(src)}.jpg`;

@@ -50,6 +50,7 @@ export function lancerAffiche3d(img) {
   const cible = { rx: 0, ry: 0, lx: 0.5, ly: 0.5, i: 0 };
   const etat = { ...cible };
   let boucle = 0, derniere = performance.now();
+  let perdu = false; // contexte WebGL perdu : plus aucun rendu
   const rendu = () => renderer.render(scene, camera);
   const image = (maintenant) => {
     const dt = Math.min((maintenant - derniere) / 1000, 0.1);
@@ -67,7 +68,7 @@ export function lancerAffiche3d(img) {
     boucle = reste > 0.0005 ? requestAnimationFrame(image) : 0;
   };
   const relancer = () => {
-    if (!boucle) { derniere = performance.now(); boucle = requestAnimationFrame(image); }
+    if (!boucle && !perdu) { derniere = performance.now(); boucle = requestAnimationFrame(image); }
   };
 
   lien.addEventListener('pointermove', (e) => {
@@ -86,7 +87,15 @@ export function lancerAffiche3d(img) {
     relancer();
   });
 
+  // Contexte WebGL perdu (veille, pilote réinitialisé, trop d'onglets) : on rend l'image, sinon l'affiche disparaît.
+  canvas.addEventListener('webglcontextlost', () => {
+    perdu = true;
+    lien.classList.remove('en-3d');
+    canvas.remove();
+  });
+
   new TextureLoader().load(img.currentSrc || img.src, (texture) => {
+    if (perdu) return;
     texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
     uniforms.carte.value = texture;
     lien.append(canvas);

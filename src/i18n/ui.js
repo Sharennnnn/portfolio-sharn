@@ -19,7 +19,7 @@ export const ui = {
     'accueil.ligneB.titre': 'Photoréalisme',
     'accueil.ligneB.texte': "Montage, retouche et mise en situation produit. Je veux qu'on doute que l'image ait été fabriquée : la lumière reste cohérente, les matières crédibles, sans raccourci visible.",
     'accueil.ligneC.titre': 'Branding & communication',
-    'accueil.ligneC.texte': "Identité visuelle et communication graphique d'une marque : logo, charte, déclinaisons. Je pars de ce que la marque doit dire, puis je fixe des règles simples — couleurs, typographies, usages — pour qu'elle reste reconnaissable sur chaque support.",
+    'accueil.ligneC.texte': "Je dessine le logo, la charte et les déclinaisons d'une marque. Je pars de ce qu'elle doit dire, puis je fixe quelques règles de couleur, de typographie et d'usage pour qu'on la reconnaisse sur chaque support.",
 
     'projets.titre': 'Projets',
     'projets.chapeau': 'Commandes, exercices et travaux personnels. Chaque vignette indique sa discipline et sa provenance.',
@@ -95,7 +95,7 @@ export const ui = {
     'accueil.ligneB.titre': 'Photorealism',
     'accueil.ligneB.texte': 'Compositing, retouching and product staging. I want you to doubt the image was built at all: the light stays consistent, the materials believable, with no visible shortcuts.',
     'accueil.ligneC.titre': 'Branding & communication',
-    'accueil.ligneC.texte': 'A brand\u2019s visual identity and graphic communication: logo, guidelines, applications. I start from what the brand needs to say, then set simple rules — colours, typefaces, usage — so it stays recognisable on every medium.',
+    'accueil.ligneC.texte': 'I design a brand\u2019s logo, guidelines and applications. I start from what it needs to say, then set a few rules for colour, type and usage so people recognise it on every medium.',
 
     'projets.titre': 'Work',
     'projets.chapeau': 'Commissions, exercises and personal work. Each thumbnail states its discipline and its origin.',

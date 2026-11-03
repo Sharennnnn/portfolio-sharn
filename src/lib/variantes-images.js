@@ -18,7 +18,12 @@ export default function variantesImages() {
         const partage = path.join(racine, 'images/partage');
         await mkdir(vignettes, { recursive: true });
         await mkdir(partage, { recursive: true });
-        const fichiers = (await readdir(source)).filter((f) => /\.(webp|jpe?g|png)$/i.test(f));
+        // Dossier des médias de l'admin : seuls les formats acceptés par ses champs image passent. La bibliothèque
+        // « Médias » de Sveltia n'a pas de filtre ; un SVG (qui peut contenir du script) ou tout autre fichier y fait
+        // donc échouer le build, et Cloudflare garde la version en ligne précédente.
+        const interdits = (await readdir(source, { recursive: true })).filter((f) => /\.[^/\\]+$/.test(f) && !/\.(webp|jpe?g|png|avif)$/i.test(f));
+        if (interdits.length) throw new Error(`Fichiers refusés dans public/images/projets (formats admis : WebP, JPEG, PNG, AVIF) :\n${interdits.join('\n')}`);
+        const fichiers = (await readdir(source)).filter((f) => /\.(webp|jpe?g|png|avif)$/i.test(f));
         for (const f of fichiers) {
           const entree = path.join(source, f);
           const base = path.basename(f, path.extname(f));

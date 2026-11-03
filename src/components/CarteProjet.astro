@@ -1,6 +1,6 @@
 ---
 import { traduire, urlProjet, champ } from '../i18n/utils.js';
-import { srcsetVignette } from '../lib/images.js';
+import { srcsetVignette, couleurAttente } from '../lib/images.js';
 const { projet, langue, niveau = 'h3', prioritaire = false, numero, tailles = '(max-width: 40rem) 50vw, 320px' } = Astro.props;
 const t = traduire(langue);
 const d = projet.data;
@@ -9,6 +9,7 @@ const Titre = niveau;
 const disciplines = d.disciplines.map((x) => t(`projets.filtre.${x}`)).join(' · ');
 const srcset = await srcsetVignette(d.couverture);
 const srcsetSurvol = d.survol && (await srcsetVignette(d.survol));
+const couleur = await couleurAttente(d.couverture);
 const chargement = prioritaire ? 'eager' : 'lazy';
 ---
 
@@ -16,7 +17,7 @@ const chargement = prioritaire ? 'eager' : 'lazy';
   <a class="zone" href={urlProjet(langue, projet.id)}>
     <div class="carte-visuel" style={`view-transition-name: affiche-${projet.id}`}>
       {numero && <span class="numero" aria-hidden="true">{numero}</span>}
-      <img src={d.couverture} srcset={srcset} sizes={tailles} alt={titre} loading={chargement} decoding="async" width="900" height="1200" />
+      <img src={d.couverture} srcset={srcset} sizes={tailles} style={`background:${couleur}`} alt="" loading={chargement} decoding="async" width="900" height="1200" />
       {d.survol && (
         <img class="survol" src={d.survol} srcset={srcsetSurvol} sizes={tailles} alt="" loading="lazy" decoding="async" width="900" height="1200" />
       )}
