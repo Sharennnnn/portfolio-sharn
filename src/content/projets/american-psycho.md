@@ -7,16 +7,18 @@ origine: fanart
 disciplines:
   - print
 client: ''
-couverture: /images/projets/american-psycho-couverture.webp
-survol: ''
+couverture: /images/projets/american_psycho.webp
+survol: /images/projets/american_psycho_2.webp
 galerie: []
 video: ''
-contrainte: —
-contrainte_en: —
-resolution: —
-resolution_en: —
-livrables: ''
-livrables_en: ''
+contrainte: Affiche fan art pour American Psycho de Mary Harron.
+contrainte_en: Fan art poster for Mary Harron’s American Psycho.
+resolution: 'Un portrait coupé en deux : une moitié du visage reste lisse, l’autre se déforme et se tache. Le fond rouge uni, le titre sur deux lignes en deux typographies et une citation en bas rejouent l’idée de double personnalité.'
+resolution_en: 'A split portrait: one half of the face stays smooth while the other warps and stains. The flat red background, the two-line title in two typefaces and a quote at the bottom play on the idea of a double life.'
+resultat: ''
+resultat_en: ''
+livrables: Affiche
+livrables_en: Poster
 outils:
   - Photoshop
 phare: false
