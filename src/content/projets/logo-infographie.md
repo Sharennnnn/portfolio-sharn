@@ -1,7 +1,7 @@
 ---
 ordre: 24
 titre: Logo Infographie
-titre_en: Logo Infographie
+titre_en: Graphic design class logo
 annee: 2026
 origine: client
 disciplines:
@@ -13,8 +13,8 @@ galerie: []
 video: ''
 contrainte: "Le besoin : un logo pour le pull de rhéto de la classe de 6e qualification infographie de l'IATA, à Namur."
 contrainte_en: 'The brief: a logo for the final-year class jumper of the graphic design qualification class (6th year) at IATA, Namur.'
-resolution: "J'ai conçu le logo dans Illustrator, avec une idée directrice : représenter au mieux la classe et l'option infographie."
-resolution_en: 'I designed the logo in Illustrator around one guiding idea: to represent the class and its graphic design option as well as possible.'
+resolution: 'J’ai dessiné le logo dans Illustrator autour d’une idée : la plume de l’outil Plume, avec ses poignées de courbe, accrochée au mot « INFO » pour représenter l’option infographie.'
+resolution_en: 'I designed the logo in Illustrator around one idea: the Pen tool nib and its curve handles, attached to the word “INFO”, to stand for the graphic design option.'
 resultat: Mon logo a été choisi pour le pull de la classe, et il est toujours utilisé.
 resultat_en: My logo was chosen for the class jumper, and it is still in use.
 livrables: Moodboard, logo (PNG, SVG, AI), mockup
