@@ -68,18 +68,18 @@ boite_outils:
     groupe_en: Motion
     outils:
       - After Effects
+      - Première Pro
   - groupe: Interface
     groupe_en: Interface
     outils:
       - Figma
+  - groupe: 3D
+    groupe_en: 3D
+    outils:
+      - Maya
+      - Blender
 rubriques:
-  services:
-    surtitre: Commandes
-    surtitre_en: Commissions
-    titre: Services,
-    titre_en: Services,
-    chute: du croquis au fichier final.
-    chute_en: from sketch to final file.
+  services: null
   outils:
     surtitre: Boîte à outils
     surtitre_en: Toolkit
