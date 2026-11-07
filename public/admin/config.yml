@@ -164,8 +164,26 @@ singletons:
             options:
               - { label: 'Sélection de projets', value: selection }
               - { label: 'Façons de travailler', value: duo }
+              - { label: 'Services', value: services }
+              - { label: 'Boîte à outils (reprend les Compétences de l''À propos)', value: outils }
+              - { label: 'Parcours en frise (reprend le Parcours de l''À propos)', value: parcours }
               - { label: 'Appel à contact (CTA)', value: cta }
           - { name: visible, label: Visible, widget: boolean, default: true }
+
+      - name: services
+        label: Services de l'accueil
+        widget: list
+        collapsed: true
+        required: false
+        hint: 'Laisse la liste vide pour garder les 4 services par défaut (Affiche, Identité visuelle, Motion, Mise en page). Dès qu''un service est ajouté ici, seule cette liste s''affiche.'
+        summary: '{{titre}}'
+        fields:
+          - { name: titre, label: 'Nom (FR)', widget: string }
+          - { name: titre_en, label: 'Nom (EN)', widget: string, required: false }
+          - { name: texte, label: 'Description (FR)', widget: text }
+          - { name: texte_en, label: 'Description (EN)', widget: text, required: false }
+          - { name: etiquettes, label: 'Étiquettes (FR), séparées par des virgules', widget: string, required: false }
+          - { name: etiquettes_en, label: 'Étiquettes (EN), séparées par des virgules', widget: string, required: false }
 
       - name: apropos
         collapsed: true
