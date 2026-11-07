@@ -24,8 +24,76 @@ sections:
     visible: true
   - cle: duo
     visible: false
+  - cle: services
+    visible: true
+  - cle: outils
+    visible: true
+  - cle: parcours
+    visible: true
   - cle: cta
     visible: true
+services:
+  - titre: Affiche
+    titre_en: Posters
+    texte: Affiches de films, de séries, d'albums ou d'événements, du concept au fichier prêt à imprimer, avec les formats pour les réseaux.
+    texte_en: Posters for films, series, albums or events, from concept to print-ready file, with formats for social media.
+    etiquettes: Cinéma, Musique, Événement
+    etiquettes_en: Film, Music, Events
+  - titre: Identité visuelle
+    titre_en: Visual identity
+    texte: Logo, couleurs, typographies et règles d'usage, pour qu'une marque se reconnaisse sur chaque support.
+    texte_en: Logo, colours, typefaces and usage rules, so a brand is recognised on every medium.
+    etiquettes: Logo, Charte, Déclinaisons
+    etiquettes_en: Logo, Guidelines, Applications
+  - titre: Motion
+    titre_en: Motion
+    texte: Affiches animées et courtes animations pour les réseaux, réalisées dans After Effects.
+    texte_en: Animated posters and short animations for social media, made in After Effects.
+    etiquettes: Affiche animée, Réseaux sociaux
+    etiquettes_en: Animated poster, Social media
+  - titre: Mise en page
+    titre_en: Layout
+    texte: Portfolios, manuscrits et documents imprimés, avec une grille et une typographie qui facilitent la lecture.
+    texte_en: Portfolios, manuscripts and printed documents, with a grid and typography that make reading easy.
+    etiquettes: Édition, Portfolio, Manuscrit
+    etiquettes_en: Editorial, Portfolio, Manuscript
+boite_outils:
+  - groupe: Print & édition
+    groupe_en: Print & editorial
+    outils:
+      - Photoshop
+      - Illustrator
+      - InDesign
+  - groupe: Motion
+    groupe_en: Motion
+    outils:
+      - After Effects
+  - groupe: Interface
+    groupe_en: Interface
+    outils:
+      - Figma
+rubriques:
+  services:
+    surtitre: Commandes
+    surtitre_en: Commissions
+    titre: Services,
+    titre_en: Services,
+    chute: du croquis au fichier final.
+    chute_en: from sketch to final file.
+  outils:
+    surtitre: Boîte à outils
+    surtitre_en: Toolkit
+    titre: Mes outils,
+    titre_en: My tools,
+    chute: projet après projet.
+    chute_en: project after project.
+  parcours:
+    surtitre: Expérience
+    surtitre_en: Experience
+    titre: Parcours,
+    titre_en: Journey,
+    chute: de l'école aux commandes.
+    chute_en: from school to commissions.
 apropos:
   photo: /images/projets/img_1100.webp
   bio:
