@@ -59,21 +59,22 @@ const reglages = defineCollection({
       visible: z.boolean().default(true),
     })),
     // Listes vides : la rubrique correspondante de l'accueil n'est pas affichée.
+    // L'admin écrit null quand on vide une liste ou un bloc entier : accepté partout, lu comme « vide ».
     services: z.array(z.object({
-      titre: z.string(), titre_en: z.string().optional(),
-      texte: z.string(), texte_en: z.string().optional(),
-      etiquettes: z.string().optional(), etiquettes_en: z.string().optional(),
-    })).default([]),
+      titre: z.string(), titre_en: z.string().nullish(),
+      texte: z.string(), texte_en: z.string().nullish(),
+      etiquettes: z.string().nullish(), etiquettes_en: z.string().nullish(),
+    })).nullish().transform((v) => v ?? []),
     boite_outils: z.array(z.object({
-      groupe: z.string(), groupe_en: z.string().optional(),
-      outils: z.array(z.string()).default([]),
-    })).default([]),
+      groupe: z.string(), groupe_en: z.string().nullish(),
+      outils: z.array(z.string().nullish()).nullish().transform((v) => (v ?? []).filter(Boolean)),
+    })).nullish().transform((v) => v ?? []),
     // Titres des rubriques de l'accueil ; un champ vide garde le titre par défaut de src/i18n/ui.js.
     rubriques: z.record(z.enum(['services', 'outils', 'parcours']), z.object({
-      surtitre: z.string().optional(), surtitre_en: z.string().optional(),
-      titre: z.string().optional(), titre_en: z.string().optional(),
-      chute: z.string().optional(), chute_en: z.string().optional(),
-    })).default({}),
+      surtitre: z.string().nullish(), surtitre_en: z.string().nullish(),
+      titre: z.string().nullish(), titre_en: z.string().nullish(),
+      chute: z.string().nullish(), chute_en: z.string().nullish(),
+    }).nullish()).nullish().transform((v) => v ?? {}),
     apropos: z.object({
       photo: z.string().optional(),
       bio: z.array(z.string()),
