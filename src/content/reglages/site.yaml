@@ -23,7 +23,7 @@ sections:
   - cle: selection
     visible: true
   - cle: duo
-    visible: true
+    visible: false
   - cle: cta
     visible: true
 apropos:
@@ -37,6 +37,21 @@ apropos:
     - 'My work splits across two registers that feed each other: an editorial practice where type carries the image, and a compositing practice where the difficulty is making the construction invisible.'
     - My long-term goal is to design film posters. In the meantime, every commission is a chance to test what holds up beyond the screen.
   parcours:
+    - periode: 2020 — 2021
+      titre: 3e secondaire, technique de transition en art
+      titre_en: ''
+      lieu: IATA, Namur
+      lieu_en: IATA, Namur
+    - periode: 2021 — 2022
+      titre: 3e secondaire, technique de transition en art graphique
+      titre_en: ''
+      lieu: IATA, Namur
+      lieu_en: IATA, Namur
+    - periode: 2022 — 2023
+      titre: 3e secondaire,  technique de qualification en industrie graphique
+      titre_en: ''
+      lieu: IATA, Namur
+      lieu_en: IATA, Namur
     - periode: 2023 — 2026
       titre: 4e à 6e secondaire, technique de qualification en infographie
       titre_en: Secondary school, years 4 to 6, graphic design technical qualification
