@@ -31,6 +31,7 @@ const colonnes = [mur.filter((_, i) => i % 2 === 0), mur.filter((_, i) => i % 2 
 
 const h = r.hero;
 const deuxChiffres = (n) => String(n).padStart(2, '0');
+const mots = t('accueil.mots').split('|');
 ---
 
 <Base titre={champ(h, 'eyebrow', langue)} preloads={[policeSerif]} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
@@ -55,6 +56,15 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
             <span class="ligne"><span>{champ(h, 'titre2', langue)}</span></span>{' '}
             <span class="ligne ligne-chute"><span><em>{champ(h, 'titre3', langue)}</em></span></span>
           </h1>
+          {/* Mot qui change : les lecteurs d'écran lisent la liste entière une seule fois. */}
+          <p class="mots reveal reveal--eyebrow">
+            <span class="sr-only">{t('accueil.mots.intro')}{langue === 'fr' ? ' : ' : ': '}{mots.join(', ')}.</span>
+            <span class="mots-intro" aria-hidden="true">{t('accueil.mots.intro')}</span>
+            <span class="mots-fenetre" aria-hidden="true">
+              {/* Le premier mot est répété à la fin pour que la boucle reparte sans saut. */}
+              <span class="mots-piste">{[...mots, mots[0]].map((m) => <em>{m}</em>)}</span>
+            </span>
+          </p>
           <p class="chapeau reveal reveal--eyebrow">{champ(h, 'chapeau', langue)}</p>
           <div class="actions reveal reveal--eyebrow">
             <a class="bouton bouton--plein" href={route(langue, 'projets')}>{t('accueil.tout')} <span class="fleche" aria-hidden="true">&rarr;</span></a>
@@ -178,6 +188,42 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
     70% { box-shadow: 0 0 0 9px transparent; }
     100% { box-shadow: 0 0 0 0 transparent; }
   }
+  /* Mot qui change : petit surtitre puis un mot en serif italique qui monte toutes les 3 s. */
+  .mots {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1rem;
+    margin: -0.75rem 0 0;
+  }
+  .mots-intro {
+    font-size: var(--t-eyebrow);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--texte-doux);
+  }
+  .mots-fenetre {
+    display: inline-block;
+    height: 1.2em;
+    overflow: hidden;
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+    line-height: 1.2;
+    color: var(--accent);
+  }
+  .mots-piste { display: flex; flex-direction: column; animation: mots 9s var(--courbe) infinite; }
+  .mots-piste em { font-style: italic; }
+  .mots-fenetre:hover .mots-piste,
+  .en-pause .mots-piste { animation-play-state: paused; }
+  /* 4 mots (le premier répété) : chaque palier = 25 % de la piste. */
+  @keyframes mots {
+    0%, 28% { translate: 0 0; }
+    33%, 61% { translate: 0 -25%; }
+    66%, 94% { translate: 0 -50%; }
+    100% { translate: 0 -75%; }
+  }
+
   .actions {
     display: flex;
     flex-wrap: wrap;
@@ -432,6 +478,10 @@ const deuxChiffres = (n) => String(n).padStart(2, '0');
 
   @media (prefers-reduced-motion: reduce) {
     .pastille { animation: none; }
+    /* Sans animation : les trois mots côte à côte, le doublon de fin masqué. */
+    .mots-fenetre { height: auto; }
+    .mots-piste { flex-direction: row; flex-wrap: wrap; gap: 0 0.75rem; animation: none; }
+    .mots-piste em:last-child { display: none; }
     .pause-anim { display: none; }
   }
 </style>

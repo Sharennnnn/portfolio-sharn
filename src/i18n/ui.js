@@ -13,6 +13,8 @@ export const ui = {
 
     'accueil.selection': 'Sélection — 2025 / 2026',
     'accueil.tout': 'Tous les projets',
+    'accueil.mots.intro': 'Ce que je conçois',
+    'accueil.mots': 'Affiches|Identités|Animations',
     'accueil.lignes': 'Trois façons de travailler',
     'accueil.ligneA.titre': 'Print éditorial',
     'accueil.ligneA.texte': "Typographie dominante, palettes réduites, grain assumé. Je construis l'image autour du texte plutôt que l'inverse : le titre porte la composition, la couleur sert la lisibilité.",
@@ -89,6 +91,8 @@ export const ui = {
 
     'accueil.selection': 'Selected work — 2025 / 2026',
     'accueil.tout': 'All projects',
+    'accueil.mots.intro': 'What I design',
+    'accueil.mots': 'Posters|Identities|Motion',
     'accueil.lignes': 'Three ways of working',
     'accueil.ligneA.titre': 'Editorial print',
     'accueil.ligneA.texte': 'Type-led compositions, reduced palettes, visible grain. I build the image around the text rather than the other way round: the headline carries the layout, colour serves legibility.',
