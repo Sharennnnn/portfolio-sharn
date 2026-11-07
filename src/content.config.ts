@@ -55,9 +55,15 @@ const reglages = defineCollection({
       lien: z.string().optional(),
     }),
     sections: z.array(z.object({
-      cle: z.enum(['selection', 'duo', 'cta']),
+      cle: z.enum(['selection', 'duo', 'services', 'outils', 'parcours', 'cta']),
       visible: z.boolean().default(true),
     })),
+    // Vide : l'accueil affiche les services par défaut de src/i18n/ui.js.
+    services: z.array(z.object({
+      titre: z.string(), titre_en: z.string().optional(),
+      texte: z.string(), texte_en: z.string().optional(),
+      etiquettes: z.string().optional(), etiquettes_en: z.string().optional(),
+    })).default([]),
     apropos: z.object({
       photo: z.string().optional(),
       bio: z.array(z.string()),
