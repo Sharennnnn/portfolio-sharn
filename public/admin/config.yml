@@ -165,7 +165,7 @@ singletons:
               - { label: 'Sélection de projets', value: selection }
               - { label: 'Façons de travailler', value: duo }
               - { label: 'Services', value: services }
-              - { label: 'Boîte à outils (reprend les Compétences de l''À propos)', value: outils }
+              - { label: 'Boîte à outils', value: outils }
               - { label: 'Parcours en frise (reprend le Parcours de l''À propos)', value: parcours }
               - { label: 'Appel à contact (CTA)', value: cta }
           - { name: visible, label: Visible, widget: boolean, default: true }
@@ -175,7 +175,7 @@ singletons:
         widget: list
         collapsed: true
         required: false
-        hint: 'Laisse la liste vide pour garder les 4 services par défaut (Affiche, Identité visuelle, Motion, Mise en page). Dès qu''un service est ajouté ici, seule cette liste s''affiche.'
+        hint: 'Un service par ligne, numérotés dans l''ordre de la liste (fais glisser pour réordonner). Liste vide : la rubrique n''apparaît pas.'
         summary: '{{titre}}'
         fields:
           - { name: titre, label: 'Nom (FR)', widget: string }
@@ -184,6 +184,59 @@ singletons:
           - { name: texte_en, label: 'Description (EN)', widget: text, required: false }
           - { name: etiquettes, label: 'Étiquettes (FR), séparées par des virgules', widget: string, required: false }
           - { name: etiquettes_en, label: 'Étiquettes (EN), séparées par des virgules', widget: string, required: false }
+
+      - name: boite_outils
+        label: Boîte à outils de l'accueil
+        widget: list
+        collapsed: true
+        required: false
+        hint: 'Une catégorie par ligne, avec ses outils. Le nombre de projets à côté de chaque outil est compté tout seul à partir du champ « Outils » des fiches projet (même orthographe). Liste vide : la rubrique n''apparaît pas.'
+        summary: '{{groupe}}'
+        fields:
+          - { name: groupe, label: 'Catégorie (FR)', widget: string }
+          - { name: groupe_en, label: 'Catégorie (EN)', widget: string, required: false }
+          - { name: outils, label: Outils, widget: list, field: { name: outil, label: Outil, widget: string } }
+
+      - name: rubriques
+        label: Titres des rubriques de l'accueil
+        widget: object
+        collapsed: true
+        required: false
+        hint: 'Un champ vide garde le titre par défaut. La « fin du titre » s''affiche en italique orange, sur la ligne suivante.'
+        fields:
+          - name: services
+            label: Services
+            widget: object
+            required: false
+            fields:
+              - { name: surtitre, label: 'Surtitre (FR)', widget: string, required: false }
+              - { name: surtitre_en, label: 'Surtitre (EN)', widget: string, required: false }
+              - { name: titre, label: 'Titre (FR)', widget: string, required: false }
+              - { name: titre_en, label: 'Titre (EN)', widget: string, required: false }
+              - { name: chute, label: 'Fin du titre en italique (FR)', widget: string, required: false }
+              - { name: chute_en, label: 'Fin du titre en italique (EN)', widget: string, required: false }
+          - name: outils
+            label: Boîte à outils
+            widget: object
+            required: false
+            fields:
+              - { name: surtitre, label: 'Surtitre (FR)', widget: string, required: false }
+              - { name: surtitre_en, label: 'Surtitre (EN)', widget: string, required: false }
+              - { name: titre, label: 'Titre (FR)', widget: string, required: false }
+              - { name: titre_en, label: 'Titre (EN)', widget: string, required: false }
+              - { name: chute, label: 'Fin du titre en italique (FR)', widget: string, required: false }
+              - { name: chute_en, label: 'Fin du titre en italique (EN)', widget: string, required: false }
+          - name: parcours
+            label: 'Parcours (frise)'
+            widget: object
+            required: false
+            fields:
+              - { name: surtitre, label: 'Surtitre (FR)', widget: string, required: false }
+              - { name: surtitre_en, label: 'Surtitre (EN)', widget: string, required: false }
+              - { name: titre, label: 'Titre (FR)', widget: string, required: false }
+              - { name: titre_en, label: 'Titre (EN)', widget: string, required: false }
+              - { name: chute, label: 'Fin du titre en italique (FR)', widget: string, required: false }
+              - { name: chute_en, label: 'Fin du titre en italique (EN)', widget: string, required: false }
 
       - name: apropos
         collapsed: true

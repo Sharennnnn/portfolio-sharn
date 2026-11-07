@@ -58,12 +58,22 @@ const reglages = defineCollection({
       cle: z.enum(['selection', 'duo', 'services', 'outils', 'parcours', 'cta']),
       visible: z.boolean().default(true),
     })),
-    // Vide : l'accueil affiche les services par défaut de src/i18n/ui.js.
+    // Listes vides : la rubrique correspondante de l'accueil n'est pas affichée.
     services: z.array(z.object({
       titre: z.string(), titre_en: z.string().optional(),
       texte: z.string(), texte_en: z.string().optional(),
       etiquettes: z.string().optional(), etiquettes_en: z.string().optional(),
     })).default([]),
+    boite_outils: z.array(z.object({
+      groupe: z.string(), groupe_en: z.string().optional(),
+      outils: z.array(z.string()).default([]),
+    })).default([]),
+    // Titres des rubriques de l'accueil ; un champ vide garde le titre par défaut de src/i18n/ui.js.
+    rubriques: z.record(z.enum(['services', 'outils', 'parcours']), z.object({
+      surtitre: z.string().optional(), surtitre_en: z.string().optional(),
+      titre: z.string().optional(), titre_en: z.string().optional(),
+      chute: z.string().optional(), chute_en: z.string().optional(),
+    })).default({}),
     apropos: z.object({
       photo: z.string().optional(),
       bio: z.array(z.string()),

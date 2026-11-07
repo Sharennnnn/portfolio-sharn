@@ -33,33 +33,28 @@ const h = r.hero;
 const deuxChiffres = (n) => String(n).padStart(2, '0');
 const mots = t('accueil.mots').split('|');
 
-// Rubriques arrivées après la liste « Sections » de l'admin : placées avant l'appel à contact
-// tant que l'admin ne les mentionne pas (elle peut ensuite les déplacer ou les masquer).
-const sections = [...r.sections];
-for (const cle of ['services', 'outils', 'parcours']) {
-  if (sections.some((s) => s.cle === cle)) continue;
-  const cta = sections.findIndex((s) => s.cle === 'cta');
-  sections.splice(cta < 0 ? sections.length : cta, 0, { cle, visible: true });
-}
 const virgules = (texte) => (texte || '').split(',').map((x) => x.trim()).filter(Boolean);
 
-// Services : ceux de l'admin, sinon les textes par défaut de ui.js.
-const services = (r.services.length ? r.services : t('accueil.services.liste')).map((s) => ({
+// Titre d'une rubrique : celui de l'admin, sinon celui de ui.js.
+const rubrique = (cle, nom) => (r.rubriques[cle] && champ(r.rubriques[cle], nom, langue)) || t(`accueil.${cle}.${nom}`);
+
+const services = r.services.map((s) => ({
   titre: champ(s, 'titre', langue),
   texte: champ(s, 'texte', langue),
   etiquettes: virgules(champ(s, 'etiquettes', langue)),
 }));
 
-// Boîte à outils : les compétences de l'admin, chaque outil avec le nombre de fiches projet qui le citent.
+// Boîte à outils : chaque outil avec le nombre de fiches projet qui le citent.
 const nbProjets = (outil) => tous.filter((p) => p.data.outils.some((o) => o.trim().toLowerCase() === outil.toLowerCase())).length;
-const outils = r.apropos.competences.map((g) => ({
+const outils = r.boite_outils.map((g) => ({
   groupe: champ(g, 'groupe', langue),
-  outils: virgules(g.outils).map((nom) => ({ nom, n: nbProjets(nom) })),
+  outils: g.outils.map((o) => o.trim()).filter(Boolean).map((nom) => ({ nom, n: nbProjets(nom) })),
 }));
 const projetsCites = (n) => (n === 1 ? t('accueil.outils.un') : t('accueil.outils.n').replace('{n}', String(n)));
 
-// Parcours : la première année de la période sert de grand chiffre dans la frise.
-const parcours = r.apropos.parcours.map((p) => ({
+// Parcours : la première année de la période sert de grand chiffre ; la frise suit l'ordre chronologique
+// (tri stable : à année égale, l'ordre de l'admin est gardé).
+const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/)?.[0] ?? '').localeCompare(b.periode.match(/\d{4}/)?.[0] ?? '')).map((p) => ({
   annee: p.periode.match(/\d{4}/)?.[0] ?? p.periode,
   periode: p.periode,
   titre: champ(p, 'titre', langue),
@@ -127,7 +122,7 @@ const parcours = r.apropos.parcours.map((p) => ({
       </section>
     </div>
 
-    {sections.filter((s) => s.visible).map((s) => {
+    {r.sections.filter((s) => s.visible).map((s) => {
       if (s.cle === 'selection') return (
         <section class="enveloppe bloc">
           <div class="entete-bloc reveal reveal--bloc">
@@ -165,8 +160,8 @@ const parcours = r.apropos.parcours.map((p) => ({
         <section class="chapitre chapitre--papier">
           <div class="enveloppe">
             <div class="entete-chapitre reveal reveal--bloc">
-              <p class="eyebrow">{t('accueil.services.surtitre')}</p>
-              <h2 class="titre-chapitre">{t('accueil.services.titre')} <em>{t('accueil.services.chute')}</em></h2>
+              <p class="eyebrow">{rubrique('services', 'surtitre')}</p>
+              <h2 class="titre-chapitre">{rubrique('services', 'titre')} <em>{rubrique('services', 'chute')}</em></h2>
             </div>
             <ol class="services">
               {services.map((x, i) => (
@@ -187,8 +182,8 @@ const parcours = r.apropos.parcours.map((p) => ({
         <section class="chapitre chapitre--accent">
           <div class="enveloppe">
             <div class="entete-chapitre reveal reveal--bloc">
-              <p class="eyebrow">{t('accueil.outils.surtitre')}</p>
-              <h2 class="titre-chapitre">{t('accueil.outils.titre')} <em>{t('accueil.outils.chute')}</em></h2>
+              <p class="eyebrow">{rubrique('outils', 'surtitre')}</p>
+              <h2 class="titre-chapitre">{rubrique('outils', 'titre')} <em>{rubrique('outils', 'chute')}</em></h2>
             </div>
             <dl class="outils">
               {outils.map((g) => (
@@ -209,8 +204,8 @@ const parcours = r.apropos.parcours.map((p) => ({
         <section class="chapitre chapitre--frise" style={`--n:${parcours.length}`}>
           <div class="frise-collant">
             <div class="enveloppe entete-chapitre reveal reveal--bloc">
-              <p class="eyebrow">{t('accueil.parcours.surtitre')}</p>
-              <h2 class="titre-chapitre">{t('accueil.parcours.titre')} <em>{t('accueil.parcours.chute')}</em></h2>
+              <p class="eyebrow">{rubrique('parcours', 'surtitre')}</p>
+              <h2 class="titre-chapitre">{rubrique('parcours', 'titre')} <em>{rubrique('parcours', 'chute')}</em></h2>
             </div>
             <ol class="frise">
               {parcours.map((p) => (
