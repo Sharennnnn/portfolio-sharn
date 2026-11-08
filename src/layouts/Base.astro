@@ -68,13 +68,22 @@ const jsonLd = schema && JSON.stringify(schema).replace(/</g, '\\u003c');
     {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
   </head>
 
-  <body>
+  <body data-entracte={t('onglet.entracte')} data-reprise={t('onglet.reprise')}>
     <a class="saut-contenu" href="#contenu">{t('a11y.saut')}</a>
     <Header langue={langue} equivalent={equivalent} />
     <main id="contenu"><slot /></main>
     <Footer langue={langue} />
 
     <script>
+      // Titre de l'onglet : « entracte » quand on part, « reprise » 2 s au retour.
+      const titreNormal = document.title;
+      let minuteurTitre = 0;
+      document.addEventListener('visibilitychange', () => {
+        clearTimeout(minuteurTitre);
+        document.title = document.hidden ? document.body.dataset.entracte : document.body.dataset.reprise;
+        if (!document.hidden) minuteurTitre = setTimeout(() => (document.title = titreNormal), 2000);
+      });
+
       const cibles = document.querySelectorAll('.reveal');
       const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

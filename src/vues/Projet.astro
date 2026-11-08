@@ -51,7 +51,7 @@ const schema = {
 ---
 
 <Base titre={titre} description={description} equivalent={urlProjet(autreLangue(langue), projet.id)} image={partage} imageLargeur={largeurPartage} imageHauteur={Math.round((couv.height * largeurPartage) / couv.width)} schema={schema}>
-  <article>
+  <article style={couleurCouv !== 'transparent' ? `--teinte: ${couleurCouv}` : undefined}>
     <header class="enveloppe tete">
       <p class="eyebrow reveal reveal--eyebrow">{t(`origine.${d.origine}`)} &middot; {d.annee}</p>
       <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{titre}</span></span></h1>
@@ -131,7 +131,7 @@ const schema = {
           <span class="eyebrow">{t('projet.suivant')} &rarr;</span>
           <span class="suivant-titre">{champ(suivant.data, 'titre', langue)}</span>
         </span>
-        <img src={suivant.data.couverture} srcset={srcsetSuivant} sizes="12rem" alt="" width="900" height="1200" loading="lazy" decoding="async" />
+        <img src={suivant.data.couverture} srcset={srcsetSuivant} sizes="12rem" style={`view-transition-name: affiche-${suivant.id}`} alt="" width="900" height="1200" loading="lazy" decoding="async" />
       </span>
     </a>
   </article>
@@ -168,6 +168,20 @@ const schema = {
 </script>
 
 <style>
+  /* Le haut de la page prend la teinte de l'affiche, puis se fond dans le noir du site.
+     Luminosité fixe : une moyenne sombre resterait invisible, une affiche blanche donnerait une bande grise.
+     Elle garde aussi le texte secondaire en contraste AA. */
+  /* clip et non hidden : le canvas 3D d'un visuel horizontal ne crée pas de défilement, et l'affiche reste collante. */
+  article { position: relative; overflow-x: clip; }
+  article::before {
+    content: '';
+    position: absolute;
+    inset: -8rem 0 auto;
+    z-index: -1;
+    height: 110svh;
+    background: linear-gradient(oklch(from var(--teinte, var(--fond)) 0.2 calc(c * 1.6) h), var(--fond));
+    pointer-events: none;
+  }
   .tete {
     display: grid;
     gap: 1rem;
