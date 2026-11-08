@@ -8,6 +8,8 @@ disciplines:
   - animation
 client: ''
 couverture: /images/projets/flashing-light-kanye-west-couverture.webp
+couverture_alt: "Les mots To Show Off en blanc sur fond noir, image tirée de l’animation typographique."
+couverture_alt_en: "The words To Show Off in white on black, a frame from the kinetic type animation."
 survol: ''
 galerie: []
 video: https://youtu.be/cUqlplrckp4

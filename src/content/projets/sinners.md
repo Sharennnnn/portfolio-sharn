@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/sinners.webp
+couverture_alt: "Deux hommes en costume, l’un au chapeau rouge, l’autre à la casquette bleue, devant un grand visage aux yeux rouges, sous le titre Sinners."
+couverture_alt_en: "Two men in suits, one in a red hat and the other in a blue cap, in front of a large face with red eyes, below the title Sinners."
 survol: ''
 galerie: []
 video: ''

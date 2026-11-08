@@ -8,6 +8,8 @@ disciplines:
   - identite
 client: ''
 couverture: /images/projets/ciao-kombucha-x-jologreen-couverture.webp
+couverture_alt: "Deux canettes vertes de kombucha Ciao à la menthe flottent au-dessus d’une prairie de tournesols, l’une montre le portrait de Jolagreen23."
+couverture_alt_en: "Two green cans of Ciao mint kombucha float above a meadow of sunflowers, one showing a portrait of Jolagreen23."
 survol: ''
 galerie: []
 video: ''

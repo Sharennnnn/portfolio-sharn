@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/baby-driver-couverture.webp
+couverture_alt: "Sur fond rose, un couple enlacé et quatre personnages à l’intérieur de la silhouette d’un pistolet géant, au-dessus d’une voiture, sous le titre Baby Driver."
+couverture_alt_en: "On a pink background, an embracing couple and four characters inside the outline of a giant pistol, above a car, below the title Baby Driver."
 survol: ''
 galerie: []
 video: ''

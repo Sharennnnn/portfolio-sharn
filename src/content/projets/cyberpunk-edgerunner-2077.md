@@ -8,6 +8,8 @@ disciplines:
   - animation
 client: ''
 couverture: /images/projets/cyberpunk-edgerunner-2077-couverture.webp
+couverture_alt: "Logo jaune Cyberpunk 2077 sur fond sombre, image tirée du générique animé."
+couverture_alt_en: "Yellow Cyberpunk 2077 logo on a dark background, a frame from the animated title sequence."
 survol: ''
 galerie: []
 video: https://youtu.be/tNghIXeNoFE

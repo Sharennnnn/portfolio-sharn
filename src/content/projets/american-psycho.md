@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/american_psycho.webp
+couverture_alt: "Portrait en rouge d’un homme en costume et écouteurs, le visage à moitié arraché, sous le titre American Psycho."
+couverture_alt_en: "Red portrait of a man in a suit and earphones, half his face torn away, below the title American Psycho."
 survol: /images/projets/american_psycho_2.webp
 galerie: []
 video: ''

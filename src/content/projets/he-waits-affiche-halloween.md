@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/titi-hallocostetypov6.webp
+couverture_alt: "Dans une lumière rouge, une silhouette à cornes attend dans un abribus, à côté des mots Don’t Get On gravés sur le mur, sous le titre He Waits."
+couverture_alt_en: "In red light, a horned figure waits in a bus shelter, next to the words Don’t Get On scratched into the wall, below the title He Waits."
 survol: /images/projets/titi-hallocostev6.webp
 galerie:
   - /images/projets/titi-hallocostev6.webp
@@ -29,7 +31,7 @@ resultat_en: ''
 livrables: Affiche
 livrables_en: Poster
 outils:
-  - Photohop
+  - Photoshop
 phare: false
 ---
 

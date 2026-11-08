@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/cyberpunk-2077-couverture.webp
+couverture_alt: "Trois personnages en violet et jaune devant une ville et un désert : une femme armée d’un pistolet, un homme à crête et un homme au premier plan, avec le logo Cyberpunk."
+couverture_alt_en: "Three characters in purple and yellow against a city and a desert: a woman holding a pistol, a man with a mohawk and a man in the foreground, with the Cyberpunk logo."
 survol: ''
 galerie:
   - /images/projets/cyberpunk-2077-galerie-1.webp

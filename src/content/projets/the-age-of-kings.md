@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/the-age-of-kings-couverture.webp
+couverture_alt: "Un roi au visage voilé et couronné, en rouge sombre sur fond noir, sous le titre The Age of Kings entouré de petits textes et d’un code-barres."
+couverture_alt_en: "A crowned king with a veiled face, in dark red on black, below the title The Age of Kings surrounded by small text and a barcode."
 survol: ''
 galerie: []
 video: ''

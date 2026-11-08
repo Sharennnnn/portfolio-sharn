@@ -8,6 +8,8 @@ disciplines:
   - identite
 client: Classe de 6e qualification infographie, IATA Namur
 couverture: /images/projets/logo-infographie-couverture.webp
+couverture_alt: "Deux versions d’un logo noir sur blanc : le mot Infographie et une plume de stylo prolongée par une courbe de Bézier."
+couverture_alt_en: "Two versions of a black logo on white: the word Infographie and a pen nib extended by a Bézier curve."
 survol: ''
 galerie: []
 video: ''

@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/thomas-shelby-couverture.webp
+couverture_alt: "Portrait de Thomas Shelby en facettes géométriques, avec casquette plate, chemise blanche et cravate sombre."
+couverture_alt_en: "Portrait of Thomas Shelby in geometric facets, with a flat cap, white shirt and dark tie."
 survol: ''
 galerie: []
 video: ''

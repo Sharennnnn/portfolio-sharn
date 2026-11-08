@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/dont-be-dumb-asap-rocky-couverture.webp
+couverture_alt: "Un rappeur à capuche suspendu à un câble, en violet sur fond noir, entre le titre Don’t Be Dumb et le nom A$AP Rocky en perspective."
+couverture_alt_en: "A hooded rapper hanging from a cable, in purple on black, between the title Don’t Be Dumb and the name A$AP Rocky in perspective."
 survol: ''
 galerie: []
 video: ''

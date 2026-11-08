@@ -9,6 +9,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/uhz1-couverture.webp
+couverture_alt: "Logo UHZ1 en lettres blanches massives sur fond violet, avec des étoiles découpées dans le U et le H."
+couverture_alt_en: "UHZ1 logo in heavy white letters on a purple background, with stars cut out of the U and the H."
 survol: /images/projets/uhz1-survol.webp
 galerie:
   - /images/projets/uhz1-galerie-1.webp
@@ -32,6 +34,6 @@ outils:
   - Illustrator
   - Photoshop
   - Figma
-  - Autodesk Maya
+  - Maya
 phare: true
 ---

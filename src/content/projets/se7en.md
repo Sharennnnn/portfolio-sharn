@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/se7en.webp
+couverture_alt: "Trois hommes marchent de face devant le titre Se7en en rouge géant sur fond clair : un policier, un détenu en combinaison orange et un inspecteur à chapeau."
+couverture_alt_en: "Three men walk towards the viewer in front of the giant red title Se7en on a pale background: a police officer, a prisoner in an orange jumpsuit and a detective in a hat."
 survol: ''
 galerie: []
 video: ''

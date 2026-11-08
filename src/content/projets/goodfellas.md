@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/the-goodfellas_2.webp
+couverture_alt: "Trois visages d’hommes émergent de l’obscurité sous le titre GoodFellas en rouge ; en bas, des silhouettes creusent près d’une voiture."
+couverture_alt_en: "Three men’s faces emerge from the dark below the red title GoodFellas; at the bottom, silhouettes dig beside a car."
 survol: ''
 galerie: []
 video: ''

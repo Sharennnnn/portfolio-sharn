@@ -8,6 +8,8 @@ disciplines:
   - identite
 client: Les Bijoux de Fafi
 couverture: /images/projets/les-bijoux-de-fafi-couverture.webp
+couverture_alt: "Logo Fafi en lettres à empattements crème sur fond rose, avec une étoile dans le a."
+couverture_alt_en: "Fafi logo in cream serif letters on a pink background, with a star inside the a."
 survol: ''
 galerie:
   - /images/projets/les-bijoux-de-fafi-galerie-1.webp

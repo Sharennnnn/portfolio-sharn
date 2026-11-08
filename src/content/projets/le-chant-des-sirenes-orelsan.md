@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/le-chant-des-sirene-orelsan-couverture.webp
+couverture_alt: "Portrait d’un homme portant un masque de super-héros et une veste usée, le visage sale, sur un fond bleu moucheté."
+couverture_alt_en: "Portrait of a man wearing a superhero mask and a worn jacket, his face dirty, on a speckled blue background."
 survol: /images/projets/le-chant-des-sirene-orelsan-survol.webp
 galerie: []
 video: ''

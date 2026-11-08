@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/l-etrange-histoire-de-mr-anderson-laylow-couverture.webp
+couverture_alt: "Dans des tons dorés, une voiture bascule au-dessus d’un cerf sur une route en forêt, à côté d’une silhouette masquée, avec le titre L’Étrange Histoire de Mr. Anderson."
+couverture_alt_en: "In golden tones, a car tips over above a deer on a forest road, beside a masked figure, with the title L’Étrange Histoire de Mr. Anderson."
 survol: ''
 galerie: []
 video: ''

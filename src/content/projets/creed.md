@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/creed-couverture.webp
+couverture_alt: "Deux boxeurs s’affrontent sur un ring éclairé en rouge, sous le titre Creed en grandes capitales italiques."
+couverture_alt_en: "Two boxers fight in a red-lit ring, below the title Creed in large italic capitals."
 survol: ''
 galerie: []
 video: ''

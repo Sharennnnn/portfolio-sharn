@@ -49,8 +49,8 @@ services:
     titre_en: Motion
     texte: Affiches animées et courtes animations pour les réseaux, réalisées dans After Effects.
     texte_en: Animated posters and short animations for social media, made in After Effects.
-    etiquettes: Animation kinétick, Réseaux sociaux, Opening tiltle,
-    etiquettes_en: Animated poster, Social media
+    etiquettes: Animation cinétique, Réseaux sociaux, Opening title
+    etiquettes_en: Kinetic animation, Social media, Opening title
   - titre: Mise en page
     titre_en: Layout
     texte: Portfolios, manuscrits et documents imprimés, avec une grille et une typographie qui facilitent la lecture.
@@ -68,7 +68,7 @@ boite_outils:
     groupe_en: Motion
     outils:
       - After Effects
-      - Première Pro
+      - Premiere Pro
   - groupe: Interface
     groupe_en: Interface
     outils:
@@ -116,7 +116,7 @@ apropos:
       lieu: IATA, Namur
       lieu_en: IATA, Namur
     - periode: 2022 — 2023
-      titre: 3e secondaire,  technique de qualification en industrie graphique
+      titre: 3e secondaire, technique de qualification en industrie graphique
       titre_en: Secondary school, year 3, printing industry technical qualification
       lieu: IATA, Namur
       lieu_en: IATA, Namur

@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/rench_affiche-overprint.webp
+couverture_alt: "Silhouette de profil de Batman sur un mur rouge taché, sous le titre The Dark Knight, avec la phrase I’m Batman."
+couverture_alt_en: "Side-on silhouette of Batman against a stained red wall, below the title The Dark Knight, with the line I’m Batman."
 survol: ''
 galerie: []
 video: ''

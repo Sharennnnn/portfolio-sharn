@@ -8,6 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/topboy.webp
+couverture_alt: "Six personnages en violet, dont deux hommes face à face, devant des immeubles, sous le titre Top Boy."
+couverture_alt_en: "Six characters in purple, including two men facing each other, in front of tower blocks, below the title Top Boy."
 survol: ''
 galerie: []
 video: ''
