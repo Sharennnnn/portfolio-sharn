@@ -1,9 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AVANCE, position, presence, opaciteHero, opaciteEntete, milieuArret, camera, coteArret } from './couloir-temps.js';
+import { AVANCE, position, presence, opaciteHero, opaciteEntete, milieuArret, camera, coteArret, elan } from './couloir-temps.js';
 
 const n = 5;
 const g = { demiLargeur: 2.2, recul: 3, zDepart: 2, zArret: (k) => -(k + 1) * 8 };
+
+test("pas d'élan à l'arrêt : l'affiche reste calée sur la vraie carte", () => {
+  for (let k = -1; k < n; k++) assert.equal(elan(k), 0);
+  assert.equal(elan(0.5), 1);
+});
 
 test("la caméra part dans l'axe du couloir", () => {
   assert.deepEqual(camera(-1, n, g), { x: 0, z: 2, yaw: 0 });

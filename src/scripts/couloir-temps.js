@@ -42,6 +42,9 @@ export function camera(p, n, g) {
   };
 }
 
+// Élan entre deux arrêts (0 à l'arrêt, 1 à mi-chemin) : la caméra s'élargit et penche un peu en marchant.
+export const elan = (p) => Math.sin((p - Math.floor(p)) * Math.PI) ** 2;
+
 // Présence de l'arrêt k (son lien, son cartel, sa vraie image) : 1 seulement quand la caméra y est immobile.
 export function presence(u, k, n) {
   const arrive = rampe(u, k + AVANCE - 0.05, k + AVANCE);
