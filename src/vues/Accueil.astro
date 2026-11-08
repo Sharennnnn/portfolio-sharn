@@ -63,16 +63,6 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
 ---
 
 <Base titre={champ(h, 'eyebrow', langue)} preloads={[policeSerif]} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
-    {r.banniere.visible && r.banniere.image && (
-      <section class="enveloppe banniere reveal reveal--bloc">
-        {r.banniere.lien ? (
-          <a href={r.banniere.lien}><img src={r.banniere.image} alt="" /></a>
-        ) : (
-          <img src={r.banniere.image} alt="" />
-        )}
-      </section>
-    )}
-
     <div class="hero-scene">
       <canvas class="fumee" aria-hidden="true"></canvas>
       <section class="enveloppe hero">
@@ -236,10 +226,6 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
 </Base>
 
 <style>
-  .banniere { padding-top: 1.5rem; }
-  .banniere img { width: 100%; border: 1px solid var(--bordure); }
-  .banniere a { display: block; }
-
   /* ---------- Hero ---------- */
   .hero-scene { position: relative; isolation: isolate; }
   .fumee {

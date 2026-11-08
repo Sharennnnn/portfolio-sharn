@@ -8,6 +8,7 @@ const r = await lireReglages();
 const annee = new Date().getFullYear();
 // Sur la page Contact, l'adresse est déjà le sujet de la page : pas de doublon dans le pied.
 const surContact = Astro.url.pathname === route(langue, 'contact');
+const banniere = r.banniere.visible && r.banniere.image;
 const reseaux = [
   r.contact.instagram && { nom: 'Instagram', url: r.contact.instagram },
   r.contact.linkedin && { nom: 'LinkedIn', url: r.contact.linkedin },
@@ -31,8 +32,17 @@ const reseaux = [
     </nav>
   </div>
 
-  <!-- Wordmark W1 à l'échelle du pied de page : décoratif, le nom est déjà annoncé dans l'en-tête. -->
-  <p class="geant" aria-hidden="true">Shar<span class="apostrophe">&rsquo;</span>N</p>
+  {/* Signature : la bannière si elle est cochée dans l'admin, sinon le wordmark. Décoratives toutes deux,
+      le nom est déjà annoncé dans l'en-tête ; seule une bannière cliquable a besoin d'un texte. */}
+  {banniere ? (
+    r.banniere.lien ? (
+      <a class="banniere" href={r.banniere.lien}><img src={r.banniere.image} alt="Shar’N" width="1600" height="265" loading="lazy" decoding="async" /></a>
+    ) : (
+      <div class="banniere"><img src={r.banniere.image} alt="" width="1600" height="265" loading="lazy" decoding="async" /></div>
+    )
+  ) : (
+    <p class="geant" aria-hidden="true">Shar<span class="apostrophe">&rsquo;</span>N</p>
+  )}
 
   <div class="enveloppe bas">
     <p class="legende">&copy; {annee} Shar&rsquo;N</p>
@@ -88,6 +98,10 @@ const reseaux = [
     user-select: none;
   }
   .geant .apostrophe { color: var(--accent); -webkit-text-fill-color: var(--accent); opacity: 0.55; }
+  .banniere { display: block; margin-top: clamp(2rem, 5vw, 4rem); }
+  /* Sur téléphone, 6:1 donnerait 62 px : on recadre les côtés vides pour garder le logo lisible. */
+  .banniere img { display: block; width: 100%; height: auto; min-height: 6.5rem; object-fit: cover; }
+  .banniere + .bas { border-top: 0; }
   .bas {
     position: relative;
     display: flex;
