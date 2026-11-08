@@ -5,7 +5,8 @@ import CarteProjet from '../components/CarteProjet.astro';
 import { traduire, route, trier, champ, rempli, autreLangue, urlProjet } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
 import { personne } from '../lib/schema.js';
-import { srcsetVignette, couleurAttente } from '../lib/images.js';
+import { srcsetVignette, couleurAttente, dimensions } from '../lib/images.js';
+import { sectionsAccueil } from '../lib/sections-accueil.js';
 // Serif italique du titre : utilisée sur cette page seulement, donc préchargée ici seulement.
 import policeSerif from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
 
@@ -60,10 +61,46 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
   titre: champ(p, 'titre', langue),
   lieu: champ(p, 'lieu', langue),
 }));
+
+// À propos : le premier paragraphe de la bio devient l'énoncé qui s'allume au scroll, mot à mot.
+const bio = champ(r.apropos, 'bio', langue);
+const motsEnonce = (bio[0] || '').split(' ');
+const portrait = r.apropos.photo ? { src: r.apropos.photo, ...(await dimensions(r.apropos.photo)), srcset: await srcsetVignette(r.apropos.photo) } : null;
+
+// Bandeau : les disciplines et étiquettes des services, répétées pour remplir l'écran.
+const bandeau = [services.map((s) => s.titre), services.flatMap((s) => s.etiquettes)].filter((l) => l.length);
+
+// Réalisé pour : les fiches avec un client, puis les lignes du parcours qui ne sont pas une école.
+// shortcut: repère ces lignes par leur lieu, à revoir si l'admin gagne un champ dédié.
+const realise = [
+  ...tous.filter((p) => rempli(p.data.client)).map((p) => ({ nom: p.data.client, detail: champ(p.data, 'titre', langue), url: urlProjet(langue, p.id) })),
+  ...r.apropos.parcours.filter((p) => /client|télétravail|remote/i.test(p.lieu)).map((p) => ({ nom: champ(p, 'titre', langue), detail: p.periode })),
+];
+
+// Index : tous les projets, regroupés par origine.
+const index = await Promise.all(['client', 'fanart', 'exercice', 'perso'].map(async (origine) => ({
+  origine,
+  projets: await Promise.all(tous.filter((p) => p.data.origine === origine).map(async (p) => ({
+    titre: champ(p.data, 'titre', langue),
+    annee: p.data.annee,
+    url: urlProjet(langue, p.id),
+    src: p.data.couverture,
+    srcset: await srcsetVignette(p.data.couverture),
+  }))),
+})));
+const groupes = index.filter((g) => g.projets.length);
+const premier = groupes[0]?.projets[0];
 ---
 
 <Base titre={champ(h, 'eyebrow', langue)} preloads={[policeSerif]} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
-    <div class="hero-scene">
+    {/* Le fil conducteur : décor qui suit le scroll ; les titres des sections restent la vraie structure. */}
+    <div class="fil" aria-hidden="true">
+      <span class="fil-trait"></span>
+      <span class="fil-tete"></span>
+      <span class="fil-libelle"></span>
+    </div>
+
+    <div class="hero-scene" data-fil="">
       <canvas class="fumee" aria-hidden="true"></canvas>
       <section class="enveloppe hero">
         <div class="hero-texte">
@@ -112,9 +149,82 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
       </section>
     </div>
 
-    {r.sections.filter((s) => s.visible).map((s) => {
+    {sectionsAccueil(r.sections.filter((s) => s.visible).map((s) => s.cle)).map((cle) => {
+      const s = { cle };
+      if (s.cle === 'bandeau' && bandeau.length) return (
+        <div class="bandeau" aria-hidden="true" data-fil="">
+          {bandeau.map((ligne, i) => (
+            <p class:list={['bandeau-ligne', { 'bandeau-ligne--chute': i === 1 }]}>
+              {Array.from({ length: 6 }, () => ligne).flat().map((m) => <span>{m}</span>)}
+            </p>
+          ))}
+        </div>
+      );
+      if (s.cle === 'apropos' && motsEnonce[0]) return (
+        <section class="enveloppe bloc apropos" data-fil={t('accueil.fil.apropos')}>
+          {portrait && (
+            <div class="apropos-photo">
+              <img src={portrait.src} srcset={portrait.srcset} sizes="(max-width: 48rem) 60vw, 26rem" alt={t('apropos.photo')} width={portrait.width} height={portrait.height} loading="lazy" decoding="async" />
+            </div>
+          )}
+          <div class="apropos-texte">
+            <h2 class="titre-chapitre reveal reveal--bloc">{t('accueil.apropos.titre')} <em>{t('accueil.apropos.chute')}</em></h2>
+            <p class="enonce">
+              {motsEnonce.map((m, i) => <><span class="m" style={`--p:${(i / motsEnonce.length).toFixed(3)}`}>{m}</span>{' '}</>)}
+            </p>
+            {bio.slice(1).map((p) => <p class="apropos-suite reveal reveal--bloc">{p}</p>)}
+            <a class="lien-accent reveal reveal--bloc" href={route(langue, 'apropos')}>{t('accueil.apropos.suite')} &rarr;</a>
+          </div>
+        </section>
+      );
+      if (s.cle === 'realise' && realise.length) return (
+        <section class="chapitre chapitre--papier" data-fil={t('accueil.fil.realise')}>
+          <div class="enveloppe">
+            <div class="entete-chapitre reveal reveal--bloc">
+              <p class="eyebrow">{t('accueil.realise.surtitre')}</p>
+              <h2 class="titre-chapitre">{t('accueil.realise.titre')} <em>{t('accueil.realise.chute')}</em></h2>
+            </div>
+            <ul class="realise">
+              {realise.map((x) => (
+                <li>
+                  {x.url ? <a href={x.url}><span class="realise-nom">{x.nom}</span><span class="realise-detail">{x.detail} <span aria-hidden="true">&rarr;</span></span></a>
+                    : <div><span class="realise-nom">{x.nom}</span><span class="realise-detail">{x.detail}</span></div>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      );
+      if (s.cle === 'index' && groupes.length) return (
+        <section class="chapitre" data-fil={t('accueil.fil.index')}>
+          <div class="enveloppe">
+            <div class="entete-chapitre reveal reveal--bloc">
+              <p class="eyebrow">{t('accueil.index.surtitre')}</p>
+              <h2 class="titre-chapitre">{t('accueil.index.titre')} <em>{t('accueil.index.chute')}</em></h2>
+            </div>
+            <div class="index">
+              <div class="index-groupes">
+                {groupes.map((g) => (
+                  <section>
+                    <h3 class="index-origine">{t(`origine.${g.origine}`)} <span>{deuxChiffres(g.projets.length)}</span></h3>
+                    <ul>
+                      {g.projets.map((p) => (
+                        <li><a href={p.url} data-src={p.src} data-srcset={p.srcset}><span>{p.titre}</span><span class="index-annee">{p.annee}</span></a></li>
+                      ))}
+                    </ul>
+                  </section>
+                ))}
+              </div>
+              {/* Aperçu au survol, souris et clavier : les liens de gauche suffisent sans lui. */}
+              <div class="index-apercu" aria-hidden="true">
+                <img src={premier.src} srcset={premier.srcset} sizes="24rem" alt="" width="900" height="1200" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </div>
+        </section>
+      );
       if (s.cle === 'selection') return (
-        <section class="enveloppe bloc">
+        <section class="enveloppe bloc" data-fil={t('accueil.fil.selection')}>
           <div class="entete-bloc reveal reveal--bloc">
             <h2>{t('accueil.selection')}</h2>
             <a class="lien-accent" href={route(langue, 'projets')}>{t('accueil.tout')} &rarr;</a>
@@ -147,7 +257,7 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
         </section>
       );
       if (s.cle === 'services' && services.length) return (
-        <section class="chapitre chapitre--papier">
+        <section class="chapitre chapitre--papier" data-fil={t('accueil.fil.services')}>
           <div class="enveloppe">
             <div class="entete-chapitre reveal reveal--bloc">
               <p class="eyebrow">{rubrique('services', 'surtitre')}</p>
@@ -169,7 +279,7 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
         </section>
       );
       if (s.cle === 'outils' && outils.length) return (
-        <section class="chapitre chapitre--accent">
+        <section class="chapitre chapitre--accent" data-fil={t('accueil.fil.outils')}>
           <div class="enveloppe">
             <div class="entete-chapitre reveal reveal--bloc">
               <p class="eyebrow">{rubrique('outils', 'surtitre')}</p>
@@ -181,7 +291,7 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
                   <dt>{g.groupe}</dt>
                   <dd>
                     <ul class="etiquettes">
-                      {g.outils.map((o) => <li>{o.nom}{o.n > 0 && <span class="outil-nombre"> · {projetsCites(o.n)}</span>}</li>)}
+                      {g.outils.map((o, i) => <li style={`--i:${i}`}>{o.nom}{o.n > 0 && <span class="outil-nombre"> · {projetsCites(o.n)}</span>}</li>)}
                     </ul>
                   </dd>
                 </div>
@@ -191,7 +301,7 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
         </section>
       );
       if (s.cle === 'parcours' && parcours.length) return (
-        <section class="chapitre chapitre--frise" style={`--n:${parcours.length}`}>
+        <section class="chapitre chapitre--frise" style={`--n:${parcours.length}`} data-fil={t('accueil.fil.parcours')}>
           <div class="frise-collant">
             <div class="enveloppe entete-chapitre reveal reveal--bloc">
               <p class="eyebrow">{rubrique('parcours', 'surtitre')}</p>
@@ -211,7 +321,7 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
         </section>
       );
       if (s.cle === 'cta') return (
-        <section class="cta">
+        <section class="cta" data-fil={t('accueil.fil.cta')}>
           <div class="enveloppe cta-interne">
             <h2 class="cta-titre titre-masque reveal"><span class="ligne"><span>{champ(h, 'cta_titre', langue)}</span></span></h2>
             <div class="cta-bas reveal reveal--cta">
@@ -226,6 +336,51 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
 </Base>
 
 <style>
+  /* ---------- Fil conducteur : une ligne qui se trace du haut au bas de la page ---------- */
+  .fil { display: none; }
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .fil {
+        --fil: var(--accent);
+        --x: clamp(0.4rem, 1.2vw, 1.25rem);
+        display: block;
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: calc(var(--z-entete) - 1);
+        pointer-events: none;
+      }
+      /* Sur les fonds colorés, la couleur du fil suit celle du texte du chapitre. */
+      .fil[data-fond='papier'] { --fil: #9a4a0b; }
+      .fil[data-fond='accent'] { --fil: var(--fond); }
+      .fil-trait, .fil-tete { position: absolute; top: 0; background: var(--fil); transition: background-color 400ms var(--courbe); }
+      .fil-trait { left: var(--x); width: 2px; height: 100svh; transform-origin: top; animation: fil-trace linear both; }
+      .fil-tete { left: calc(var(--x) - 4px); width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; animation: fil-tete linear both; }
+      /* Règles séparées : le minifieur fusionnerait sinon la timeline dans le raccourci « animation ». */
+      span.fil-trait, span.fil-tete { animation-timeline: scroll(root); }
+    }
+  }
+  @keyframes fil-trace { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes fil-tete { from { translate: 0 0; } to { translate: 0 100svh; } }
+  .fil-libelle { display: none; }
+  /* Le nom de la section en cours, dans la marge : seulement là où la marge peut le contenir. */
+  @media (min-width: 64rem) {
+    .fil-libelle {
+      display: block;
+      position: absolute;
+      bottom: 1.5rem;
+      left: calc(var(--x) + 0.6rem);
+      writing-mode: vertical-rl;
+      rotate: 180deg;
+      font-size: var(--t-eyebrow);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--fil);
+      transition: color 400ms var(--courbe);
+    }
+  }
+
   /* ---------- Hero ---------- */
   .hero-scene { position: relative; isolation: isolate; }
   .fumee {
@@ -394,6 +549,47 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     .piste a { width: min(58vw, 16rem); }
   }
 
+  /* Le hero s'efface en montant, le mur glisse moins vite : on quitte l'affiche pour entrer dans la page. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-texte { animation: hero-sortie linear both; }
+      div.hero-texte { animation-timeline: view(); animation-range: exit 15% exit 100%; }
+      .mur { animation: mur-sortie linear both; }
+      div.mur { animation-timeline: view(); animation-range: exit 0% exit 100%; }
+    }
+  }
+  @keyframes hero-sortie { to { opacity: 0; translate: 0 -4rem; } }
+  @keyframes mur-sortie { to { translate: 0 3rem; } }
+
+  /* ---------- Bandeau des disciplines : il coulisse au scroll, donc rien ne bouge tout seul ---------- */
+  .bandeau { margin-top: clamp(1rem, 3vw, 3rem); overflow: clip; }
+  .bandeau-ligne {
+    display: flex;
+    width: max-content;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin: 0;
+    font-family: var(--police-titre);
+    font-size: clamp(2.75rem, 8vw, 7.5rem);
+    line-height: 1.05;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .bandeau-ligne--chute {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    text-transform: none;
+    color: var(--accent);
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .bandeau-ligne { animation: bandeau linear both; }
+      .bandeau-ligne--chute { animation-name: bandeau-inverse; }
+      p.bandeau-ligne { animation-timeline: view(); }
+    }
+  }
+  @keyframes bandeau { from { translate: 0 0; } to { translate: -30% 0; } }
+  @keyframes bandeau-inverse { from { translate: -30% 0; } to { translate: 0 0; } }
+
   /* ---------- Sélection ---------- */
   .bloc { padding-block: var(--section) 0; }
   .entete-bloc {
@@ -469,6 +665,57 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     line-height: 0.85;
   }
   .tuile-texte { font-size: var(--t-legende); font-weight: 600; }
+
+  /* Les affiches se recalent à leur taille en entrant à l'écran. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .selection :global(.carte-visuel img:not(.survol)) { animation: affiche-entree linear both; }
+      .selection :global(li .carte-visuel img:not(.survol)) { animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    }
+  }
+  @keyframes affiche-entree { from { scale: 1.14; } to { scale: 1; } }
+
+  /* ---------- À propos ---------- */
+  .apropos {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+  .apropos-photo { overflow: hidden; }
+  .apropos-photo img { display: block; width: 100%; height: auto; }
+  .apropos-texte { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); justify-items: start; }
+  .enonce {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.9vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1.2;
+    text-wrap: pretty;
+    view-timeline: --enonce block;
+    view-timeline-inset: 0;
+  }
+  .apropos-suite { margin: 0; max-width: 60ch; color: var(--texte-doux); }
+  @media (max-width: 48rem) {
+    .apropos { grid-template-columns: 1fr; }
+    .apropos-photo { width: min(60vw, 18rem); }
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* Chaque mot s'allume à son tour : tout est lu quand l'énoncé atteint le milieu de l'écran. */
+      .enonce .m { animation: mot-allume linear both; }
+      p.enonce span.m {
+        animation-timeline: --enonce;
+        animation-range: cover calc(6% + var(--p) * 38%) cover calc(10% + var(--p) * 38%);
+      }
+      .apropos-photo { animation: photo-entree linear both; }
+      div.apropos-photo { animation-timeline: view(); animation-range: entry 0% entry 80%; }
+      .apropos-photo img { animation: photo-recul linear both; }
+      div.apropos-photo img { animation-timeline: view(); }
+    }
+  }
+  @keyframes mot-allume { from { opacity: 0.18; } to { opacity: 1; } }
+  @keyframes photo-entree { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+  @keyframes photo-recul { from { scale: 1.2; } to { scale: 1; } }
 
   /* ---------- Deux façons de travailler ---------- */
   .duo {
@@ -561,7 +808,7 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
   }
 
   /* Services : numéro italique, nom, puis texte et étiquettes. */
-  .services { margin: 0; padding: 0; list-style: none; border-top: 1px solid color-mix(in srgb, var(--encre) 25%, transparent); }
+  .services { overflow-x: clip; margin: 0; padding: 0; list-style: none; border-top: 1px solid color-mix(in srgb, var(--encre) 25%, transparent); }
   .services > li {
     display: grid;
     grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 1.3fr);
@@ -597,6 +844,26 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     .outils > div { grid-template-columns: 1fr; }
   }
 
+  /* Les outils se posent un à un. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .outils .etiquettes > li { animation: outil-pose linear both; }
+      .outils ul.etiquettes > li { animation-timeline: view(); animation-range: entry calc(var(--i) * 12%) entry calc(50% + var(--i) * 12%); }
+      /* Services : le numéro et le nom arrivent de part et d'autre de leur ligne. */
+      .services-numero { animation: service-numero linear both; }
+      .services > li > .services-numero { animation-timeline: view(); animation-range: entry 0% entry 90%; }
+      .services h3 { animation: service-nom linear both; }
+      .services > li > h3 { animation-timeline: view(); animation-range: entry 0% entry 90%; }
+    }
+  }
+  @keyframes outil-pose { from { opacity: 0; scale: 0.8; translate: 0 0.75rem; } to { opacity: 1; scale: 1; translate: 0 0; } }
+  @keyframes service-numero { from { translate: -1.5rem 0; opacity: 0; } to { translate: 0 0; opacity: 1; } }
+  @keyframes service-nom { from { translate: 2.5rem 0; } to { translate: 0 0; } }
+  @media (hover: hover) and (pointer: fine) {
+    .services > li { transition: background-color var(--duree) var(--courbe); }
+    .services > li:hover { background: color-mix(in srgb, var(--encre) 6%, transparent); }
+  }
+
   /* Parcours : par défaut une liste verticale ; frise horizontale au défilement si le navigateur le permet. */
   .frise { display: grid; margin: 0; padding: 0 var(--gouttiere); list-style: none; }
   .frise > li {
@@ -630,8 +897,26 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
       /* Règle séparée : le minifieur fusionnerait sinon la timeline dans le raccourci « animation ». */
       .frise-collant > ol.frise { animation-timeline: --frise; animation-range: contain 0% contain 100%; }
       .frise > li { width: 20rem; }
+      /* Le fil se retrouve ici à l'horizontale : il avance avec les années. */
+      .frise-collant::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 clamp(2rem, 8svh, 5rem);
+        height: 2px;
+        background: var(--marque);
+        transform-origin: left;
+        animation: frise-trace linear both;
+      }
+      div.frise-collant::after { animation-timeline: --frise; animation-range: contain 0% contain 100%; }
+    }
+    /* Liste verticale (téléphone, écran bas) : chaque étape arrive à son tour. */
+    @media (prefers-reduced-motion: no-preference) and ((max-width: 47.99rem) or (max-height: 43.99rem)) {
+      .frise > li { animation: etape-entree linear both; }
+      ol.frise > li { animation-timeline: view(); animation-range: entry 0% entry 70%; }
     }
   }
+  @keyframes frise-trace { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes etape-entree { from { opacity: 0; translate: 0 1.5rem; } to { opacity: 1; translate: 0 0; } }
   @keyframes frise { to { translate: calc(-100% + 100vw) 0; } }
 
   /* Arrivée des chapitres colorés : le bloc s'élargit jusqu'aux bords en entrant à l'écran. */
@@ -644,6 +929,66 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     }
   }
   @keyframes ouverture { from { clip-path: inset(0 4% round 1.5rem); } to { clip-path: inset(0 0 round 0); } }
+
+  /* ---------- Réalisé pour ---------- */
+  .realise { margin: 0; padding: 0; list-style: none; border-top: 1px solid color-mix(in srgb, var(--encre) 25%, transparent); }
+  .realise > li { border-bottom: 1px solid color-mix(in srgb, var(--encre) 25%, transparent); }
+  .realise a, .realise div {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0.5rem clamp(1.5rem, 4vw, 4rem);
+    padding-block: clamp(1.25rem, 2.5vw, 2rem);
+  }
+  .realise-nom { font-family: var(--police-titre); font-size: clamp(1.5rem, 3.4vw, 3rem); line-height: 1.05; text-transform: uppercase; }
+  .realise-detail { font-size: var(--t-legende); color: var(--encre-douce); }
+  .realise a { transition: padding-inline-start var(--duree) var(--courbe); }
+  .realise a:hover, .realise a:focus-visible { padding-inline-start: 1rem; }
+  .realise a:hover .realise-nom { color: var(--marque); }
+  @media (max-width: 40rem) {
+    .realise a, .realise div { grid-template-columns: 1fr; }
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .realise > li { animation: etape-entree linear both; }
+      ul.realise > li { animation-timeline: view(); animation-range: entry 0% entry 80%; }
+    }
+  }
+
+  /* ---------- Index : toute la production, avec un aperçu au survol ---------- */
+  .index { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+  .index-groupes { display: grid; gap: clamp(2rem, 4vw, 3rem); }
+  .index-origine { display: flex; justify-content: space-between; padding-bottom: 0.75rem; font-size: var(--t-h3); }
+  .index-origine span { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; color: var(--marque); }
+  .index-groupes ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--bordure-forte); }
+  .index-groupes li { border-bottom: 1px solid var(--bordure); break-inside: avoid; }
+  @media (min-width: 72rem) {
+    .index-groupes ul { columns: 2; column-gap: clamp(1.5rem, 3vw, 3rem); }
+  }
+  .index-groupes a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    min-height: 44px;
+    padding-block: 0.7rem;
+    transition: color var(--duree) var(--courbe), padding-inline-start var(--duree) var(--courbe);
+  }
+  .index-groupes a:hover, .index-groupes a:focus-visible { color: var(--accent); padding-inline-start: 0.75rem; }
+  .index-annee { font-size: var(--t-legende); color: var(--texte-doux); font-variant-numeric: tabular-nums; }
+  .index-apercu { position: sticky; top: 6rem; aspect-ratio: 3 / 4; overflow: hidden; background: var(--surface); }
+  .index-apercu img { width: 100%; height: 100%; object-fit: cover; }
+  /* Sans souris, pas d'aperçu : il resterait figé sur la première affiche. */
+  @media (max-width: 56rem), (hover: none) {
+    .index { grid-template-columns: 1fr; }
+    .index-apercu { display: none; }
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .index-groupes li { animation: etape-entree linear both; }
+      .index-groupes ul > li { animation-timeline: view(); animation-range: entry 0% entry 100%; }
+    }
+  }
 
   /* ---------- Appel à contact ---------- */
   .cta {
@@ -663,6 +1008,15 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     align-items: center;
     gap: 1.5rem 3rem;
   }
+
+  /* Le titre final grandit jusqu'à sa pleine taille : le fil arrive au bout de la page. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .cta-titre { transform-origin: left bottom; animation: cta-grandit linear both; }
+      h2.cta-titre { animation-timeline: view(); animation-range: entry 0% entry 100%; }
+    }
+  }
+  @keyframes cta-grandit { from { scale: 0.72; } to { scale: 1; } }
 
   /* Bouton pause : icône seule (libellé pour les lecteurs d'écran), dans le coin bas du mur, cible 44 px. */
   .hero { position: relative; }
@@ -727,6 +1081,36 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
       pauseFumee?.(pause);
     });
   }
+
+  // Fil conducteur : le nom de la section au milieu de l'écran, et le fond sur lequel passe le fil.
+  const fil = document.querySelector('.fil');
+  const libelle = fil?.querySelector('.fil-libelle');
+  const etapes = [...document.querySelectorAll('[data-fil]')];
+  const nommees = etapes.filter((e) => e.dataset.fil);
+  if (fil && etapes.length) {
+    const suivi = new IntersectionObserver((entrees) => {
+      for (const { isIntersecting, target } of entrees) {
+        if (!isIntersecting) continue;
+        const rang = nommees.indexOf(target);
+        libelle.textContent = rang < 0 ? '' : `${String(rang + 1).padStart(2, '0')} — ${target.dataset.fil}`;
+        fil.dataset.fond = target.classList.contains('chapitre--papier') ? 'papier' : target.classList.contains('chapitre--accent') ? 'accent' : '';
+      }
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    etapes.forEach((e) => suivi.observe(e));
+  }
+
+  // Index : l'affiche du projet survolé ou atteint au clavier.
+  const apercu = document.querySelector('.index-apercu img');
+  document.querySelectorAll('.index-groupes a').forEach((lien) => {
+    const montrer = () => {
+      if (!apercu || apercu.getAttribute('src') === lien.dataset.src) return;
+      apercu.srcset = lien.dataset.srcset;
+      apercu.src = lien.dataset.src;
+      if (matchMedia('(prefers-reduced-motion: no-preference)').matches) apercu.animate([{ opacity: 0.2, scale: 1.04 }, { opacity: 1, scale: 1 }], { duration: 320, easing: 'cubic-bezier(.22,1,.36,1)' });
+    };
+    lien.addEventListener('pointerenter', montrer);
+    lien.addEventListener('focus', montrer);
+  });
 
   // Le mur d'affiches s'arrête quand il sort de l'écran : aucun calcul pour un décor invisible.
   const mur = document.querySelector('.mur');
