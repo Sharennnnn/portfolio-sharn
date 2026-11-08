@@ -107,7 +107,7 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
               <div class:list={['piste defile', { inverse: c === 1 }]}>
                 {[...col, ...col].map((a, i) => (
                   <a href={urlProjet(langue, a.id)} tabindex="-1">
-                    <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) 9rem, 15rem" style={`background:${a.couleur}`} alt="" width="900" height="1200" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={c === 0 && i === 0 ? 'high' : undefined} decoding="async" />
+                    <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) min(58vw, 16rem), 15rem" style={`background:${a.couleur}`} alt="" width="900" height="1200" loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={c === 0 && i === 0 ? 'high' : undefined} decoding="async" />
                   </a>
                 ))}
               </div>
@@ -402,8 +402,8 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     .mur::before { left: 0; background: linear-gradient(to right, var(--fond), transparent); }
     .mur::after { right: 0; background: linear-gradient(to left, var(--fond), transparent); }
     .colonne + .colonne { display: none; }
-    .piste { flex-direction: row; width: max-content; padding: 0 0.75rem 0 0; gap: 0.75rem; animation-name: defile-x; animation-duration: 45s; }
-    .piste a { width: 8.5rem; }
+    .piste { flex-direction: row; width: max-content; padding: 0 0.75rem 0 0; gap: 0.75rem; animation-name: defile-x; animation-duration: 70s; }
+    .piste a { width: min(58vw, 16rem); }
   }
 
   /* ---------- Sélection ---------- */
