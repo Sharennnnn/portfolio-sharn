@@ -382,7 +382,8 @@ const premier = groupes[0]?.projets[0];
   }
 
   /* ---------- Hero ---------- */
-  .hero-scene { position: relative; isolation: isolate; }
+  /* overflow-x : le mur incliné et agrandi dépasse du bord droit sur les écrans moyens. */
+  .hero-scene { position: relative; isolation: isolate; overflow-x: clip; }
   .fumee {
     position: absolute;
     inset: 0;
