@@ -5,7 +5,7 @@ import CarteProjet from '../components/CarteProjet.astro';
 import { traduire, route, trier, champ, rempli, autreLangue, urlProjet } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
 import { personne } from '../lib/schema.js';
-import { srcsetVignette, couleurAttente } from '../lib/images.js';
+import { srcsetVignette, couleurAttente, urlVignette } from '../lib/images.js';
 // Serif italique du titre : utilisée sur cette page seulement, donc préchargée ici seulement.
 import policeSerif from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
 
@@ -28,6 +28,12 @@ const mur = await Promise.all(
   }))
 );
 const colonnes = [mur.filter((_, i) => i % 2 === 0), mur.filter((_, i) => i % 2 === 1)];
+
+// Fil conducteur : les faces successives de l'affiche. La 2e est celle de la carte où elle se pose (2e de la sélection).
+const urlFace = async (src) => ((await srcsetVignette(src)) ? urlVignette(src) : src);
+const faces = await Promise.all(
+  [mur[0]?.src, projets[1]?.data.couverture, projets[0]?.data.couverture, projets[3]?.data.couverture, projets[2]?.data.couverture, mur[1]?.src].map((src) => src && urlFace(src))
+);
 
 const h = r.hero;
 const deuxChiffres = (n) => String(n).padStart(2, '0');
@@ -63,6 +69,7 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
 ---
 
 <Base titre={champ(h, 'eyebrow', langue)} preloads={[policeSerif]} description={champ(h, 'chapeau', langue)} equivalent={route(autreLangue(langue), 'accueil')} schema={schema}>
+    {faces.every(Boolean) && <canvas class="fil-affiche" aria-hidden="true" data-images={JSON.stringify(faces)}></canvas>}
     <div class="hero-scene">
       <canvas class="fumee" aria-hidden="true"></canvas>
       <section class="enveloppe hero">
@@ -702,6 +709,35 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     .pause-anim { position: static; justify-self: end; margin-top: -1.25rem; }
   }
 
+  /* ---------- Fil conducteur : l'affiche qui accompagne le scroll ---------- */
+  /* Au-dessus du contenu mais sous l'en-tête, sans capter la souris. Rien ne bouge sans fil-affiche.js. */
+  .fil-affiche {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: calc(var(--z-entete) - 1);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 700ms var(--courbe);
+  }
+  .fil-affiche.pret { opacity: 1; }
+  @media print { .fil-affiche { display: none; } }
+  /* La colonne de l'affiche : les textes s'arrêtent avant elle. --rail est posé par fil-affiche.js, avec la classe. */
+  :global(.fil-actif) .chapitre--papier > .enveloppe,
+  :global(.fil-actif) .chapitre--accent > .enveloppe,
+  :global(.fil-actif) .frise-collant > .enveloppe { padding-right: calc(var(--gouttiere) + var(--rail) + 2.5rem); }
+  /* Écran bas : le parcours redevient une liste, qui laisse aussi la colonne libre. */
+  @media (max-height: 43.99rem) {
+    :global(.fil-actif) .frise { padding-right: calc(var(--gouttiere) + var(--rail) + 2.5rem); }
+  }
+  /* Sa place finale, à droite sous le grand titre. */
+  :global(.fil-actif) .cta-bas {
+    align-items: flex-start;
+    min-height: calc(var(--rail) * 4 / 3);
+    padding-right: calc(var(--rail) + 3rem);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .pastille { animation: none; }
     /* Sans animation : les trois mots côte à côte, le doublon de fin masqué. */
@@ -731,4 +767,14 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
   // Le mur d'affiches s'arrête quand il sort de l'écran : aucun calcul pour un décor invisible.
   const mur = document.querySelector('.mur');
   if (mur) new IntersectionObserver(([e]) => mur.classList.toggle('hors-champ', !e.isIntersecting)).observe(mur);
+
+  // ESSAI : fil conducteur en 3D (Three.js chargé après la page), grand écran + souris + animations non réduites.
+  const fil = document.querySelector<HTMLCanvasElement>('.fil-affiche');
+  const gabarit = matchMedia('(min-width: 70rem) and (min-height: 36rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+  if (fil && gabarit.matches) {
+    addEventListener('load', async () => {
+      const { lancerFilAffiche } = await import('../scripts/fil-affiche.js');
+      lancerFilAffiche(fil, gabarit);
+    }, { once: true });
+  }
 </script>
