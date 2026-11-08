@@ -16,6 +16,32 @@ export function position(u, n) {
   return k - 1 + rampe(v - k, 0, AVANCE);
 }
 
+// Côté du mur de l'arrêt k : 1 à droite, -1 à gauche, en alternance.
+export const coteArret = (k) => (k % 2 ? -1 : 1);
+
+// Pose fixe de la caméra : -1 à l'entrée, k face à l'affiche sur son mur, le dernier arrêt face aux portes.
+function poseFixe(k, n, g) {
+  if (k < 0) return { x: 0, z: g.zDepart, yaw: 0 };
+  if (k >= n - 1) return { x: 0, z: g.zArret(k), yaw: 0 };
+  const c = coteArret(k);
+  return { x: c * (g.demiLargeur - g.recul), z: g.zArret(k), yaw: -c * Math.PI / 2 };
+}
+
+// Trajet entre deux poses : se détourne du mur, marche dans le couloir, se tourne vers le mur suivant.
+// g = { demiLargeur, recul, zDepart, zArret(k) }
+export function camera(p, n, g) {
+  const k = Math.ceil(p);
+  const a = poseFixe(k - 1, n, g);
+  const b = poseFixe(k, n, g);
+  const t = p - (k - 1);
+  const marche = rampe(t, 0.15, 0.85);
+  return {
+    x: a.x + (b.x - a.x) * marche,
+    z: a.z + (b.z - a.z) * marche,
+    yaw: a.yaw * (1 - rampe(t, 0, 0.35)) + b.yaw * rampe(t, 0.65, 1),
+  };
+}
+
 // Présence de l'arrêt k (son lien, son cartel, sa vraie image) : 1 seulement quand la caméra y est immobile.
 export function presence(u, k, n) {
   const arrive = rampe(u, k + AVANCE - 0.05, k + AVANCE);

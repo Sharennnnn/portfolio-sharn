@@ -1,21 +1,60 @@
-// ESSAI — l'accueil devient un couloir d'affiches : le scroll fait avancer la caméra, chaque projet phare
-// arrive en plein écran, puis on le traverse. Les liens restent ceux des cartes, toujours focalisables.
-// Rien ne bouge sans geste du visiteur. Sans WebGL matériel ou avec animations réduites : accueil classique.
-import { WebGLRenderer, Scene, PerspectiveCamera, PlaneGeometry, ShaderMaterial, Mesh, TextureLoader, DoubleSide, MathUtils, Vector2 } from 'three';
-import { AVANCE, position, presence, rampe, opaciteHero, opaciteEntete, milieuArret } from './couloir-temps.js';
+// ESSAI — l'accueil devient un couloir de cinéma : le scroll fait marcher le visiteur entre deux murs d'affiches
+// dans leurs caissons lumineux. À chaque arrêt, il se tourne vers le mur et un projet phare remplit l'écran.
+// Les liens restent ceux des cartes, toujours focalisables. Rien ne bouge sans geste du visiteur.
+// Sans WebGL matériel ou avec animations réduites : accueil classique.
+import { WebGLRenderer, Scene, PerspectiveCamera, PlaneGeometry, BoxGeometry, ShaderMaterial, Mesh, TextureLoader, BackSide, MathUtils, Vector2, Vector3 } from 'three';
+import { AVANCE, position, presence, rampe, opaciteHero, opaciteEntete, milieuArret, camera as trajet, coteArret } from './couloir-temps.js';
 
 const FOV = 50;
-const ECART = 9; // distance entre deux arrêts
-const RECUL = 3; // distance caméra - affiche à l'arrêt
 const TAN = Math.tan(MathUtils.degToRad(FOV / 2));
 const RATIO = 4 / 3;
+const CASES_PAR_ARRET = 3; // une affiche de projet toutes les trois cases du mur
 
-const VS = 'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}';
-// Pixels de l'image tels quels, recadrés comme object-fit: cover. Le fondu passe par l'alpha : marche sur les deux thèmes.
-const FS = `precision mediump float;
-uniform sampler2D carte;uniform vec2 cadre;uniform float alpha;varying vec2 vUv;
-void main(){vec2 uv=vUv;if(!gl_FrontFacing)uv.x=1.-uv.x;
-gl_FragColor=vec4(texture2D(carte,(uv-.5)*cadre+.5).rgb,alpha);}`;
+// Affiche dans son caisson : pixels de l'image tels quels (cover), cadre sombre, liseré de lumière, fondu au loin.
+const VS_AFFICHE = 'varying vec2 vUv;varying vec3 vP;void main(){vUv=uv;vP=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(vP,1.);}';
+const FS_AFFICHE = `precision highp float;
+uniform sampler2D carte;uniform vec2 cadre,taille;uniform float marge;uniform vec3 fond,lumiere;varying vec2 vUv;varying vec3 vP;
+void main(){vec2 q=(vUv-.5)*(taille+2.*marge);vec2 e=abs(q)-taille*.5;float dehors=max(e.x,e.y);
+vec3 c;if(dehors<0.){c=texture2D(carte,(q/taille)*cadre+.5).rgb;}
+else{c=mix(lumiere,vec3(.035),smoothstep(0.,marge*.45,dehors));}
+c=mix(c,fond,smoothstep(9.,34.,distance(vP,cameraPosition)));
+gl_FragColor=vec4(c,1.);}`;
+
+// Le couloir lui-même, en une seule boîte vue de l'intérieur : moquette, plafond à spots, murs, portes du fond.
+const VS_COULOIR = 'varying vec3 vP;varying vec3 vN;void main(){vN=normal;vP=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(vP,1.);}';
+const FS_COULOIR = `precision highp float;
+uniform vec3 fond,accent;uniform float clair,pas,demi,yAffiche,yBas,yHaut,zFin;uniform vec2 taille;varying vec3 vP;varying vec3 vN;
+void main(){vec3 chaud=vec3(1.,.82,.6);
+float zr=mod(vP.z+pas*.5,pas)-pas*.5;
+vec3 c;
+if(vN.y<-.5){ /* moquette : motif de losanges, flaques de lumière sous les spots */
+  vec2 m=vP.xz*7.;float motif=step(.72,abs(sin(m.x+m.y))*abs(sin(m.x-m.y)));
+  vec3 base=mix(mix(vec3(.13,.035,.045),vec3(.62,.5,.4),clair),accent,.1);
+  c=base*(.8+.25*motif);
+  c+=base*mix(1.3,.28,clair)*exp(-(zr*zr)*.9-(vP.x*vP.x)*.35);
+  c+=accent*.22*exp(-(demi-abs(vP.x))*5.);
+}else if(vN.y>.5){ /* plafond : un spot à chaque case */
+  vec3 base=mix(vec3(.03),vec3(.93,.91,.87),clair);
+  float d=length(vec2(vP.x,zr));
+  c=base+chaud*(smoothstep(.13,.1,d)*1.5+exp(-d*2.6)*mix(.3,.08,clair));
+}else if(abs(vN.x)>.5){ /* murs : soubassement, halo des caissons, liseré au sol */
+  vec3 base=mix(vec3(.05,.042,.05),vec3(.85,.8,.72),clair);
+  base*=.7+.5*smoothstep(yBas,yHaut,vP.y);
+  if(vP.y<yBas+.26)base*=mix(.55,.8,clair);
+  vec2 q=abs(vec2(zr,vP.y-yAffiche))-taille*.5;
+  c=base+chaud*exp(-length(max(q,0.))*3.2)*mix(.26,.05,clair);
+  c+=accent*smoothstep(.022,.0,abs(vP.y-yBas-.26))*.8;
+}else{ /* fond : deux portes de salle, lumière dessous */
+  vec3 base=mix(vec3(.05,.04,.05),vec3(.8,.76,.68),clair);
+  vec2 p=vec2(abs(vP.x),vP.y-yBas);
+  float haut=(yHaut-yBas)*.82;
+  bool porte=p.x<demi*.72&&p.y<haut;
+  c=porte?mix(vec3(.2,.035,.05),vec3(.45,.1,.12),clair)*(.75+.35*p.y/haut):base;
+  if(porte&&p.x<.012)c=vec3(.01);
+  if(p.x<demi*.72&&p.y<.03)c=accent*1.4;
+}
+c=mix(c,fond,smoothstep(9.,34.,distance(vP,cameraPosition)));
+gl_FragColor=vec4(c,1.);}`;
 
 const hautPage = (el) => {
   let y = 0;
@@ -39,30 +78,54 @@ export function lancerCouloir(canvas, gabarit) {
 
   let renderer;
   try {
-    renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power', failIfMajorPerformanceCaveat: true });
+    renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: 'low-power', failIfMajorPerformanceCaveat: true });
   } catch {
     return;
   }
 
   const scene = new Scene();
-  const camera = new PerspectiveCamera(FOV, 1, 0.05, 80);
-  const geometrie = new PlaneGeometry(1, 1);
-  const plan = (texture) => {
+  const cam = new PerspectiveCamera(FOV, 1, 0.05, 80);
+  cam.rotation.order = 'YXZ';
+  const couleurs = { fond: { value: new Vector3() }, accent: { value: new Vector3() }, clair: { value: 0 } };
+  const plan = new PlaneGeometry(1, 1);
+  const boite = new Mesh(new BoxGeometry(1, 1, 1), new ShaderMaterial({
+    vertexShader: VS_COULOIR, fragmentShader: FS_COULOIR, side: BackSide,
+    uniforms: {
+      ...couleurs,
+      pas: { value: 1 }, demi: { value: 1 }, yAffiche: { value: 0 }, yBas: { value: -1 }, yHaut: { value: 1 }, zFin: { value: 0 }, taille: { value: new Vector2(1, 1) },
+    },
+  }));
+  scene.add(boite);
+
+  let cases = []; // { mesh, i, cote }
+  let actif = false, boucle = 0, lisse = 0, vw = 1, vh = 1, haut = 0, course = 1, etroit = false, geo;
+  const souris = { x: 0, y: 0, cx: 0, cy: 0 };
+
+  // Couleurs du site : suivent le thème et l'accent de l'admin.
+  const lireCouleur = (nom) => {
+    canvas.style.color = `var(${nom})`;
+    const v = getComputedStyle(canvas).color.match(/[\d.]+/g).slice(0, 3).map(Number);
+    return Math.max(...v) > 1 ? v.map((x) => x / 255) : v;
+  };
+  const lireTheme = () => {
+    couleurs.fond.value.fromArray(lireCouleur('--fond'));
+    couleurs.accent.value.fromArray(lireCouleur('--accent'));
+    couleurs.clair.value = html.dataset.salle === 'allumee' ? 1 : 0;
+  };
+
+  const creerCase = (texture) => {
     const a = texture.image.width / texture.image.height;
     const cadre = a > 1 / RATIO ? new Vector2(1 / RATIO / a, 1) : new Vector2(1, a * RATIO);
-    const mesh = new Mesh(geometrie, new ShaderMaterial({
-      vertexShader: VS, fragmentShader: FS, side: DoubleSide, transparent: true, depthWrite: false,
-      uniforms: { carte: { value: texture }, cadre: { value: cadre }, alpha: { value: 0 } },
+    const mesh = new Mesh(plan, new ShaderMaterial({
+      vertexShader: VS_AFFICHE, fragmentShader: FS_AFFICHE,
+      uniforms: {
+        fond: couleurs.fond, carte: { value: texture }, cadre: { value: cadre },
+        taille: { value: new Vector2(1, 1) }, marge: { value: 0.05 }, lumiere: { value: new Vector3(1, 0.93, 0.8) },
+      },
     }));
     scene.add(mesh);
     return mesh;
   };
-
-  let centraux = [], murs = [], actif = false, boucle = 0, lisse = 0, vw = 1, vh = 1, haut = 0, course = 1, etroit = false;
-  const souris = { x: 0, y: 0, cx: 0, cy: 0 };
-
-  const zArret = (k) => -(k + 1) * ECART;
-  const zCamera = (p) => zArret(p) + RECUL;
 
   const mesurer = () => {
     vw = html.clientWidth;
@@ -72,24 +135,42 @@ export function lancerCouloir(canvas, gabarit) {
     etroit = vw / vh < 5 / 4;
     renderer.setPixelRatio(Math.min(devicePixelRatio, etroit ? 1.5 : 2));
     renderer.setSize(vw, vh, false);
-    camera.aspect = vw / vh;
+    cam.aspect = vw / vh;
 
-    // À l'arrêt, l'affiche 3D tombe exactement sur la vraie carte : mêmes pixels, sans saut au fondu.
-    const vue = 2 * RECUL * TAN; // hauteur visible à la distance d'arrêt
-    const parPx = vue / vh;
+    // Largeur du couloir et recul : à l'arrêt, l'affiche 3D tombe exactement sur la vraie carte, sans saut au fondu.
+    const demi = etroit ? 1.3 : 2.2;
+    const recul = demi + 0.8;
+    const parPx = (2 * recul * TAN) / vh;
     const visuel = cartes[0].querySelector('.carte-visuel');
-    const hPx = visuel.offsetHeight, lPx = visuel.offsetWidth;
-    const yCentre = visuel.offsetTop + hPx / 2 + cartes[0].offsetTop + bloc.offsetTop;
-    centraux.forEach((m, k) => {
-      m.scale.set(lPx * parPx, hPx * parPx, 1);
-      m.position.set(0, (vh / 2 - yCentre) * parPx, zArret(k));
-    });
-    const xMur = 0.5 + vue * camera.aspect * 0.42;
-    murs.forEach((m) => {
-      const hMur = etroit ? 1.3 : 2;
-      m.scale.set(hMur / RATIO, hMur, 1);
-      m.position.x = m.userData.cote * xMur;
-    });
+    const l = visuel.offsetWidth * parPx, h = visuel.offsetHeight * parPx;
+    const yCentre = visuel.offsetTop + visuel.offsetHeight / 2 + cartes[0].offsetTop + bloc.offsetTop;
+    const yAffiche = (vh / 2 - yCentre) * parPx;
+    const pas = l + Math.max(0.55, l * 0.4);
+    const ecart = pas * CASES_PAR_ARRET;
+    const zArret = (k) => -(k + 1) * ecart;
+    geo = { demiLargeur: demi, recul, zDepart: pas, zArret };
+
+    const yBas = yAffiche - h / 2 - 0.42, yHaut = yAffiche + h / 2 + 0.5;
+    const zFin = zArret(n - 1) - recul * 1.25;
+    const zDebut = pas * 3;
+    boite.position.set(0, (yBas + yHaut) / 2, (zDebut + zFin) / 2);
+    boite.scale.set(demi * 2, yHaut - yBas, zDebut - zFin);
+    const u = boite.material.uniforms;
+    u.pas.value = pas;
+    u.demi.value = demi;
+    u.yAffiche.value = yAffiche;
+    u.yBas.value = yBas;
+    u.yHaut.value = yHaut;
+    u.taille.value.set(l, h);
+
+    for (const c of cases) {
+      const m = c.mesh;
+      m.scale.set(l + 0.1, h + 0.1, 1);
+      m.position.set(c.cote * (demi - 0.012), yAffiche, -c.i * pas);
+      m.rotation.y = -c.cote * Math.PI / 2;
+      m.material.uniforms.taille.value.set(l, h);
+      m.visible = -c.i * pas > zFin + 0.5 * pas;
+    }
     relancer();
   };
 
@@ -97,25 +178,7 @@ export function lancerCouloir(canvas, gabarit) {
     const p = position(lisse, n);
     const ouverture = 1 - rampe(lisse, 0, AVANCE);
     // Point de fuite décalé à l'arrivée, pour laisser le texte du hero sur fond calme.
-    camera.setViewOffset(vw, vh, etroit ? 0 : -vw * 0.2 * ouverture, etroit ? -vh * 0.22 * ouverture : 0, vw, vh);
-    camera.position.set(souris.cx, souris.cy, zCamera(p));
-
-    centraux.forEach((m, k) => {
-      const d = camera.position.z - m.position.z;
-      // Traversée quand on s'en approche ; apparition depuis le fond ; tourne pour venir se placer de face.
-      m.material.uniforms.alpha.value = rampe(d, RECUL * 0.22, RECUL * 0.7) * (1 - rampe(d, 18, 30));
-      m.visible = d > 0 && m.material.uniforms.alpha.value > 0;
-      m.rotation.y = rampe(d, RECUL, RECUL + 9) * (k % 2 ? -0.7 : 0.7);
-      // La souris ne décale que les murs : l'affiche de face reste calée sur la vraie carte.
-      m.position.x = souris.cx;
-      m.userData.yBase ??= m.position.y;
-      m.position.y = m.userData.yBase + souris.cy;
-    });
-    murs.forEach((m) => {
-      const d = camera.position.z - m.position.z;
-      m.material.uniforms.alpha.value = rampe(d, 0.3, 1.6) * (1 - rampe(d, 16, 30)) * 0.92;
-      m.visible = d > 0 && m.material.uniforms.alpha.value > 0;
-    });
+    cam.setViewOffset(vw, vh, etroit ? 0 : -vw * 0.2 * ouverture, etroit ? -vh * 0.22 * ouverture : 0, vw, vh);
 
     // Couche HTML : hero, en-tête, puis l'arrêt présent. La vraie image prend le relais du plan 3D à l'arrêt.
     const oh = opaciteHero(lisse);
@@ -123,12 +186,20 @@ export function lancerCouloir(canvas, gabarit) {
     heroScene.style.pointerEvents = oh > 0.5 ? '' : 'none';
     entete.style.opacity = opaciteEntete(lisse);
     entete.style.pointerEvents = opaciteEntete(lisse) > 0.5 ? '' : 'none';
+    let present = 0;
     arrets.forEach((el, k) => {
       const pr = presence(lisse, k, n);
+      present = Math.max(present, pr);
       el.style.opacity = pr;
       el.classList.toggle('courant', pr > 0.5);
     });
-    renderer.render(scene, camera);
+
+    // La souris fait à peine tourner la tête, sauf à l'arrêt : l'affiche reste calée sur la vraie carte.
+    const c = trajet(p, n, geo);
+    const libre = 1 - present;
+    cam.position.set(c.x, souris.cy * libre * 0.25, c.z);
+    cam.rotation.set(souris.cy * libre * 0.12, c.yaw - souris.cx * libre * 0.25, 0);
+    renderer.render(scene, cam);
   };
 
   const cibleU = () => MathUtils.clamp((scrollY - haut) / course, 0, 1) * n;
@@ -137,14 +208,14 @@ export function lancerCouloir(canvas, gabarit) {
     const dt = Math.min((t - derniere) / 1000, 0.1);
     derniere = t;
     const k = 1 - Math.pow(1 - 0.14, dt * 60);
-    const c = cibleU();
-    lisse += (c - lisse) * k;
-    if (Math.abs(c - lisse) < 0.0004) lisse = c;
+    const cible = cibleU();
+    lisse += (cible - lisse) * k;
+    if (Math.abs(cible - lisse) < 0.0004) lisse = cible;
     souris.cx += (souris.x - souris.cx) * k;
     souris.cy += (souris.y - souris.cy) * k;
     if (Math.abs(souris.x - souris.cx) + Math.abs(souris.y - souris.cy) < 0.0005) { souris.cx = souris.x; souris.cy = souris.y; }
     dessiner();
-    boucle = lisse !== c || souris.cx !== souris.x || souris.cy !== souris.y ? requestAnimationFrame(image) : 0;
+    boucle = lisse !== cible || souris.cx !== souris.x || souris.cy !== souris.y ? requestAnimationFrame(image) : 0;
   };
   function relancer() {
     if (actif && !boucle) { derniere = performance.now(); boucle = requestAnimationFrame(image); }
@@ -158,8 +229,8 @@ export function lancerCouloir(canvas, gabarit) {
     else if (heroScene.contains(e.target)) scrollTo({ top: 0, behavior: 'instant' });
   };
   const bouger = (e) => {
-    souris.x = (e.clientX / innerWidth - 0.5) * 0.35;
-    souris.y = (0.5 - e.clientY / innerHeight) * 0.22;
+    souris.x = e.clientX / innerWidth - 0.5;
+    souris.y = 0.5 - e.clientY / innerHeight;
     relancer();
   };
 
@@ -176,6 +247,7 @@ export function lancerCouloir(canvas, gabarit) {
         return false;
       }
       lisse = cibleU();
+      lireTheme();
       mesurer();
       html.classList.add('couloir-pret');
       couloir.addEventListener('focusin', auFocus);
@@ -203,21 +275,22 @@ export function lancerCouloir(canvas, gabarit) {
     // shortcut: l'accueil reste classique pour cette visite ; à revoir si le couloir est gardé.
     if (scrollY > innerHeight * 0.3 || !gabarit.matches) return;
     for (const t of [...projets, ...mur]) renderer.initTexture(t);
-    centraux = projets.slice(0, cartes.length).map(plan);
-    // Murs du couloir : alternance gauche / droite, hauteurs variées (suite fixe, même rendu à chaque visite).
-    const longueur = (n + 1) * ECART;
-    for (let i = 0, z = 0.5; z < longueur; i++, z += 1.6) {
-      const m = plan(mur[i % mur.length]);
-      const cote = i % 2 ? 1 : -1;
-      m.userData.cote = cote;
-      m.position.y = [0.55, -0.7, 0.15, -0.3, 0.8, -0.55, 0.35][i % 7];
-      m.position.z = -z;
-      m.rotation.y = -cote * 1.02;
-      murs.push(m);
+
+    // Les murs : une case par pas, des deux côtés. Les projets phares prennent les cases de leurs arrêts.
+    const dernier = (n + 1) * CASES_PAR_ARRET;
+    let j = 0;
+    for (let i = -2; i <= dernier; i++) {
+      for (const cote of [1, -1]) {
+        const k = i / CASES_PAR_ARRET - 1;
+        const projet = Number.isInteger(k) && k >= 0 && k < cartes.length && coteArret(k) === cote ? projets[k] : null;
+        cases.push({ i, cote, mesh: creerCase(projet ?? mur[j++ % mur.length]) });
+      }
     }
     if (!activer(true)) return;
     addEventListener('scroll', relancer, { passive: true });
     new ResizeObserver(() => { if (actif) mesurer(); }).observe(document.body);
+    // Interrupteur « Lumières de la salle » : le couloir s'allume avec le site.
+    new MutationObserver(() => { if (actif) { lireTheme(); if (!boucle) dessiner(); } }).observe(html, { attributes: true, attributeFilter: ['data-salle', 'style'] });
     gabarit.addEventListener('change', (e) => activer(e.matches));
   }, () => {}); // image manquante : accueil classique
 }
