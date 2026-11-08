@@ -263,9 +263,11 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
   }
   .hero-texte {
     display: grid;
-    gap: 2rem;
+    gap: 1.5rem;
     justify-items: start;
   }
+  /* Titre limité aussi par la hauteur de l'écran : le bouton principal reste visible à l'arrivée sur un portable. */
+  .hero-titre { font-size: min(var(--t-hero), max(3.25rem, 11svh)); }
   .eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; }
   /* Pastille « disponible » : pulsation lente, arrêtée si les animations sont réduites. */
   .pastille {
@@ -518,9 +520,10 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     --encre: var(--texte);
     --encre-douce: var(--texte-doux);
     --marque: var(--accent);
+    --fond-chapitre: var(--fond);
     margin-top: var(--section);
     padding-block: var(--section);
-    background: var(--fond);
+    background: var(--fond-chapitre);
     color: var(--encre);
   }
   .chapitre--papier {
@@ -528,17 +531,18 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     --encre-douce: #57514a;
     /* Orange assombri : l'accent normal n'atteint pas 4,5:1 sur le crème. */
     --marque: #9a4a0b;
-    background: #efe8dc;
+    --fond-chapitre: #efe8dc;
   }
   /* Fond = accent de l'admin : texte noir (≥ 8:1 avec l'accent par défaut). */
   .chapitre--accent {
     --encre: var(--fond);
     --encre-douce: color-mix(in srgb, var(--fond) 78%, var(--accent));
     --marque: var(--fond);
+    --fond-chapitre: var(--accent);
     margin-top: 0;
-    background: var(--accent);
   }
-  .chapitre :global(::selection) { background: var(--encre); color: var(--fond); }
+  /* Sélection inversée : les couleurs du chapitre échangées, lisibles sur les trois fonds. */
+  .chapitre :global(::selection) { background: var(--encre); color: var(--fond-chapitre); }
   /* Deux chapitres qui se suivent se touchent : pas de bande de fond entre eux. */
   .chapitre + .chapitre { margin-top: 0; }
   .chapitre .eyebrow { color: var(--encre-douce); }
@@ -617,7 +621,8 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
   .frise h3 { font-size: var(--t-h3); max-width: 22ch; }
   .frise-collant { max-width: var(--largeur-max); margin-inline: auto; }
   @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) {
+    /* min-height : sur un écran bas (ou zoomé à 200 %), l'en-tête cacherait le haut de la frise collante ; on garde la liste. */
+    @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) and (min-height: 44rem) {
       /* La section dure un écran de plus par affiche environ ; son contenu reste collé pendant ce temps. */
       /* view-timeline-inset: 0 : sinon le scroll-padding-top global (5rem) décale le départ de la frise. */
       .chapitre--frise { height: calc(100svh + var(--n) * 18rem); padding-block: 0; view-timeline: --frise block; view-timeline-inset: 0; }

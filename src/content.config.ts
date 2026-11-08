@@ -12,6 +12,9 @@ const projets = defineCollection({
     client: z.string().optional(),
 
     couverture: z.string(),
+    // Description de l'affiche pour les lecteurs d'écran ; vide : le titre du projet sert de texte alternatif.
+    couverture_alt: z.string().nullish(),
+    couverture_alt_en: z.string().nullish(),
     survol: z.string().optional(),
     galerie: z.array(z.string()).default([]),
     video: z.string().optional(),
@@ -83,10 +86,6 @@ const reglages = defineCollection({
         periode: z.string(),
         titre: z.string(), titre_en: z.string().optional(),
         lieu: z.string(), lieu_en: z.string().optional(),
-      })),
-      competences: z.array(z.object({
-        groupe: z.string(), groupe_en: z.string().optional(),
-        outils: z.string(),
       })),
     }),
     contact: z.object({

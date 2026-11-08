@@ -34,7 +34,7 @@ const photo = a.photo ? { src: a.photo, ...(await dimensions(a.photo)), srcset: 
 
       <div class="colonnes">
         <section class="reveal reveal--bloc">
-          <p class="eyebrow">{t('apropos.parcours')}</p>
+          <h2 class="eyebrow">{t('apropos.parcours')}</h2>
           <ul class="liste">
             {a.parcours.map((item) => (
               <li>
@@ -47,12 +47,12 @@ const photo = a.photo ? { src: a.photo, ...(await dimensions(a.photo)), srcset: 
         </section>
 
         <section class="reveal reveal--bloc">
-          <p class="eyebrow">{t('apropos.competences')}</p>
+          <h2 class="eyebrow">{t('apropos.competences')}</h2>
           <ul class="liste">
-            {a.competences.map((item) => (
+            {r.boite_outils.map((item) => (
               <li>
                 <span class="intitule">{champ(item, 'groupe', langue)}</span>
-                <span class="legende">{item.outils}</span>
+                <span class="legende">{item.outils.join(', ')}</span>
               </li>
             ))}
           </ul>

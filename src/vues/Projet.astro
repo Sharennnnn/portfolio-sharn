@@ -11,6 +11,7 @@ const { langue, projet } = Astro.props;
 const t = traduire(langue);
 const d = projet.data;
 const titre = champ(d, 'titre', langue);
+const altCouverture = champ(d, 'couverture_alt', langue) || titre;
 const contrainte = champ(d, 'contrainte', langue);
 const resolution = champ(d, 'resolution', langue);
 const livrables = champ(d, 'livrables', langue);
@@ -59,7 +60,7 @@ const schema = {
     <div class:list={['enveloppe scene', { paysage, 'sans-texte': !aDuTexte }]}>
       <div class="affiche">
         {/* Sans JS, le lien ouvre l'image seule ; avec JS, la même image s'affiche en grand dans la visionneuse. */}
-        <a class="agrandir" href={d.couverture} aria-label={`${t('projet.agrandir')} ${titre}`}><img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={titre} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}; background: ${couleurCouv}; --ratio: ${(couv.width / couv.height).toFixed(4)}; --largeur: ${largeurAffiche}px`} /></a>
+        <a class="agrandir" href={d.couverture} aria-label={`${t('projet.agrandir')} ${altCouverture}`}><img class="visuel" src={d.couverture} srcset={srcsetCouv} sizes={taillesCouv} alt={altCouverture} width={couv.width} height={couv.height} fetchpriority="high" style={`view-transition-name: affiche-${projet.id}; background: ${couleurCouv}; --ratio: ${(couv.width / couv.height).toFixed(4)}; --largeur: ${largeurAffiche}px`} /></a>
       </div>
 
       <div class="corps">
@@ -86,7 +87,7 @@ const schema = {
         </div>}
 
         <div class="fiche reveal reveal--bloc">
-          <p class="eyebrow">{t('projet.infos')}</p>
+          <h2 class="eyebrow">{t('projet.infos')}</h2>
           <dl>
             {d.client && (<div><dt>{t('projet.client')}</dt><dd>{d.client}</dd></div>)}
             <div><dt>{t('projet.annee')}</dt><dd>{d.annee}</dd></div>
@@ -137,7 +138,7 @@ const schema = {
 
   <dialog class="visionneuse" aria-label={titre}>
     <form method="dialog"><button class="fermer" aria-label={t('projet.fermer')}>&times;</button></form>
-    <img src={d.couverture} alt={titre} width={couv.width} height={couv.height} loading="lazy" decoding="async" />
+    <img src={d.couverture} alt={altCouverture} width={couv.width} height={couv.height} loading="lazy" decoding="async" />
   </dialog>
 </Base>
 
@@ -298,7 +299,7 @@ const schema = {
   .fiche dd { display: inline; }
   .fiche dt {
     font-family: var(--police-texte);
-    font-size: 0.55em;
+    font-size: max(0.75rem, 0.55em);
     font-weight: 500;
     letter-spacing: 0.14em;
     color: var(--texte-doux);

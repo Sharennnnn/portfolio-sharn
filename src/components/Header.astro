@@ -42,7 +42,10 @@ const liens = ['projets', 'apropos', 'contact'].map((nom) => ({
     position: absolute;
     inset: 0 0 auto;
     height: calc(0.75rem + 26px);
-    background: linear-gradient(var(--fond) 0.75rem, transparent);
+    /* Flou plutôt qu'une couleur : pas de bande noire au-dessus des chapitres clairs. */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    mask-image: linear-gradient(#000 0.75rem, transparent);
   }
   .ilot {
     position: relative;

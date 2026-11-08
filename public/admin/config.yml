@@ -87,6 +87,8 @@ collections:
 
       - { name: client, label: 'Client (facultatif)', widget: string, required: false, hint: 'Laisse vide pour un fan art ou un exercice.' }
       - { name: couverture, label: 'Image de couverture', hint: 'Image portrait : la grille l''affiche au format 3:4. Convertie en WebP à l''envoi.', widget: image, accept: 'image/webp,image/jpeg,image/png,image/avif' }
+      - { name: couverture_alt, label: 'Description de l''image, pour les lecteurs d''écran (FR, facultatif)', hint: 'Décris ce qu''on voit en une phrase. Vide : le titre du projet est utilisé.', widget: string, required: false }
+      - { name: couverture_alt_en, label: 'Description de l''image (EN, facultatif)', widget: string, required: false }
       - { name: survol, label: 'Image au survol (facultatif)', hint: 'Remplace la couverture quand on passe la souris dessus.', widget: image, required: false, accept: 'image/webp,image/jpeg,image/png,image/avif' }
       - name: galerie
         label: 'Galerie (facultatif)'
@@ -258,15 +260,6 @@ singletons:
               - { name: titre_en, label: 'Intitulé (EN)', widget: string, required: false }
               - { name: lieu, label: 'Lieu / détail (FR)', widget: string }
               - { name: lieu_en, label: 'Lieu / détail (EN)', widget: string, required: false }
-          - name: competences
-            label: Compétences
-            widget: list
-            collapsed: true
-            summary: '{{groupe}} : {{outils}}'
-            fields:
-              - { name: groupe, label: 'Catégorie (FR)', widget: string }
-              - { name: groupe_en, label: 'Catégorie (EN)', widget: string, required: false }
-              - { name: outils, label: Outils, widget: string }
 
       - name: contact
         collapsed: true

@@ -21,12 +21,12 @@ const reseaux = [
 
     <section class="enveloppe blocs">
       <div class="reveal reveal--bloc">
-        <p class="eyebrow">{t('contact.email')}</p>
+        <h2 class="eyebrow">{t('contact.email')}</h2>
         <a class="adresse" href={`mailto:${c.email}`}>{c.email}</a>
       </div>
       {reseaux.length > 0 && (
         <div class="reveal reveal--bloc">
-          <p class="eyebrow">{t('contact.reseaux')}</p>
+          <h2 class="eyebrow">{t('contact.reseaux')}</h2>
           <ul class="liens">
             {reseaux.map((r2) => (
               <li><a class="lien-accent" href={r2.url} rel="me noopener" target="_blank">{r2.nom}<span class="sr-only"> {t('a11y.nouvelOnglet')}</span></a></li>

@@ -34,7 +34,7 @@
   --t-chapeau: clamp(1.0625rem, 1.4vw, 1.25rem);
   --t-corps: 1.0625rem;
   --t-legende: 0.8125rem;
-  --t-eyebrow: 0.6875rem;
+  --t-eyebrow: 0.75rem;
 
   /* Rythme */
   --gouttiere: clamp(1.25rem, 4.2vw, 3.75rem);
@@ -343,9 +343,6 @@ h3 {
   line-height: 1.3;
   font-size: 0.9375rem;
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin: 0.75rem 0 0.125rem;
   transition: color var(--duree) var(--courbe);
 }
