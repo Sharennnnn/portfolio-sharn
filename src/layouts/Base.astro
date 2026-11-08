@@ -36,8 +36,11 @@ const jsonLd = schema && JSON.stringify(schema).replace(/</g, '\\u003c');
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {/* Signale que le JS tourne : sans lui, les blocs .reveal restent visibles. */}
-    <script is:inline>document.documentElement.classList.add('js')</script>
+    <meta name="theme-color" content="#0a0a0b" />
+    {/* Signale que le JS tourne : sans lui, les blocs .reveal restent visibles. Le choix des lumières
+        s'applique ici, avant le premier rendu, pour éviter un éclair sombre à chaque page. */}
+    {/* Son empreinte CSP est écrite à la main dans astro.config.mjs : à recalculer s'il change. */}
+    <script is:inline>document.documentElement.classList.add('js');try{if(localStorage.getItem('salle')==='allumee'){document.documentElement.dataset.salle='allumee';document.querySelector('meta[name="theme-color"]').content='#f7f4ee'}}catch(e){}</script>
     <title>{titre} — Shar'N</title>
     <meta name="description" content={description} />
     {!indexer && <meta name="robots" content="noindex" />}
@@ -55,7 +58,6 @@ const jsonLd = schema && JSON.stringify(schema).replace(/</g, '\\u003c');
     <meta property="og:image:width" content={String(imageLargeur)} />
     <meta property="og:image:height" content={String(imageHauteur)} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#0a0a0b" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {urlAutre && (
@@ -86,6 +88,24 @@ const jsonLd = schema && JSON.stringify(schema).replace(/</g, '\\u003c');
 
       const cibles = document.querySelectorAll('.reveal');
       const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Lumières de la salle : fondu entre les deux thèmes, instantané si les animations sont réduites.
+      const racine = document.documentElement;
+      const interrupteurs = document.querySelectorAll('.interrupteur');
+      const marquer = () => interrupteurs.forEach((b) => b.setAttribute('aria-pressed', String(racine.dataset.salle === 'allumee')));
+      marquer();
+      interrupteurs.forEach((b) => b.addEventListener('click', () => {
+        const allumee = racine.dataset.salle !== 'allumee';
+        const basculer = () => {
+          if (allumee) racine.dataset.salle = 'allumee';
+          else delete racine.dataset.salle;
+          document.querySelector('meta[name="theme-color"]').content = getComputedStyle(racine).getPropertyValue('--fond').trim();
+          marquer();
+        };
+        try { localStorage.setItem('salle', allumee ? 'allumee' : 'eteinte'); } catch {}
+        if (document.startViewTransition && !reduit) document.startViewTransition(basculer);
+        else basculer();
+      }));
 
       if (reduit) {
         cibles.forEach((el) => el.classList.add('visible'));

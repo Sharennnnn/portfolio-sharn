@@ -384,6 +384,8 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     transition: opacity 600ms var(--courbe), transform 900ms var(--courbe-ressort);
   }
   .piste a:hover img { opacity: 1; transform: scale(1.05); }
+  /* Sur fond clair, l'opacité délaverait les affiches au lieu de les assombrir. */
+  :global([data-salle='allumee']) .piste img { opacity: 1; }
   @keyframes defile-y { to { transform: translateY(-50%); } }
   @keyframes defile-x { to { transform: translateX(-50%); } }
 
@@ -541,6 +543,8 @@ const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/
     --fond-chapitre: var(--accent);
     margin-top: 0;
   }
+  /* Le mélange ci-dessus tombe à 4,14:1 sur l'accent foncé de la salle allumée. */
+  :global([data-salle='allumee']) .chapitre--accent { --encre-douce: var(--fond); }
   /* Sélection inversée : les couleurs du chapitre échangées, lisibles sur les trois fonds. */
   .chapitre :global(::selection) { background: var(--encre); color: var(--fond-chapitre); }
   /* Deux chapitres qui se suivent se touchent : pas de bande de fond entre eux. */

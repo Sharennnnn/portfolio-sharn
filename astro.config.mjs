@@ -23,9 +23,9 @@ export default defineConfig({
         "form-action 'self'",
       ],
       // Attributs style="…" (couleur d'accent, noms de transition) : pas de script possible.
-      // Empreinte du script is:inline de Base.astro (classe « js ») : Astro ne le hache pas lui-même.
+      // Empreinte du script is:inline de Base.astro (classe « js », lumières de la salle) : Astro ne le hache pas lui-même.
       // shortcut: si ce script change, recalculer l'empreinte (le test de build échoue sinon).
-      scriptDirective: { hashes: ['sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo='] },
+      scriptDirective: { hashes: ['sha256-wliQQD49hnmLjATmX49mCoTlMecsGBBFkJByupoj3q0='] },
       styleDirective: { resources: ["'self'", { resource: "'unsafe-inline'", kind: 'attribute' }] },
     },
   },

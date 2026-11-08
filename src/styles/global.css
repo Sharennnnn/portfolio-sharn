@@ -22,6 +22,8 @@
   --texte: #ededed;       /* 16.9:1  AAA */
   --texte-doux: #a1a1a7;  /*  7.7:1 AAA (7.16:1 sur --surface) ; avant #8a8a90, 5.77:1 */
   --accent: #e09a55;      /*  8.41:1 AAA */
+  --teinte-l: 0.2;        /* Luminosité et saturation de la teinte d'affiche en haut des pages projet */
+  --teinte-c: 1.6;
 
   /* Polices */
   --police-titre: 'Anton', Impact, 'Arial Narrow', sans-serif;
@@ -51,7 +53,48 @@
   --z-apercu: 40;
 }
 
+/* Salle allumée : le thème clair, choisi par le visiteur. Le sombre reste l'identité du site.
+   shortcut: !important et accent fixe, car Base.astro pose l'accent de l'admin en style inline et il
+   n'atteint pas 4,5:1 sur le clair ; à dériver de l'accent si Charlie change souvent de couleur. */
+:root[data-salle='allumee'] {
+  --fond: #f7f4ee;
+  --surface: #fffdf9;
+  --bordure: #ddd6ca;
+  --bordure-forte: #b3aa9c;
+  --texte: #16130f;
+  --texte-doux: #57514a;
+  --accent: #9a4a0b !important;
+  --teinte-l: 0.95;
+  --teinte-c: 0.35;
+  color-scheme: light;
+}
+
 ::selection { background: var(--accent); color: var(--fond); }
+
+/* Interrupteur des lumières : pastille à moitié pleine, dessinée en CSS. Inutile sans JavaScript. */
+.interrupteur {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--texte-doux);
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--duree) var(--courbe);
+}
+.interrupteur::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+}
+.interrupteur:hover { color: var(--accent); }
+html:not(.js) .interrupteur { display: none; }
 
 *,
 *::before,

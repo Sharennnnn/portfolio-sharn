@@ -20,6 +20,7 @@ const liens = ['projets', 'apropos', 'contact'].map((nom) => ({
       {liens.map((l) => (
         <a href={l.href} aria-current={l.actif ? 'page' : undefined}>{t(`nav.${l.nom}`)}</a>
       ))}
+      <button class="interrupteur" type="button" aria-label={t('a11y.salle')} aria-pressed="false"></button>
       <a class="langue" href={lienAutre} hreflang={autre} aria-label={`${autre.toUpperCase()}, ${t('a11y.langue')}`}>
         {autre.toUpperCase()}
       </a>
@@ -112,7 +113,10 @@ const liens = ['projets', 'apropos', 'contact'].map((nom) => ({
     border-color: var(--accent);
     color: var(--accent);
   }
+  .interrupteur { justify-content: center; width: 32px; height: 32px; }
   @media (max-width: 40rem) {
+    /* Plus de place dans l'îlot sur téléphone : l'interrupteur reste accessible dans le pied de page. */
+    .interrupteur { display: none; }
     .ilot { padding-inline: 0.875rem 0.375rem; }
     .nav a:not(.langue) { padding-inline: 0.5rem; }
   }

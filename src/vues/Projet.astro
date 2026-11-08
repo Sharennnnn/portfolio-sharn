@@ -179,7 +179,7 @@ const schema = {
     inset: -8rem 0 auto;
     z-index: -1;
     height: 110svh;
-    background: linear-gradient(oklch(from var(--teinte, var(--fond)) 0.2 calc(c * 1.6) h), var(--fond));
+    background: linear-gradient(oklch(from var(--teinte, var(--fond)) var(--teinte-l) calc(c * var(--teinte-c)) h), var(--fond));
     pointer-events: none;
   }
   .tete {
