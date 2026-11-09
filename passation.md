@@ -1,7 +1,7 @@
 # Passation — Portfolio Shar'N
 
 *Version publique allégée (le dépôt est public) : aucun chemin local, aucune adresse e-mail, aucun nom de client.
-La version complète reste hors Git chez Charlie. Mise à jour : **3 novembre 2026**, troisième passe en cours sur la branche `passe-3`.
+La version complète reste hors Git chez Charlie et n'a pas été mise à jour ici. Mise à jour : **9 novembre 2026**.
 Étiquettes : (a) fait vérifié, (b) bonne pratique, (c) avis.*
 
 ---
@@ -29,8 +29,66 @@ accent `#e09a55`, grille 3:4, polices Inter / Anton / Instrument Serif (OFL). To
 - Avant de livrer : `npm run build` (contrôle CSP), `npm test`, HTML généré, puis vérification en ligne de l'aperçu.
 - Sécurité, WCAG 2.1 AA et `prefers-reduced-motion` ne sont jamais affaiblis.
 - Lire les `engines` avant toute mise à jour.
+- Faire valider un plan par Charlie avant chaque phase. Pas de sous-agents sans son accord.
+- Ne rien inventer : vérifier dans la doc officielle ou le code du paquet, sinon écrire « Je ne peux pas confirmer ça ».
+  Rien sur Charlie, ses clients ou ses projets sans sa réponse.
+- Répondre en français, concis, avec des titres et les étiquettes (a), (b), (c), sources à l'appui.
+- Dépôt public : ni donnée personnelle, ni texte de client, ni brouillon. Ne jamais demander de jeton dans le chat.
+- Interdit sans accord : `rm -rf`, `reset --hard`, `clean`, `push --force`, suppression de branches, réécriture de
+  l'historique, installation globale, mise à jour de dépendance, `wrangler deploy`, toute modification de Cloudflare.
 
-## 3. Troisième passe (3 novembre 2026)
+## 3. État actuel (9 novembre 2026)
+
+`main` est à `d2f0d27`, identique au dépôt distant. Tout ce qui suit est en production, contrôlé en ligne.
+
+### Ce qui a changé depuis le 3 novembre (a)
+
+| Commit | Changement |
+|---|---|
+| `0fd87ce` | Accueil : fil conducteur au scroll, À propos, bandeau, références, index |
+| `183a1f7` | Accueil : le mur d'affiches ne déborde plus entre 800 et 1100 px |
+| `2943d52` | Projets et Contact harmonisées avec l'accueil |
+| `bda994e` | Page À propos retirée (FR et EN) : le menu et le pied de page mènent à `#a-propos` sur l'accueil, les anciennes adresses redirigent en 301 |
+| `bd6d844` | Parcours : les missions clients ne s'affichent plus que dans « Réalisé pour » |
+
+Accueil en ligne, dans l'ordre : Sélection, À propos, Services, Outils, Parcours, Réalisé pour, Index, Contact.
+Dernier build : 60 pages (contrôle CSP), 58 adresses dans le sitemap, 8 tests. Ces trois chiffres remplacent ceux de la section 4.
+
+### Décisions de Charlie, à ne pas reproposer
+
+- Refusés : refonte VHS, commode et récit de vie ; petite affiche 3D sur le côté ; couloir de cinéma 3D ; générique de fin ;
+  page À propos séparée.
+- La base reste le site actuel, avec des effets légers au scroll plutôt que de grosses mises en scène.
+- Sites qu'il donne en exemple, pour la logique et jamais pour copier : serhii.website, byholm.co, adriangnzl.es,
+  suho.studio, labs.griflan.com, effepinnastudio.com.
+
+### Pièges connus
+
+- **Parcours et Réalisé pour lisent la même liste** (`apropos.parcours`) et trient selon le champ `lieu` :
+  - un lieu qui contient « client » : seulement dans Réalisé pour (`src/components/ChapitreParcours.astro`) ;
+  - « Télétravail » ou « Remote » : dans les deux (`src/vues/Accueil.astro`) ;
+  - tout autre lieu : seulement dans Parcours.
+  - Effacer une ligne dans l'admin l'enlève donc des deux sections. Changer le libellé « Client freelance » pour un texte
+    sans « client » la renvoie dans Parcours et la retire de Réalisé pour.
+- **Effets au scroll** : `animation-timeline` va dans un sélecteur à part, plus spécifique (`.x { animation: … }` puis
+  `div.x { animation-timeline: view(); }`), sinon le minifieur le fusionne dans le raccourci `animation` et Chrome le
+  rejette. Toujours dans `@supports` et `prefers-reduced-motion: no-preference`.
+- **CSP** : les attributs `style` passent, un bloc `<style>` injecté est bloqué.
+- **Contrôles en ligne** : attendre un repère propre au changement, car un repère trop général passe avant la fin du
+  déploiement. `innerText` rend le texte en capitales là où le CSS les impose : chercher dans `textContent`.
+- **Outils** : `gh` n'est pas installé. Aperçus Cloudflare en `noindex`, donc SEO faible dans PageSpeed : c'est normal.
+
+### Non vérifié
+
+- Vrai téléphone, Safari et Firefox, sur tout le travail depuis le 3 novembre.
+- Thème clair : seulement par captures à 1440 px, pas sur la page d'accueil actuelle après les derniers retraits.
+- Lecteur d'écran réel (NVDA, VoiceOver).
+
+## 4. Historique : troisième passe (3 novembre 2026)
+
+*Les numéros de commit de cette section sont introuvables dans le clone actuel ; la passe est sur `main` (`9be0df5`). Le
+tag `archive/phase-c-f1` existe toujours sur le dépôt distant. Le wordmark du pied de page n'est plus affiché que si la
+bannière n'est pas cochée dans l'admin.*
 
 ### Phase A — état réel (a)
 - 11 commits de l'admin depuis le 17/10 : check-runs Cloudflare Pages tous en **success**.
@@ -124,14 +182,21 @@ accent `#e09a55`, grille 3:4, polices Inter / Anton / Instrument Serif (OFL). To
   avec le nom de la machine (identité locale corrigée vers l'adresse `noreply` GitHub après coup). Images de l'ancienne
   fiche Six O'Clock toujours dans `public/` et l'historique.
 
-## 4. Reste à faire (côté Charlie)
+## 5. Reste à faire
+
+### Attend une décision de Charlie
+- Section « Comment je travaille » : pas construite, il faut ses étapes.
+- Branches : `couloir-affiches`, `fil-affiche` et `essais-inspirations` ne sont pas fusionnées ; les autres branches de
+  session le sont. Aucune suppression sans son accord.
+- Libellé « Client freelance » : les travaux ne sont pas rémunérés (confirmé le 3/11), mais toujours en place. Voir les
+  pièges de la section 3 avant de le changer.
+
+### Côté Charlie
 
 - Médias de l'admin : supprimer les images de l'ancienne fiche Six O'Clock (`khali_sixoclock*`, toujours accessibles
   par leur adresse) et `pasted-image-1789067949822.png` (inutilisée).
-- 12 fiches sans texte ; rubriques « Mes choix » vides (Bijoux de Fafi, Urban Jersey, The Age of Kings, Thomas Shelby).
-- He Waits : faute « Photohop » dans *Outils*.
+- Constat du 3/11, non revérifié : 12 fiches sans texte ; rubriques « Mes choix » vides (Bijoux de Fafi, Urban Jersey, The Age of Kings, Thomas Shelby).
 - CV `public/cv-sharn.pdf` absent ; couvertures 282 × 400 à vérifier.
 - 2FA (GitHub, Cloudflare, compte de l'adresse de contact) : déclaré, non vérifié.
 - Test réel d'un envoi SVG dans l'admin ; test avec un vrai lecteur d'écran.
 - Domaine personnalisé : `site` dans `astro.config.mjs`, `ALLOWED_DOMAINS` du Worker, limitation de débit.
-- Fusion de `passe-3` dans `main` : sur accord.
