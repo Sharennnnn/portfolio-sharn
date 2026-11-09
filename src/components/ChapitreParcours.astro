@@ -8,7 +8,8 @@ const { langue } = Astro.props;
 const t = traduire(langue);
 const r = await lireReglages();
 const rubrique = (nom) => (r.rubriques.parcours && champ(r.rubriques.parcours, nom, langue)) || t(`accueil.parcours.${nom}`);
-const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/)?.[0] ?? '').localeCompare(b.periode.match(/\d{4}/)?.[0] ?? '')).map((p) => ({
+// Les lignes « Client… » restent dans la liste de l'admin mais ne s'affichent que dans « Réalisé pour ».
+const parcours = r.apropos.parcours.filter((p) => !/client/i.test(p.lieu)).sort((a, b) => (a.periode.match(/\d{4}/)?.[0] ?? '').localeCompare(b.periode.match(/\d{4}/)?.[0] ?? '')).map((p) => ({
   annee: p.periode.match(/\d{4}/)?.[0] ?? p.periode,
   periode: p.periode,
   titre: champ(p, 'titre', langue),
