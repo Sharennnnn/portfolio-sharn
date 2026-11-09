@@ -1,0 +1,76 @@
+---
+// Le fil conducteur : décor qui suit le scroll ; les titres des sections restent la vraie structure.
+// Chaque section le nourrit par son attribut data-fil (vide : pas de nom affiché).
+---
+
+<div class="fil" aria-hidden="true">
+  <span class="fil-trait"></span>
+  <span class="fil-tete"></span>
+  <span class="fil-libelle"></span>
+</div>
+
+<style>
+  /* ---------- Fil conducteur : une ligne qui se trace du haut au bas de la page ---------- */
+  .fil { display: none; }
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .fil {
+        --fil: var(--accent);
+        --x: clamp(0.4rem, 1.2vw, 1.25rem);
+        display: block;
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: calc(var(--z-entete) - 1);
+        pointer-events: none;
+      }
+      /* Sur les fonds colorés, la couleur du fil suit celle du texte du chapitre. */
+      .fil[data-fond='papier'] { --fil: #9a4a0b; }
+      .fil[data-fond='accent'] { --fil: var(--fond); }
+      .fil-trait, .fil-tete { position: absolute; top: 0; background: var(--fil); transition: background-color 400ms var(--courbe); }
+      .fil-trait { left: var(--x); width: 2px; height: 100svh; transform-origin: top; animation: fil-trace linear both; }
+      .fil-tete { left: calc(var(--x) - 4px); width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; animation: fil-tete linear both; }
+      /* Règles séparées : le minifieur fusionnerait sinon la timeline dans le raccourci « animation ». */
+      span.fil-trait, span.fil-tete { animation-timeline: scroll(root); }
+    }
+  }
+  @keyframes fil-trace { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes fil-tete { from { translate: 0 0; } to { translate: 0 100svh; } }
+  .fil-libelle { display: none; }
+  /* Le nom de la section en cours, dans la marge : seulement là où la marge peut le contenir. */
+  @media (min-width: 64rem) {
+    .fil-libelle {
+      display: block;
+      position: absolute;
+      bottom: 1.5rem;
+      left: calc(var(--x) + 0.6rem);
+      writing-mode: vertical-rl;
+      rotate: 180deg;
+      font-size: var(--t-eyebrow);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--fil);
+      transition: color 400ms var(--courbe);
+    }
+  }
+</style>
+
+<script>
+  // Fil conducteur : le nom de la section au milieu de l'écran, et le fond sur lequel passe le fil.
+  const fil = document.querySelector('.fil');
+  const libelle = fil?.querySelector('.fil-libelle');
+  const etapes = [...document.querySelectorAll('[data-fil]')];
+  const nommees = etapes.filter((e) => e.dataset.fil);
+  if (fil && etapes.length) {
+    const suivi = new IntersectionObserver((entrees) => {
+      for (const { isIntersecting, target } of entrees) {
+        if (!isIntersecting) continue;
+        const rang = nommees.indexOf(target);
+        libelle.textContent = rang < 0 ? '' : `${String(rang + 1).padStart(2, '0')} — ${target.dataset.fil}`;
+        fil.dataset.fond = target.classList.contains('chapitre--papier') ? 'papier' : target.classList.contains('chapitre--accent') ? 'accent' : '';
+      }
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    etapes.forEach((e) => suivi.observe(e));
+  }
+</script>

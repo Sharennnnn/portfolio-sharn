@@ -1,16 +1,18 @@
 ---
-import { traduire, route } from '../i18n/utils.js';
+import { traduire, route, urlApropos } from '../i18n/utils.js';
 const { langue, equivalent } = Astro.props;
 const t = traduire(langue);
 const autre = langue === 'fr' ? 'en' : 'fr';
 const lienAutre = equivalent ?? route(autre, 'accueil');
 const chemin = Astro.url.pathname;
-const liens = ['projets', 'apropos', 'contact'].map((nom) => ({
+const liens = ['projets', 'contact'].map((nom) => ({
   nom,
   href: route(langue, nom),
   // Une page projet (/projets/creed/) appartient à la rubrique Projets.
   actif: chemin.startsWith(route(langue, nom)),
 }));
+// À propos est une section de l'accueil, jamais la page en cours.
+liens.splice(1, 0, { nom: 'apropos', href: urlApropos(langue), actif: false });
 ---
 
 <header class="entete reveal reveal--header" style="view-transition-name: entete">

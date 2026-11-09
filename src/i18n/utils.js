@@ -13,6 +13,10 @@ export function route(langue, nom) {
   return chemins[langue][nom];
 }
 
+export function urlApropos(langue) {
+  return `${chemins[langue].accueil}#a-propos`;
+}
+
 export function urlProjet(langue, id) {
   return langue === 'en' ? `/en/work/${id}/` : `/projets/${id}/`;
 }

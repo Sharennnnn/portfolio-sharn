@@ -1,0 +1,94 @@
+---
+// Parcours : la première année de la période sert de grand chiffre ; la frise suit l'ordre chronologique
+// (tri stable : à année égale, l'ordre de l'admin est gardé).
+import { traduire, champ, rempli } from '../i18n/utils.js';
+import { lireReglages } from '../i18n/reglages.js';
+
+const { langue } = Astro.props;
+const t = traduire(langue);
+const r = await lireReglages();
+const rubrique = (nom) => (r.rubriques.parcours && champ(r.rubriques.parcours, nom, langue)) || t(`accueil.parcours.${nom}`);
+const parcours = [...r.apropos.parcours].sort((a, b) => (a.periode.match(/\d{4}/)?.[0] ?? '').localeCompare(b.periode.match(/\d{4}/)?.[0] ?? '')).map((p) => ({
+  annee: p.periode.match(/\d{4}/)?.[0] ?? p.periode,
+  periode: p.periode,
+  titre: champ(p, 'titre', langue),
+  lieu: champ(p, 'lieu', langue),
+}));
+---
+
+{parcours.length > 0 && (
+  <section class="chapitre chapitre--frise" style={`--n:${parcours.length}`} data-fil={t('accueil.fil.parcours')}>
+    <div class="frise-collant">
+      <div class="enveloppe entete-chapitre reveal reveal--bloc">
+        <p class="eyebrow">{rubrique('surtitre')}</p>
+        <h2 class="titre-chapitre">{rubrique('titre')} <em>{rubrique('chute')}</em></h2>
+      </div>
+      <ol class="frise">
+        {parcours.map((p) => (
+          <li>
+            <span class="frise-annee" aria-hidden="true">{p.annee}</span>
+            <p class="frise-periode">{p.periode}</p>
+            <h3>{p.titre}</h3>
+            {rempli(p.lieu) && <p class="etiquettes"><span>{p.lieu}</span></p>}
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+)}
+
+<style>
+  /* Parcours : par défaut une liste verticale ; frise horizontale au défilement si le navigateur le permet. */
+  .frise { display: grid; margin: 0; padding: 0 var(--gouttiere); list-style: none; }
+  .frise > li {
+    display: grid;
+    gap: 0.6rem;
+    justify-items: start;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--bordure);
+  }
+  .frise-annee { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.9; color: var(--marque); }
+  .frise-periode { margin: 0; font-size: var(--t-legende); color: var(--encre-douce); font-variant-numeric: tabular-nums; }
+  .frise h3 { font-size: var(--t-h3); max-width: 22ch; }
+  .frise-collant { max-width: var(--largeur-max); margin-inline: auto; }
+  @supports (animation-timeline: view()) {
+    /* min-height : sur un écran bas (ou zoomé à 200 %), l'en-tête cacherait le haut de la frise collante ; on garde la liste. */
+    @media (prefers-reduced-motion: no-preference) and (min-width: 48rem) and (min-height: 44rem) {
+      /* La section dure un écran de plus par affiche environ ; son contenu reste collé pendant ce temps. */
+      /* view-timeline-inset: 0 : sinon le scroll-padding-top global (5rem) décale le départ de la frise. */
+      .chapitre--frise { height: calc(100svh + var(--n) * 18rem); padding-block: 0; view-timeline: --frise block; view-timeline-inset: 0; }
+      .frise-collant {
+        position: sticky;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100svh;
+        max-width: none;
+        overflow: hidden;
+      }
+      .frise { display: flex; width: max-content; gap: clamp(2.5rem, 5vw, 5rem); animation: frise linear both; }
+      /* Règle séparée : le minifieur fusionnerait sinon la timeline dans le raccourci « animation ». */
+      .frise-collant > ol.frise { animation-timeline: --frise; animation-range: contain 0% contain 100%; }
+      .frise > li { width: 20rem; }
+      /* Le fil se retrouve ici à l'horizontale : il avance avec les années. */
+      .frise-collant::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 clamp(2rem, 8svh, 5rem);
+        height: 2px;
+        background: var(--marque);
+        transform-origin: left;
+        animation: frise-trace linear both;
+      }
+      div.frise-collant::after { animation-timeline: --frise; animation-range: contain 0% contain 100%; }
+    }
+    /* Liste verticale (téléphone, écran bas) : chaque étape arrive à son tour. */
+    @media (prefers-reduced-motion: no-preference) and ((max-width: 47.99rem) or (max-height: 43.99rem)) {
+      .frise > li { animation: etape-entree linear both; }
+      ol.frise > li { animation-timeline: view(); animation-range: entry 0% entry 70%; }
+    }
+  }
+  @keyframes frise-trace { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes frise { to { translate: calc(-100% + 100vw) 0; } }
+</style>

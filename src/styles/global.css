@@ -552,6 +552,128 @@ body::before {
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* ---------- Blocs communs à l'accueil, Projets, À propos et Contact ---------- */
+
+.bloc { padding-block: var(--section) 0; }
+
+/* Titre des pages intérieures : sa seconde ligne, insécable, doit tenir sur les plus petits écrans. */
+.hero.sortie-hero .hero-titre { font-size: min(var(--t-hero), 13vw); }
+
+/* Le hero s'efface en montant. */
+@supports (animation-timeline: view()) {
+@media (prefers-reduced-motion: no-preference) {
+  .sortie-hero { animation: hero-sortie linear both; }
+  html .sortie-hero { animation-timeline: view(); animation-range: exit 15% exit 100%; }
+}
+}
+@keyframes hero-sortie { to { opacity: 0; translate: 0 -4rem; } }
+@keyframes etape-entree { from { opacity: 0; translate: 0 1.5rem; } to { opacity: 1; translate: 0 0; } }
+
+/* Les affiches se recalent à leur taille en entrant à l'écran. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .grille .carte-visuel img:not(.survol) { animation: affiche-entree linear both; }
+    .grille li .carte-visuel img:not(.survol) { animation-timeline: view(); animation-range: entry 0% cover 45%; }
+  }
+}
+@keyframes affiche-entree { from { scale: 1.14; } to { scale: 1; } }
+
+/* ---------- Chapitres (services, outils, parcours) ---------- */
+/* Le fond change d'une rubrique à l'autre : papier crème, puis accent, puis retour au noir.
+   Couleurs locales aux chapitres : --encre (texte), --encre-douce, --marque (numéros et étiquettes). */
+.chapitre {
+  --encre: var(--texte);
+  --encre-douce: var(--texte-doux);
+  --marque: var(--accent);
+  --fond-chapitre: var(--fond);
+  margin-top: var(--section);
+  padding-block: var(--section);
+  background: var(--fond-chapitre);
+  color: var(--encre);
+}
+.chapitre--papier {
+  --encre: #16130f;
+  --encre-douce: #57514a;
+  /* Orange assombri : l'accent normal n'atteint pas 4,5:1 sur le crème. */
+  --marque: #9a4a0b;
+  --fond-chapitre: #efe8dc;
+}
+/* Fond = accent de l'admin : texte noir (≥ 8:1 avec l'accent par défaut). */
+.chapitre--accent {
+  --encre: var(--fond);
+  --encre-douce: color-mix(in srgb, var(--fond) 78%, var(--accent));
+  --marque: var(--fond);
+  --fond-chapitre: var(--accent);
+  margin-top: 0;
+}
+/* Le mélange ci-dessus tombe à 4,14:1 sur l'accent foncé de la salle allumée. */
+[data-salle='allumee'] .chapitre--accent { --encre-douce: var(--fond); }
+/* Sélection inversée : les couleurs du chapitre échangées, lisibles sur les trois fonds. */
+.chapitre ::selection { background: var(--encre); color: var(--fond-chapitre); }
+/* Deux chapitres qui se suivent se touchent : pas de bande de fond entre eux. */
+.chapitre + .chapitre { margin-top: 0; }
+.chapitre .eyebrow { color: var(--encre-douce); }
+.chapitre a { color: inherit; }
+
+.entete-chapitre { display: grid; gap: 1rem; margin-bottom: clamp(2rem, 5vw, 4rem); }
+.titre-chapitre { font-size: clamp(2.5rem, 6vw, 5.5rem); line-height: 0.95; text-wrap: balance; }
+.titre-chapitre em {
+  display: block;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--marque);
+}
+
+/* Étiquettes : petites capsules à bord fin, réutilisées par les trois rubriques. */
+.etiquettes { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+.etiquettes > * {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: var(--t-legende);
+  font-weight: 500;
+  color: var(--marque);
+}
+
+/* Arrivée des chapitres colorés : le bloc s'élargit jusqu'aux bords en entrant à l'écran. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .chapitre--papier,
+    .chapitre--accent { animation: ouverture linear both; }
+    section.chapitre--papier,
+    section.chapitre--accent { animation-timeline: view(); animation-range: entry 0% entry 70%; }
+  }
+}
+@keyframes ouverture { from { clip-path: inset(0 4% round 1.5rem); } to { clip-path: inset(0 0 round 0); } }
+
+/* ---------- Grandes rangées (Réalisé pour, Contact) ---------- */
+.rangs { margin: 0; padding: 0; list-style: none; border-top: 1px solid color-mix(in srgb, var(--encre) 25%, transparent); }
+.rangs > li { border-bottom: 1px solid color-mix(in srgb, var(--encre) 25%, transparent); }
+.rangs a, .rangs div {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.5rem clamp(1.5rem, 4vw, 4rem);
+  padding-block: clamp(1.25rem, 2.5vw, 2rem);
+}
+.rang-nom { font-family: var(--police-titre); font-size: clamp(1.5rem, 3.4vw, 3rem); line-height: 1.05; text-transform: uppercase; }
+.rang-detail { font-size: var(--t-legende); color: var(--encre-douce); }
+.rangs a { transition: padding-inline-start var(--duree) var(--courbe); }
+.rangs a:hover, .rangs a:focus-visible { padding-inline-start: 1rem; }
+.rangs a:hover .rang-nom { color: var(--marque); }
+@media (max-width: 40rem) {
+  .rangs a, .rangs div { grid-template-columns: 1fr; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rangs > li { animation: etape-entree linear both; }
+    ul.rangs > li { animation-timeline: view(); animation-range: entry 0% entry 80%; }
+  }
+}
+
+
 /* ---------- Accessibilité ---------- */
 
 .sr-only {
