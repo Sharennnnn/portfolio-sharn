@@ -52,6 +52,7 @@ export const ui = {
     'accueil.ligneC.texte': "Je dessine le logo, la charte et les déclinaisons d'une marque. Je pars de ce qu'elle doit dire, puis je fixe quelques règles de couleur, de typographie et d'usage pour qu'on la reconnaisse sur chaque support.",
 
     'projets.titre': 'Projets',
+    'projets.chute': 'pièce après pièce.',
     'projets.chapeau': 'Commandes, exercices et travaux personnels. Chaque vignette indique sa discipline et sa provenance.',
     'projets.filtre.tous': 'Tout',
     'projets.filtre.print': 'Print',
@@ -82,12 +83,14 @@ export const ui = {
 
     'apropos.titre': 'À propos',
     'apropos.description': "Charlie Renneson (Shar'N), infographiste à Namur : parcours et compétences.",
-    'apropos.parcours': 'Parcours',
-    'apropos.competences': 'Compétences',
     'apropos.cv': 'Télécharger le CV (PDF)',
     'apropos.photo': "Portrait de Charlie Renneson (Shar'N)",
 
     'contact.titre': 'Contact',
+    'contact.chute': 'parlons-en.',
+    'contact.surtitre': 'Me joindre',
+    'contact.bloc.titre': 'Écris-moi,',
+    'contact.bloc.chute': 'ou retrouve-moi ailleurs.',
     'contact.chapeau': "Disponible pour des commandes en freelance. Écris-moi avec le contexte, le format attendu et ton échéance — je réponds sous deux jours ouvrés.",
     'contact.email': 'Email',
     'contact.reseaux': 'Réseaux',
@@ -161,6 +164,7 @@ export const ui = {
     'accueil.ligneC.texte': 'I design a brand\u2019s logo, guidelines and applications. I start from what it needs to say, then set a few rules for colour, type and usage so people recognise it on every medium.',
 
     'projets.titre': 'Work',
+    'projets.chute': 'piece by piece.',
     'projets.chapeau': 'Commissions, exercises and personal work. Each thumbnail states its discipline and its origin.',
     'projets.filtre.tous': 'All',
     'projets.filtre.print': 'Print',
@@ -191,12 +195,14 @@ export const ui = {
 
     'apropos.titre': 'About',
     'apropos.description': "Charlie Renneson (Shar'N), graphic designer in Namur: background and skills.",
-    'apropos.parcours': 'Background',
-    'apropos.competences': 'Skills',
     'apropos.cv': 'Download CV (PDF)',
     'apropos.photo': "Portrait of Charlie Renneson (Shar'N)",
 
     'contact.titre': 'Contact',
+    'contact.chute': "let's talk.",
+    'contact.surtitre': 'Reach me',
+    'contact.bloc.titre': 'Write to me,',
+    'contact.bloc.chute': 'or find me elsewhere.',
     'contact.chapeau': 'Available for freelance commissions. Send the context, the format you need and your deadline — I reply within two working days.',
     'contact.email': 'Email',
     'contact.reseaux': 'Elsewhere',

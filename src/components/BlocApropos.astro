@@ -1,0 +1,76 @@
+---
+// À propos : le premier paragraphe de la bio devient l'énoncé qui s'allume au scroll, mot à mot.
+import { traduire, route, champ } from '../i18n/utils.js';
+import { lireReglages } from '../i18n/reglages.js';
+import { dimensions, srcsetVignette } from '../lib/images.js';
+
+const { langue, avecTitre = true, avecLien = true } = Astro.props;
+const t = traduire(langue);
+const r = await lireReglages();
+const bio = champ(r.apropos, 'bio', langue);
+const motsEnonce = (bio[0] || '').split(' ');
+const portrait = r.apropos.photo ? { src: r.apropos.photo, ...(await dimensions(r.apropos.photo)), srcset: await srcsetVignette(r.apropos.photo) } : null;
+---
+
+{motsEnonce[0] && (
+  <section class="enveloppe bloc apropos" data-fil={t('accueil.fil.apropos')}>
+    {portrait && (
+      <div class="apropos-photo">
+        <img src={portrait.src} srcset={portrait.srcset} sizes="(max-width: 48rem) 60vw, 26rem" alt={t('apropos.photo')} width={portrait.width} height={portrait.height} loading="lazy" decoding="async" />
+      </div>
+    )}
+    <div class="apropos-texte">
+      {avecTitre && <h2 class="titre-chapitre reveal reveal--bloc">{t('accueil.apropos.titre')} <em>{t('accueil.apropos.chute')}</em></h2>}
+      <p class="enonce">
+        {motsEnonce.map((m, i) => <><span class="m" style={`--p:${(i / motsEnonce.length).toFixed(3)}`}>{m}</span>{' '}</>)}
+      </p>
+      {bio.slice(1).map((p) => <p class="apropos-suite reveal reveal--bloc">{p}</p>)}
+      {avecLien && <a class="lien-accent reveal reveal--bloc" href={route(langue, 'apropos')}>{t('accueil.apropos.suite')} &rarr;</a>}
+      <slot />
+    </div>
+  </section>
+)}
+
+<style>
+  /* ---------- À propos ---------- */
+  .apropos {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+  .apropos-photo { overflow: hidden; }
+  .apropos-photo img { display: block; width: 100%; height: auto; }
+  .apropos-texte { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); justify-items: start; }
+  .enonce {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.9vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1.2;
+    text-wrap: pretty;
+    view-timeline: --enonce block;
+    view-timeline-inset: 0;
+  }
+  .apropos-suite { margin: 0; max-width: 60ch; color: var(--texte-doux); }
+  @media (max-width: 48rem) {
+    .apropos { grid-template-columns: 1fr; }
+    .apropos-photo { width: min(60vw, 18rem); }
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* Chaque mot s'allume à son tour : tout est lu quand l'énoncé atteint le milieu de l'écran. */
+      .enonce .m { animation: mot-allume linear both; }
+      p.enonce span.m {
+        animation-timeline: --enonce;
+        animation-range: cover calc(6% + var(--p) * 38%) cover calc(10% + var(--p) * 38%);
+      }
+      .apropos-photo { animation: photo-entree linear both; }
+      div.apropos-photo { animation-timeline: view(); animation-range: entry 0% entry 80%; }
+      .apropos-photo img { animation: photo-recul linear both; }
+      div.apropos-photo img { animation-timeline: view(); }
+    }
+  }
+  @keyframes mot-allume { from { opacity: 0.18; } to { opacity: 1; } }
+  @keyframes photo-entree { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+  @keyframes photo-recul { from { scale: 1.2; } to { scale: 1; } }
+</style>

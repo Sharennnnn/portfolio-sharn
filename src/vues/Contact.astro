@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
-import { traduire, route, autreLangue } from '../i18n/utils.js';
+import Fil from '../components/Fil.astro';
+import { traduire, route, champ, autreLangue } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
 
 const { langue } = Astro.props;
@@ -14,26 +15,29 @@ const reseaux = [
 ---
 
 <Base titre={t('contact.titre')} description={t('contact.chapeau')} equivalent={route(autreLangue(langue), 'contact')}>
-    <section class="enveloppe hero">
-      <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{t('contact.titre')}</span></span></h1>
+    <Fil />
+    <section class="enveloppe hero sortie-hero" data-fil="">
+      <p class="eyebrow reveal reveal--eyebrow">{champ(r.hero, 'eyebrow', langue)}</p>
+      <h1 class="hero-titre titre-masque reveal">
+        <span class="ligne"><span>{t('contact.titre')},</span></span>{' '}
+        <span class="ligne ligne-chute"><span><em>{t('contact.chute')}</em></span></span>
+      </h1>
       <p class="chapeau reveal reveal--eyebrow">{t('contact.chapeau')}</p>
     </section>
 
-    <section class="enveloppe blocs">
-      <div class="reveal reveal--bloc">
-        <h2 class="eyebrow">{t('contact.email')}</h2>
-        <a class="adresse" href={`mailto:${c.email}`}>{c.email}</a>
-      </div>
-      {reseaux.length > 0 && (
-        <div class="reveal reveal--bloc">
-          <h2 class="eyebrow">{t('contact.reseaux')}</h2>
-          <ul class="liens">
-            {reseaux.map((r2) => (
-              <li><a class="lien-accent" href={r2.url} rel="me noopener" target="_blank">{r2.nom}<span class="sr-only"> {t('a11y.nouvelOnglet')}</span></a></li>
-            ))}
-          </ul>
+    <section class="chapitre chapitre--papier" data-fil={t('contact.titre')}>
+      <div class="enveloppe">
+        <div class="entete-chapitre reveal reveal--bloc">
+          <p class="eyebrow">{t('contact.surtitre')}</p>
+          <h2 class="titre-chapitre">{t('contact.bloc.titre')} <em>{t('contact.bloc.chute')}</em></h2>
         </div>
-      )}
+        <ul class="rangs">
+          <li><a href={`mailto:${c.email}`}><span class="rang-nom adresse">{c.email}</span><span class="rang-detail">{t('contact.email')} <span aria-hidden="true">&rarr;</span></span></a></li>
+          {reseaux.map((x) => (
+            <li><a href={x.url} rel="me noopener" target="_blank"><span class="rang-nom">{x.nom}</span><span class="rang-detail">{t('contact.reseaux')} <span aria-hidden="true">&nearr;</span><span class="sr-only"> {t('a11y.nouvelOnglet')}</span></span></a></li>
+          ))}
+        </ul>
+      </div>
     </section>
 </Base>
 
@@ -42,27 +46,8 @@ const reseaux = [
     display: grid;
     gap: 1.5rem;
     justify-items: start;
-    padding-block: clamp(3rem, 6vw, 6.25rem) 2rem;
+    padding-block: clamp(3rem, 6vw, 6.25rem) 0;
   }
-  .blocs {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: 2.5rem;
-    border-top: 1px solid var(--bordure);
-    padding-top: 2.5rem;
-  }
-  .adresse {
-    display: inline-block;
-    margin-top: 1rem;
-    font-size: clamp(1.5rem, 4.6vw, 4rem);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1.1;
-    overflow-wrap: anywhere;
-    border-bottom: 1px solid var(--bordure-forte);
-    transition: color var(--duree) var(--courbe), border-color var(--duree) var(--courbe);
-  }
-  .adresse:hover { color: var(--accent); border-color: var(--accent); }
-  @media (max-width: 48rem) { .blocs { grid-template-columns: 1fr; } }
-  .liens { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+  /* L'adresse garde sa casse et peut se couper : elle doit rester copiable et tenir sur un téléphone. */
+  .adresse { text-transform: none; overflow-wrap: anywhere; }
 </style>

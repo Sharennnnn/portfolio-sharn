@@ -1,0 +1,70 @@
+---
+// Boîte à outils : chaque outil avec le nombre de fiches projet qui le citent.
+import { getCollection } from 'astro:content';
+import { traduire, champ } from '../i18n/utils.js';
+import { lireReglages } from '../i18n/reglages.js';
+
+const { langue } = Astro.props;
+const t = traduire(langue);
+const r = await lireReglages();
+const tous = await getCollection('projets');
+const rubrique = (nom) => (r.rubriques.outils && champ(r.rubriques.outils, nom, langue)) || t(`accueil.outils.${nom}`);
+const nbProjets = (outil) => tous.filter((p) => p.data.outils.some((o) => o.trim().toLowerCase() === outil.toLowerCase())).length;
+const outils = r.boite_outils.map((g) => ({
+  groupe: champ(g, 'groupe', langue),
+  outils: g.outils.map((o) => o.trim()).filter(Boolean).map((nom) => ({ nom, n: nbProjets(nom) })),
+}));
+const projetsCites = (n) => (n === 1 ? t('accueil.outils.un') : t('accueil.outils.n').replace('{n}', String(n)));
+---
+
+{outils.length > 0 && (
+  <section class="chapitre chapitre--accent" data-fil={t('accueil.fil.outils')}>
+    <div class="enveloppe">
+      <div class="entete-chapitre reveal reveal--bloc">
+        <p class="eyebrow">{rubrique('surtitre')}</p>
+        <h2 class="titre-chapitre">{rubrique('titre')} <em>{rubrique('chute')}</em></h2>
+      </div>
+      <dl class="outils">
+        {outils.map((g) => (
+          <div class="reveal reveal--bloc">
+            <dt>{g.groupe}</dt>
+            <dd>
+              <ul class="etiquettes">
+                {g.outils.map((o, i) => <li style={`--i:${i}`}>{o.nom}{o.n > 0 && <span class="outil-nombre"> · {projetsCites(o.n)}</span>}</li>)}
+              </ul>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+)}
+
+<style>
+  /* Boîte à outils : catégorie en italique à gauche, outils à droite. */
+  .outils { margin: 0; border-top: 1px solid color-mix(in srgb, var(--encre) 30%, transparent); }
+  .outils > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: center;
+    gap: 1rem 2rem;
+    padding-block: clamp(1.25rem, 2.5vw, 2rem);
+    border-bottom: 1px solid color-mix(in srgb, var(--encre) 30%, transparent);
+  }
+  .outils dt { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.1; }
+  .outils dd { margin: 0; }
+  .outils .etiquettes > * { font-size: var(--t-corps); padding: 0.45rem 0.9rem; }
+  .outil-nombre { font-size: var(--t-legende); color: var(--encre-douce); }
+  @media (max-width: 40rem) {
+    .outils > div { grid-template-columns: 1fr; }
+  }
+
+  /* Les outils se posent un à un. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .outils .etiquettes > li { animation: outil-pose linear both; }
+      .outils ul.etiquettes > li { animation-timeline: view(); animation-range: entry calc(var(--i) * 12%) entry calc(50% + var(--i) * 12%); }
+    }
+  }
+  @keyframes outil-pose { from { opacity: 0; scale: 0.8; translate: 0 0.75rem; } to { opacity: 1; scale: 1; translate: 0 0; } }
+</style>

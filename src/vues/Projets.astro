@@ -3,11 +3,15 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import CarteProjet from '../components/CarteProjet.astro';
 import Filtres from '../components/Filtres.astro';
+import Fil from '../components/Fil.astro';
+import AppelContact from '../components/AppelContact.astro';
 import { traduire, trier, route, autreLangue, urlProjet, champ } from '../i18n/utils.js';
+import { lireReglages } from '../i18n/reglages.js';
 import { srcsetVignette } from '../lib/images.js';
 
 const { langue } = Astro.props;
 const t = traduire(langue);
+const reglages = await lireReglages();
 const projets = trier(await getCollection('projets'));
 const deuxChiffres = (n) => String(n).padStart(2, '0');
 // Lettres du titre groupées par mot (pas de coupure au milieu d'un mot), avec leur rang pour décaler le roulement.
@@ -31,12 +35,17 @@ const lignes = await Promise.all(
 ---
 
 <Base titre={t('projets.titre')} description={t('projets.chapeau')} equivalent={route(autreLangue(langue), 'projets')}>
-  <section class="enveloppe hero">
-    <h1 class="hero-titre titre-masque reveal"><span class="ligne"><span>{t('projets.titre')} <sup class="total">{deuxChiffres(projets.length)}</sup></span></span></h1>
+  <Fil />
+  <section class="enveloppe hero sortie-hero" data-fil="">
+    <p class="eyebrow reveal reveal--eyebrow">{champ(reglages.hero, 'eyebrow', langue)}</p>
+    <h1 class="hero-titre titre-masque reveal">
+      <span class="ligne"><span>{t('projets.titre')}, <sup class="total">{deuxChiffres(projets.length)}</sup></span></span>{' '}
+      <span class="ligne ligne-chute"><span><em>{t('projets.chute')}</em></span></span>
+    </h1>
     <p class="chapeau reveal reveal--eyebrow">{t('projets.chapeau')}</p>
   </section>
 
-  <section class="enveloppe">
+  <section class="enveloppe" data-fil={t('projets.titre')}>
     <div class="reveal reveal--bloc barre">
       <Filtres langue={langue} />
       <div class="vues" role="group" aria-label={t('a11y.vue')}>
@@ -71,6 +80,8 @@ const lignes = await Promise.all(
       ))}
     </ol>
   </section>
+
+  <AppelContact langue={langue} />
 
   <img class="apercu" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" aria-hidden="true" width="900" height="1200" sizes="15rem" decoding="async" />
 </Base>
