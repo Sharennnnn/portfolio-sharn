@@ -1,8 +1,8 @@
 export const langueDefaut = 'fr';
 
 export const chemins = {
-  fr: { accueil: '/', projets: '/projets/', apropos: '/a-propos/', contact: '/contact/' },
-  en: { accueil: '/en/', projets: '/en/work/', apropos: '/en/about/', contact: '/en/contact/' },
+  fr: { accueil: '/', projets: '/projets/', contact: '/contact/' },
+  en: { accueil: '/en/', projets: '/en/work/', contact: '/en/contact/' },
 };
 
 export const ui = {
@@ -37,7 +37,6 @@ export const ui = {
     'accueil.fil.cta': 'Contact',
     'accueil.apropos.titre': 'À propos,',
     'accueil.apropos.chute': 'en quelques mots.',
-    'accueil.apropos.suite': 'Lire la suite',
     'accueil.realise.surtitre': 'Commandes',
     'accueil.realise.titre': 'Réalisé pour,',
     'accueil.realise.chute': 'hors exercices et fan arts.',
@@ -80,9 +79,6 @@ export const ui = {
     'origine.fanart': 'Fan art',
     'origine.exercice': 'Exercice',
     'origine.perso': 'Personnel',
-
-    'apropos.titre': 'À propos',
-    'apropos.description': "Charlie Renneson (Shar'N), infographiste à Namur : parcours et compétences.",
     'apropos.cv': 'Télécharger le CV (PDF)',
     'apropos.photo': "Portrait de Charlie Renneson (Shar'N)",
 
@@ -149,7 +145,6 @@ export const ui = {
     'accueil.fil.cta': 'Contact',
     'accueil.apropos.titre': 'About,',
     'accueil.apropos.chute': 'in a few words.',
-    'accueil.apropos.suite': 'Read more',
     'accueil.realise.surtitre': 'Commissions',
     'accueil.realise.titre': 'Made for,',
     'accueil.realise.chute': 'beyond exercises and fan art.',
@@ -192,9 +187,6 @@ export const ui = {
     'origine.fanart': 'Fan art',
     'origine.exercice': 'Exercise',
     'origine.perso': 'Personal',
-
-    'apropos.titre': 'About',
-    'apropos.description': "Charlie Renneson (Shar'N), graphic designer in Namur: background and skills.",
     'apropos.cv': 'Download CV (PDF)',
     'apropos.photo': "Portrait of Charlie Renneson (Shar'N)",
 

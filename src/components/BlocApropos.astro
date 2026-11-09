@@ -1,32 +1,34 @@
 ---
 // À propos : le premier paragraphe de la bio devient l'énoncé qui s'allume au scroll, mot à mot.
-import { traduire, route, champ } from '../i18n/utils.js';
+import { existsSync } from 'node:fs';
+import { traduire, champ } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
 import { dimensions, srcsetVignette } from '../lib/images.js';
 
-const { langue, avecTitre = true, avecLien = true } = Astro.props;
+const { langue } = Astro.props;
 const t = traduire(langue);
 const r = await lireReglages();
 const bio = champ(r.apropos, 'bio', langue);
 const motsEnonce = (bio[0] || '').split(' ');
+// Le bouton CV n'apparaît que si public/cv-sharn.pdf existe.
+const cvDispo = existsSync('public/cv-sharn.pdf');
 const portrait = r.apropos.photo ? { src: r.apropos.photo, ...(await dimensions(r.apropos.photo)), srcset: await srcsetVignette(r.apropos.photo) } : null;
 ---
 
 {motsEnonce[0] && (
-  <section class="enveloppe bloc apropos" data-fil={t('accueil.fil.apropos')}>
+  <section id="a-propos" class="enveloppe bloc apropos" data-fil={t('accueil.fil.apropos')}>
     {portrait && (
       <div class="apropos-photo">
         <img src={portrait.src} srcset={portrait.srcset} sizes="(max-width: 48rem) 60vw, 26rem" alt={t('apropos.photo')} width={portrait.width} height={portrait.height} loading="lazy" decoding="async" />
       </div>
     )}
     <div class="apropos-texte">
-      {avecTitre && <h2 class="titre-chapitre reveal reveal--bloc">{t('accueil.apropos.titre')} <em>{t('accueil.apropos.chute')}</em></h2>}
+      <h2 class="titre-chapitre reveal reveal--bloc">{t('accueil.apropos.titre')} <em>{t('accueil.apropos.chute')}</em></h2>
       <p class="enonce">
         {motsEnonce.map((m, i) => <><span class="m" style={`--p:${(i / motsEnonce.length).toFixed(3)}`}>{m}</span>{' '}</>)}
       </p>
       {bio.slice(1).map((p) => <p class="apropos-suite reveal reveal--bloc">{p}</p>)}
-      {avecLien && <a class="lien-accent reveal reveal--bloc" href={route(langue, 'apropos')}>{t('accueil.apropos.suite')} &rarr;</a>}
-      <slot />
+      {cvDispo && <a class="bouton reveal reveal--bloc" href="/cv-sharn.pdf" download>{t('apropos.cv')}</a>}
     </div>
   </section>
 )}
