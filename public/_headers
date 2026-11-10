@@ -16,7 +16,17 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Images : cache d'une semaine, et aucun script exécutable si un fichier est ouvert directement.
+# Images : aucun script exécutable si un fichier est ouvert directement.
 /images/*
-  Cache-Control: public, max-age=604800
   Content-Security-Policy: default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; sandbox
+
+# Cache des images, une règle par dossier : Cloudflare additionne les en-têtes de toutes les règles qui
+# correspondent, un Cache-Control sur /images/* se cumulerait donc avec celui des vignettes.
+# Originaux et images de partage : nom fixe (un remplacement garde l'adresse), cache d'une semaine.
+/images/projets/*
+  Cache-Control: public, max-age=604800
+/images/partage/*
+  Cache-Control: public, max-age=604800
+# Vignettes : nom à empreinte du contenu (src/lib/images.js), donc immuables : cache d'un an.
+/images/vignettes/*
+  Cache-Control: public, max-age=31536000, immutable
