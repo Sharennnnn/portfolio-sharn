@@ -1,7 +1,7 @@
 # Passation — Portfolio Shar'N
 
 *Version publique allégée (le dépôt est public) : aucun chemin local, aucune adresse e-mail, aucun nom de client.
-La version complète reste hors Git chez Charlie et n'a pas été mise à jour ici. Mise à jour : **9 novembre 2026**.
+La version complète reste hors Git chez Charlie et n'a pas été mise à jour ici. Mise à jour : **10 novembre 2026**.
 Étiquettes : (a) fait vérifié, (b) bonne pratique, (c) avis.*
 
 ---
@@ -18,7 +18,7 @@ accent `#e09a55`, grille 3:4, polices Inter / Anton / Instrument Serif (OFL). To
 | Admin | `/admin/` (connexion GitHub, `auth_scope: public_repo`) |
 | Aperçu d'une branche | `<branche>.portfolio-sharn.pages.dev` |
 | Stack | Astro **~7.3.8**, CSS pur, Sveltia CMS 0.227.2 figé + SRI, sharp, three (chargé à la demande), js-yaml |
-| Node | Cloudflare : `NODE_VERSION=22.12.0`. astro 7.4.x exige Node ≥ **22.23.4** (a, `npm view`, 3/11) |
+| Node | Cloudflare : `NODE_VERSION=22.12.0`. astro 7.4.x exige Node ≥ **22.23.4** (a, `npm view`, 3/11). Poste de Charlie : Node 26 depuis le 10/11, donc un build local ne garantit pas le build en ligne : toujours contrôler l'aperçu |
 
 ## 2. Règles de travail
 
@@ -37,11 +37,27 @@ accent `#e09a55`, grille 3:4, polices Inter / Anton / Instrument Serif (OFL). To
 - Interdit sans accord : `rm -rf`, `reset --hard`, `clean`, `push --force`, suppression de branches, réécriture de
   l'historique, installation globale, mise à jour de dépendance, `wrangler deploy`, toute modification de Cloudflare.
 
-## 3. État actuel (9 novembre 2026)
+## 3. État actuel (10 novembre 2026)
 
-`main` est à `d2f0d27`, identique au dépôt distant. Tout ce qui suit est en production, contrôlé en ligne.
+Avant cette mise à jour de la passation, `main` est à `bd35e83`, identique au dépôt distant. Tout ce qui suit est en
+production, contrôlé en ligne.
 
-### Ce qui a changé depuis le 3 novembre (a)
+### Ce qui a changé le 10 novembre (a)
+
+| Commit | Changement |
+|---|---|
+| `2d03333` | Accueil : compteur « 02 / 04 » fixe dans la Sélection (affiche survolée, sinon celle au milieu de l'écran) |
+| `2d03333` | Titres de chapitre : composant `TitreChapitre.astro`, les deux lignes montent derrière un masque (accueil et Contact) |
+| `2d03333` | Affiches : pastille « Voir » qui accompagne la souris (souris fine, animations non réduites ; le curseur du système reste visible) |
+| `96fdbe5`, `b874718` | Accueil : section « Comment je travaille » après Services (`ChapitreMethode.astro`), quatre étapes validées par Charlie : brief, moodboard, conception, livraison |
+
+Accueil en ligne, dans l'ordre : Sélection, À propos, Services, Méthode, Outils, Parcours, Réalisé pour, Index, Contact.
+Dernier build : 60 pages (contrôle CSP), 58 adresses dans le sitemap, 9 tests. Ces chiffres remplacent ceux plus bas.
+
+Contrôle en ligne du 10/11 avant ces changements : redirections 301 de l'ancienne page À propos, 404 FR/EN en
+`noindex`, en-têtes de sécurité, tri Parcours / Réalisé pour, console vide (accueil, Projets, Creed, Contact).
+
+### Ce qui a changé du 3 au 9 novembre (a)
 
 | Commit | Changement |
 |---|---|
@@ -51,13 +67,11 @@ accent `#e09a55`, grille 3:4, polices Inter / Anton / Instrument Serif (OFL). To
 | `bda994e` | Page À propos retirée (FR et EN) : le menu et le pied de page mènent à `#a-propos` sur l'accueil, les anciennes adresses redirigent en 301 |
 | `bd6d844` | Parcours : les missions clients ne s'affichent plus que dans « Réalisé pour » |
 
-Accueil en ligne, dans l'ordre : Sélection, À propos, Services, Outils, Parcours, Réalisé pour, Index, Contact.
-Dernier build : 60 pages (contrôle CSP), 58 adresses dans le sitemap, 8 tests. Ces trois chiffres remplacent ceux de la section 4.
-
 ### Décisions de Charlie, à ne pas reproposer
 
 - Refusés : refonte VHS, commode et récit de vie ; petite affiche 3D sur le côté ; couloir de cinéma 3D ; générique de fin ;
   page À propos séparée.
+- Déconseillé le 10/11 et non retenu : écran d'ouverture avec logo (retarde l'affichage du contenu).
 - La base reste le site actuel, avec des effets légers au scroll plutôt que de grosses mises en scène.
 - Sites qu'il donne en exemple, pour la logique et jamais pour copier : serhii.website, byholm.co, adriangnzl.es,
   suho.studio, labs.griflan.com, effepinnastudio.com.
@@ -76,12 +90,19 @@ Dernier build : 60 pages (contrôle CSP), 58 adresses dans le sitemap, 8 tests. 
 - **CSP** : les attributs `style` passent, un bloc `<style>` injecté est bloqué.
 - **Contrôles en ligne** : attendre un repère propre au changement, car un repère trop général passe avant la fin du
   déploiement. `innerText` rend le texte en capitales là où le CSS les impose : chercher dans `textContent`.
+- **Section Méthode** : ses textes sont dans `src/i18n/ui.js` (clés `accueil.methode.*`), pas dans l'admin. Sa place
+  est fixée par `src/lib/sections-accueil.js` : après Services, sinon avant Réalisé pour.
+- **Libellé « Client freelance »** : il n'est affiché nulle part (Réalisé pour montre le titre et la période, pas le
+  lieu). Il sert seulement au tri.
+- **Contrôle dans le navigateur** : un `fetch` de pages suivi de `DOMParser` dans la console fait apparaître de fausses
+  violations CSP et un faux 404. Contrôler la console dans un onglet neuf.
 - **Outils** : `gh` n'est pas installé. Aperçus Cloudflare en `noindex`, donc SEO faible dans PageSpeed : c'est normal.
 
 ### Non vérifié
 
-- Vrai téléphone, Safari et Firefox, sur tout le travail depuis le 3 novembre.
-- Thème clair : seulement par captures à 1440 px, pas sur la page d'accueil actuelle après les derniers retraits.
+- Vrai téléphone, Safari et Firefox, sur tout le travail depuis le 3 novembre, dont les effets du 10 novembre.
+- Réglage « réduire les animations » sur les effets du 10 novembre : vérifié dans le code uniquement.
+- Thème clair : haut de l'accueil vu le 10/11 (texte lisible), pas les nouvelles sections ni les autres pages.
 - Lecteur d'écran réel (NVDA, VoiceOver).
 
 ## 4. Historique : troisième passe (3 novembre 2026)
@@ -185,18 +206,22 @@ bannière n'est pas cochée dans l'admin.*
 ## 5. Reste à faire
 
 ### Attend une décision de Charlie
-- Section « Comment je travaille » : pas construite, il faut ses étapes.
-- Branches : `couloir-affiches`, `fil-affiche` et `essais-inspirations` ne sont pas fusionnées ; les autres branches de
-  session le sont. Aucune suppression sans son accord.
-- Libellé « Client freelance » : les travaux ne sont pas rémunérés (confirmé le 3/11), mais toujours en place. Voir les
-  pièges de la section 3 avant de le changer.
+- Branches : `couloir-affiches` et `fil-affiche` ne sont pas fusionnées ; `essais-inspirations` n'existe pas sur le
+  dépôt distant (constat du 10/11). Les autres branches de session sont fusionnées, dont `effets-lot-1` et
+  `comment-je-travaille`. Aucune suppression sans son accord.
+- Textes de la section Méthode modifiables dans l'admin : demanderait de toucher `public/admin/config.yml`.
 
 ### Côté Charlie
 
 - Médias de l'admin : supprimer les images de l'ancienne fiche Six O'Clock (`khali_sixoclock*`, toujours accessibles
   par leur adresse) et `pasted-image-1789067949822.png` (inutilisée).
-- Constat du 3/11, non revérifié : 12 fiches sans texte ; rubriques « Mes choix » vides (Bijoux de Fafi, Urban Jersey, The Age of Kings, Thomas Shelby).
-- CV `public/cv-sharn.pdf` absent ; couvertures 282 × 400 à vérifier.
+- Contenu revérifié le 10/11 (a) : les 26 fiches ont leur brief et leur rubrique « Mes choix » en FR et EN ; toutes
+  les couvertures font au moins 1026 px de large. La rubrique « Résultat » est vide sur 18 fiches (elle ne s'affiche
+  pas) : à remplir seulement s'il y a un fait réel.
+- À coller dans l'admin : libellé « Client freelance » → « Client » (garder le mot « client ») ; texte du service
+  Identité visuelle avec la charte graphique complète (proposé le 10/11).
+- Bio : parle toujours de « deux registres » ; la version à trois registres proposée le 3/11 n'a pas été collée.
+- CV `public/cv-sharn.pdf` absent : le bouton d'À propos apparaît dès que le fichier existe.
 - 2FA (GitHub, Cloudflare, compte de l'adresse de contact) : déclaré, non vérifié.
 - Test réel d'un envoi SVG dans l'admin ; test avec un vrai lecteur d'écran.
 - Domaine personnalisé : `site` dans `astro.config.mjs`, `ALLOWED_DOMAINS` du Worker, limitation de débit.
