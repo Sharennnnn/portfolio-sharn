@@ -1,5 +1,6 @@
 ---
 import TitreChapitre from '../components/TitreChapitre.astro';
+import ChapitreMethode from '../components/ChapitreMethode.astro';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import CarteProjet from '../components/CarteProjet.astro';
@@ -243,6 +244,7 @@ const premier = groupes[0]?.projets[0];
           </div>
         </section>
       );
+      if (s.cle === 'methode') return <ChapitreMethode langue={langue} />;
       if (s.cle === 'outils') return <ChapitreOutils langue={langue} />;
       if (s.cle === 'parcours') return <ChapitreParcours langue={langue} />;
       if (s.cle === 'cta') return <AppelContact langue={langue} />;
