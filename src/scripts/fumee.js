@@ -40,10 +40,15 @@ export function lancerFumee(canvas) {
   gl.uniform3fv(gl.getUniformLocation(prog, 'acc'), couleurAccent());
 
   // Tiers de résolution : la fumée est floue par nature (coût ÷ 9) ; le hero plein écran l'exige.
-  const taille = () => {
+  // Taille fournie par le ResizeObserver (appelé dès l'observation) : lire clientWidth au chargement
+  // forçait un calcul de mise en page synchrone (« ajustement forcé » relevé par PageSpeed).
+  const taille = ([e]) => {
     const d = Math.min(devicePixelRatio, 2) * 0.33;
-    canvas.width = Math.max(1, Math.round(canvas.clientWidth * d));
-    canvas.height = Math.max(1, Math.round(canvas.clientHeight * d));
+    const boite = e.contentBoxSize?.[0];
+    const l = boite ? boite.inlineSize : e.contentRect.width;
+    const h = boite ? boite.blockSize : e.contentRect.height;
+    canvas.width = Math.max(1, Math.round(l * d));
+    canvas.height = Math.max(1, Math.round(h * d));
     gl.viewport(0, 0, canvas.width, canvas.height);
   };
   const debut = performance.now();
@@ -68,7 +73,6 @@ export function lancerFumee(canvas) {
   new ResizeObserver(taille).observe(canvas);
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; relancer(); }).observe(canvas);
   document.addEventListener('visibilitychange', relancer);
-  taille();
   canvas.classList.add('active');
   // Bouton pause du hero (WCAG 2.2.2) : la fumée se fige sur l'image en cours.
   return (pause) => { enPause = pause; relancer(); };
