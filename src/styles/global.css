@@ -306,32 +306,6 @@ h3 {
   pointer-events: none;
 }
 
-/* Pastille « Voir » : accompagne la souris sur les affiches (activée par le script, souris fine
-   et animations non réduites uniquement). Le curseur du système reste visible. */
-.curseur-voir {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: calc(var(--z-entete) + 1);
-  display: grid;
-  place-items: center;
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--fond);
-  font-size: var(--t-eyebrow);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  pointer-events: none;
-  opacity: 0;
-  translate: calc(var(--x, 0px) + 1rem) calc(var(--y, 0px) + 1rem);
-  scale: 0.4;
-  transition: opacity 200ms var(--courbe), scale 300ms var(--courbe-ressort);
-}
-.curseur-voir.visible { opacity: 1; scale: 1; }
-
 /* ---------- Grille de projets ---------- */
 
 .grille {
