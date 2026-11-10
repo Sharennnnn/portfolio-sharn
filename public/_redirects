@@ -27,3 +27,7 @@
 /a-propos  /#a-propos  301
 /en/about/  /en/#a-propos  301
 /en/about  /en/#a-propos  301
+
+# Validation Google Search Console : servie telle quelle à l'adresse en .html, sans la redirection
+# automatique de Cloudflare vers l'adresse sans extension (10/11/2026).
+/googleb39170dad58a01fc.html  /verification/google.txt  200
