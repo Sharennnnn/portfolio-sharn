@@ -5,5 +5,7 @@ export function sectionsAccueil(cles) {
   ordre.splice(ordre.includes('selection') ? ordre.indexOf('selection') + 1 : 1, 0, 'apropos');
   const fin = ordre.includes('cta') ? ordre.indexOf('cta') : ordre.length;
   ordre.splice(fin, 0, 'realise', 'index');
+  // La méthode suit les services ; sans services, elle précède les références.
+  ordre.splice(ordre.includes('services') ? ordre.indexOf('services') + 1 : ordre.indexOf('realise'), 0, 'methode');
   return ordre;
 }
