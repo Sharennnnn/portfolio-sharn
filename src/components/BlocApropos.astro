@@ -73,7 +73,9 @@ const portrait = r.apropos.photo ? { src: r.apropos.photo, ...(await dimensions(
       div.apropos-photo img { animation-timeline: view(); }
     }
   }
-  @keyframes mot-allume { from { opacity: 0.18; } to { opacity: 1; } }
+  /* Le mot « éteint » garde la couleur du texte secondaire (7,7:1 sur fond sombre) : avec une opacité de 0,18,
+     les mots pas encore allumés tombaient sous le contraste minimal de 4,5:1 (WCAG 1.4.3, relevé par PageSpeed). */
+  @keyframes mot-allume { from { color: var(--texte-doux); } to { color: var(--texte); } }
   @keyframes photo-entree { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
   @keyframes photo-recul { from { scale: 1.2; } to { scale: 1; } }
 </style>
