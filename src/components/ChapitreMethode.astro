@@ -69,7 +69,7 @@ const etapes = [1, 2, 3, 4].map((n) => ({ nom: t(`accueil.methode.${n}.nom`), te
       @media (min-width: 56rem) {
         .methode::before { animation-name: methode-trait-x; }
         /* Les quatre colonnes entrent ensemble à l'écran : chaque étape attend un peu plus que la précédente. */
-        ol.methode > li { animation-range: entry calc(var(--i) * 25%) cover calc(22% + var(--i) * 9%); }
+        ol.methode > li { animation-range: entry calc(var(--i) * 18%) cover calc(12% + var(--i) * 6%); }
       }
     }
   }
