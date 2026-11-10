@@ -75,6 +75,8 @@ const jsonLd = schema && JSON.stringify(schema).replace(/</g, '\\u003c');
     <Header langue={langue} equivalent={equivalent} />
     <main id="contenu"><slot /></main>
     <Footer langue={langue} />
+    {/* Pastille « Voir » qui accompagne la souris sur les affiches : décor, le lien reste le vrai contrôle. */}
+    <div class="curseur-voir" aria-hidden="true">{t('carte.voir')}</div>
 
     <script>
       // Titre de l'onglet : « entracte » quand on part, « reprise » 2 s au retour.
@@ -150,6 +152,35 @@ const jsonLd = schema && JSON.stringify(schema).replace(/</g, '\\u003c');
               v.style.setProperty('--ry', '0deg');
             });
           });
+
+          // Pastille « Voir » : suit la souris sur les affiches, avec le même amorti que l'aperçu de l'Index.
+          const pastille = document.querySelector('.curseur-voir');
+          const affiches = document.querySelectorAll('.carte .carte-visuel');
+          if (pastille && affiches.length) {
+            let cx = 0, cy = 0, x = 0, y = 0, boucle = 0;
+            const suivre = () => {
+              x += (cx - x) * 0.18;
+              y += (cy - y) * 0.18;
+              pastille.style.setProperty('--x', `${x.toFixed(1)}px`);
+              pastille.style.setProperty('--y', `${y.toFixed(1)}px`);
+              boucle = Math.abs(cx - x) + Math.abs(cy - y) > 0.5 ? requestAnimationFrame(suivre) : 0;
+            };
+            affiches.forEach((v) => {
+              v.addEventListener('pointerenter', (e) => {
+                // Première apparition : la pastille part de la souris, pas du coin de l'écran.
+                if (!pastille.classList.contains('visible')) { x = e.clientX; y = e.clientY; }
+                pastille.classList.add('visible');
+              });
+              v.addEventListener('pointermove', (e) => {
+                cx = e.clientX;
+                cy = e.clientY;
+                if (!boucle) boucle = requestAnimationFrame(suivre);
+              });
+              v.addEventListener('pointerleave', () => pastille.classList.remove('visible'));
+            });
+            // Clic, changement de page ou défilement hors de l'affiche : la pastille ne reste pas en l'air.
+            addEventListener('scroll', () => pastille.classList.remove('visible'), { passive: true });
+          }
 
           // Boutons magnétiques : suivent la souris de 30 % de l'écart, 10 px au plus, puis reviennent en ressort.
           document.querySelectorAll('.bouton').forEach((b) => {

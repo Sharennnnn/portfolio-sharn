@@ -1,4 +1,5 @@
 ---
+import TitreChapitre from './TitreChapitre.astro';
 // Boîte à outils : chaque outil avec le nombre de fiches projet qui le citent.
 import { getCollection } from 'astro:content';
 import { traduire, champ } from '../i18n/utils.js';
@@ -22,7 +23,7 @@ const projetsCites = (n) => (n === 1 ? t('accueil.outils.un') : t('accueil.outil
     <div class="enveloppe">
       <div class="entete-chapitre reveal reveal--bloc">
         <p class="eyebrow">{rubrique('surtitre')}</p>
-        <h2 class="titre-chapitre">{rubrique('titre')} <em>{rubrique('chute')}</em></h2>
+        <TitreChapitre titre={rubrique('titre')} chute={rubrique('chute')} />
       </div>
       <dl class="outils">
         {outils.map((g) => (

@@ -1,4 +1,5 @@
 ---
+import TitreChapitre from '../components/TitreChapitre.astro';
 import Base from '../layouts/Base.astro';
 import Fil from '../components/Fil.astro';
 import { traduire, route, champ, autreLangue } from '../i18n/utils.js';
@@ -29,7 +30,7 @@ const reseaux = [
       <div class="enveloppe">
         <div class="entete-chapitre reveal reveal--bloc">
           <p class="eyebrow">{t('contact.surtitre')}</p>
-          <h2 class="titre-chapitre">{t('contact.bloc.titre')} <em>{t('contact.bloc.chute')}</em></h2>
+          <TitreChapitre titre={t('contact.bloc.titre')} chute={t('contact.bloc.chute')} />
         </div>
         <ul class="rangs">
           <li><a href={`mailto:${c.email}`}><span class="rang-nom adresse">{c.email}</span><span class="rang-detail">{t('contact.email')} <span aria-hidden="true">&rarr;</span></span></a></li>

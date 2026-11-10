@@ -1,4 +1,5 @@
 ---
+import TitreChapitre from './TitreChapitre.astro';
 // À propos : le premier paragraphe de la bio devient l'énoncé qui s'allume au scroll, mot à mot.
 import { existsSync } from 'node:fs';
 import { traduire, champ } from '../i18n/utils.js';
@@ -23,7 +24,7 @@ const portrait = r.apropos.photo ? { src: r.apropos.photo, ...(await dimensions(
       </div>
     )}
     <div class="apropos-texte">
-      <h2 class="titre-chapitre reveal reveal--bloc">{t('accueil.apropos.titre')} <em>{t('accueil.apropos.chute')}</em></h2>
+      <TitreChapitre titre={t('accueil.apropos.titre')} chute={t('accueil.apropos.chute')} />
       <p class="enonce">
         {motsEnonce.map((m, i) => <><span class="m" style={`--p:${(i / motsEnonce.length).toFixed(3)}`}>{m}</span>{' '}</>)}
       </p>
