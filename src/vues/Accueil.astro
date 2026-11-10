@@ -113,11 +113,12 @@ const premier = groupes[0]?.projets[0];
             <div class="colonne">
               <div class:list={['piste defile', { inverse: c === 1 }]}>
                 {[...col, ...col].map((a, i) => {
-                  // Affiches visibles à l'ouverture (image LCP) : chargées tout de suite, la première en priorité.
+                  // Affiches visibles à l'ouverture (image LCP) : chargées tout de suite, les deux premières en priorité
+                  // (l'affiche retenue comme LCP change selon la taille d'écran).
                   // Colonne 1 : elle part de la fin (-50 %), on voit donc le début de la 2e série et la fin de la 1re.
                   const n = col.length;
                   const visible = c === 0 ? i < 4 : i >= n - 1 && i <= n + 3;
-                  const img = <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) min(58vw, 16rem), 15rem" style={`background:${a.couleur}`} alt="" width="900" height="1200" loading={visible ? 'eager' : 'lazy'} fetchpriority={i === (c === 0 ? 0 : n) ? 'high' : undefined} decoding="async" />;
+                  const img = <img src={a.src} srcset={a.srcset} sizes="(max-width: 48rem) min(58vw, 16rem), 15rem" style={`background:${a.couleur}`} alt="" width="900" height="1200" loading={visible ? 'eager' : 'lazy'} fetchpriority={(c === 0 ? i < 2 : i === n || i === n + 1) ? 'high' : undefined} decoding="async" />;
                   return (
                     <a href={urlProjet(langue, a.id)} tabindex="-1">
                       {c === 0 ? img : (
@@ -206,7 +207,7 @@ const premier = groupes[0]?.projets[0];
           </div>
           <ul class="grille selection">
             {projets.map((projet, i) => (
-              <CarteProjet projet={projet} langue={langue} numero={deuxChiffres(i + 1)} tailles={i === 0 ? '(max-width: 40rem) 100vw, 660px' : '(max-width: 40rem) 50vw, 320px'} />
+              <CarteProjet projet={projet} langue={langue} numero={deuxChiffres(i + 1)} tailles={i === 0 ? '(max-width: 40rem) 100vw, min(43vw, 630px)' : '(max-width: 40rem) 50vw, min(21vw, 300px)'} />
             ))}
             <li class="tuile-tout reveal reveal--carte">
               <a href={route(langue, 'projets')}>
@@ -295,17 +296,27 @@ const premier = groupes[0]?.projets[0];
   .hero-titre { font-size: min(var(--t-hero), max(3.25rem, 11svh)); }
   .eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; }
   /* Pastille « disponible » : pulsation lente, arrêtée si les animations sont réduites. */
+  /* Halo sur un pseudo-élément animé en scale + opacity (composé par le GPU) : une ombre animée
+     se repeignait à chaque image (« animation non composée » relevée par PageSpeed). */
   .pastille {
+    position: relative;
     width: 7px;
     height: 7px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+  .pastille::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 60%, transparent);
     animation: pulsation 2.4s var(--courbe) infinite;
   }
   @keyframes pulsation {
-    70% { box-shadow: 0 0 0 9px transparent; }
-    100% { box-shadow: 0 0 0 0 transparent; }
+    0% { transform: scale(1); opacity: 1; }
+    70% { transform: scale(3.6); opacity: 0; }
+    100% { transform: scale(3.6); opacity: 0; }
   }
   /* Mot qui change : petit surtitre puis un mot en serif italique qui monte toutes les 3 s. */
   .mots {
@@ -702,13 +713,13 @@ const premier = groupes[0]?.projets[0];
     clip-path: polygon(0 0, 100% 50%, 0 100%);
   }
   .en-pause .piste,
-  .en-pause .pastille { animation-play-state: paused; }
+  .en-pause .pastille::after { animation-play-state: paused; }
   @media (max-width: 48rem) {
     .pause-anim { position: static; justify-self: end; margin-top: -1.25rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pastille { animation: none; }
+    .pastille::after { animation: none; opacity: 0; }
     /* Sans animation : les trois mots côte à côte, le doublon de fin masqué. */
     .mots-fenetre { height: auto; }
     .mots-piste { flex-direction: row; flex-wrap: wrap; gap: 0 0.75rem; animation: none; }

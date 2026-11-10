@@ -5,7 +5,9 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
-// Petite variante : affiches du mur et des cartes sur téléphone (≈ 220 px × 1,75) ou en 15rem sur ordinateur.
+// Mini : affiches du mur (15rem) et petites cartes sur ordinateur à densité 1.
+export const LARGEUR_MINI = 280;
+// Petite : affiches du mur et cartes sur téléphone (≈ 220 px × 1,75).
 export const LARGEUR_PETITE = 400;
 export const LARGEUR_VIGNETTE = 640;
 // Variante intermédiaire : affiche d'une page projet sur mobile haute densité (372 px × 3) ou desktop 2× (600 px × 2).
@@ -52,7 +54,8 @@ export const urlPartage = (src) => `/images/partage/${nom(src)}.jpg`;
 export async function srcsetVignette(src) {
   const { width } = await dimensions(src);
   if (import.meta.env.DEV || width <= LARGEUR_VIGNETTE) return undefined;
+  const mini = width > LARGEUR_MINI ? `${urlVignette(src, LARGEUR_MINI)} ${LARGEUR_MINI}w, ` : '';
   const petite = width > LARGEUR_PETITE ? `${urlVignette(src, LARGEUR_PETITE)} ${LARGEUR_PETITE}w, ` : '';
   const moyenne = width > LARGEUR_MOYENNE ? `${urlVignette(src, LARGEUR_MOYENNE)} ${LARGEUR_MOYENNE}w, ` : '';
-  return `${petite}${urlVignette(src)} ${LARGEUR_VIGNETTE}w, ${moyenne}${src} ${width}w`;
+  return `${mini}${petite}${urlVignette(src)} ${LARGEUR_VIGNETTE}w, ${moyenne}${src} ${width}w`;
 }

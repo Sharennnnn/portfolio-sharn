@@ -1,10 +1,10 @@
-// Intégration Astro : après le build, place la 404 anglaise et crée les vignettes (400, 640 et 1200 px, WebP, nom à empreinte) et les images de
+// Intégration Astro : après le build, place la 404 anglaise et crée les vignettes (280, 400, 640 et 1200 px, WebP, nom à empreinte) et les images de
 // partage (1200 px, JPEG pour les réseaux sociaux) à partir de dist/images/projets/.
 import sharp from 'sharp';
 import { readdir, mkdir, rename, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { LARGEUR_PETITE, LARGEUR_VIGNETTE, LARGEUR_MOYENNE, LARGEUR_PARTAGE, empreinte, nomVignette } from './images.js';
+import { LARGEUR_MINI, LARGEUR_PETITE, LARGEUR_VIGNETTE, LARGEUR_MOYENNE, LARGEUR_PARTAGE, empreinte, nomVignette } from './images.js';
 import { verifierCsp } from './verifier-csp.js';
 
 export default function variantesImages() {
@@ -29,7 +29,7 @@ export default function variantesImages() {
           const base = path.basename(f, path.extname(f));
           const { width } = await sharp(entree).metadata();
           const hash = empreinte(path.join('public/images/projets', f));
-          for (const largeur of [LARGEUR_PETITE, LARGEUR_VIGNETTE, LARGEUR_MOYENNE]) {
+          for (const largeur of [LARGEUR_MINI, LARGEUR_PETITE, LARGEUR_VIGNETTE, LARGEUR_MOYENNE]) {
             if (width > largeur) {
               await sharp(entree).resize({ width: largeur }).webp({ quality: 78 }).toFile(path.join(vignettes, nomVignette(base, hash, largeur)));
             }
