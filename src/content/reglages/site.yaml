@@ -41,8 +41,8 @@ services:
     etiquettes_en: Film, Music, Events
   - titre: Identité visuelle
     titre_en: Visual identity
-    texte: Logo, couleurs, typographies et règles d'usage, pour qu'une marque se reconnaisse sur chaque support.
-    texte_en: Logo, colours, typefaces and usage rules, so a brand is recognised on every medium.
+    texte: Logo, couleurs et typographies, réunis dans une charte graphique complète, pour qu'une marque se reconnaisse sur chaque support.
+    texte_en: Logo, colours and typefaces, gathered in complete brand guidelines, so a brand is recognised on every medium.
     etiquettes: Logo, Charte, Déclinaisons
     etiquettes_en: Logo, Guidelines, Applications
   - titre: Motion
@@ -138,13 +138,13 @@ apropos:
     - periode: '2026'
       titre: Mise en page du portfolio de Cyril Derviendt
       titre_en: Layout of Cyril Derviendt’s portfolio
-      lieu: Client freelance
-      lieu_en: Freelance client
+      lieu: Client
+      lieu_en: Client
     - periode: '2026'
       titre: Mise en page du manuscrit de Benoît Renneson
       titre_en: Layout of Benoît Renneson’s manuscript
-      lieu: Client freelance
-      lieu_en: Freelance client
+      lieu: Client
+      lieu_en: Client
   competences:
     - groupe: Print & édition
       groupe_en: Print & editorial
