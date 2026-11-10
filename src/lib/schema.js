@@ -12,3 +12,15 @@ export function personne(reglages, metier, site) {
     sameAs: [c.instagram, c.linkedin].filter(Boolean),
   };
 }
+
+// Nom du site pour Google (« site name ») : sans cela, Google affiche le nom de l'hébergeur.
+// Le nom préféré est le nom complet ; le pseudo et l'adresse du site sont les solutions de repli.
+export function siteWeb(site) {
+  const url = new URL('/', site);
+  return {
+    '@type': 'WebSite',
+    name: 'Charlie Renneson',
+    alternateName: ["Shar'N", url.hostname],
+    url: url.href,
+  };
+}

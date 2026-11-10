@@ -11,7 +11,7 @@ import ChapitreParcours from '../components/ChapitreParcours.astro';
 import AppelContact from '../components/AppelContact.astro';
 import { traduire, route, trier, champ, rempli, autreLangue, urlProjet } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
-import { personne } from '../lib/schema.js';
+import { personne, siteWeb } from '../lib/schema.js';
 import { srcsetVignette, couleurAttente } from '../lib/images.js';
 import { sectionsAccueil } from '../lib/sections-accueil.js';
 // Serif italique du titre : utilisée sur cette page seulement, donc préchargée ici seulement.
@@ -20,7 +20,7 @@ import policeSerif from '@fontsource/instrument-serif/files/instrument-serif-lat
 const { langue } = Astro.props;
 const t = traduire(langue);
 const r = await lireReglages();
-const schema = { '@context': 'https://schema.org', ...personne(r, t('schema.metier'), Astro.site) };
+const schema = { '@context': 'https://schema.org', '@graph': [siteWeb(Astro.site), personne(r, t('schema.metier'), Astro.site)] };
 // Sélection : les projets cochés « phare » (4 premiers selon l'ordre), sinon les 4 premiers tout court.
 const tous = trier(await getCollection('projets'));
 const phares = tous.filter((p) => p.data.phare);
