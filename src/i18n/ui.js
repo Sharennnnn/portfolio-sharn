@@ -1,8 +1,8 @@
 export const langueDefaut = 'fr';
 
 export const chemins = {
-  fr: { accueil: '/', projets: '/projets/', contact: '/contact/' },
-  en: { accueil: '/en/', projets: '/en/work/', contact: '/en/contact/' },
+  fr: { accueil: '/', projets: '/projets/', contact: '/contact/', confidentialite: '/confidentialite/' },
+  en: { accueil: '/en/', projets: '/en/work/', contact: '/en/contact/', confidentialite: '/en/privacy/' },
 };
 
 export const ui = {
@@ -106,6 +106,7 @@ export const ui = {
 
     'footer.mentions': 'Fan art et exercices signalés comme tels. Marques citées à titre de référence.',
     'footer.ecrire': 'Écrire à Shar\u2019N',
+    'footer.confidentialite': 'Confidentialité et hébergeur',
     'projet.suivant': 'Projet suivant',
     'onglet.entracte': 'Entracte — Shar\'N',
     'onglet.reprise': 'La séance reprend — Shar\'N',
@@ -227,6 +228,7 @@ export const ui = {
 
     'footer.mentions': 'Fan art and exercises are labelled as such. Brands referenced for context only.',
     'footer.ecrire': 'Write to Shar\u2019N',
+    'footer.confidentialite': 'Privacy and hosting',
     'projet.suivant': 'Next project',
     'onglet.entracte': 'Intermission — Shar\'N',
     'onglet.reprise': 'Back to the show — Shar\'N',

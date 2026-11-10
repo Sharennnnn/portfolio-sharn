@@ -47,6 +47,7 @@ const reseaux = [
   <div class="enveloppe bas">
     <p class="legende">&copy; {annee} Shar&rsquo;N</p>
     <p class="legende">{t('footer.mentions')}</p>
+    <p class="legende"><a href={route(langue, 'confidentialite')}>{t('footer.confidentialite')}</a></p>
   </div>
 </footer>
 
@@ -102,6 +103,8 @@ const reseaux = [
   /* Sur téléphone, 6:1 donnerait 62 px : on recadre les côtés vides pour garder le logo lisible. */
   .banniere img { display: block; width: 100%; height: auto; min-height: 6.5rem; object-fit: cover; }
   .banniere + .bas { border-top: 0; }
+  .bas a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
+  .bas a:hover, .bas a:focus-visible { color: var(--accent); }
   .bas {
     position: relative;
     display: flex;
