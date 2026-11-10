@@ -1,0 +1,134 @@
+---
+import Base from '../layouts/Base.astro';
+import { route, autreLangue } from '../i18n/utils.js';
+import { lireReglages } from '../i18n/reglages.js';
+
+// Mentions légales, confidentialité et cookies, réunies sur une seule page pour éviter les doublons.
+// Sources vérifiées le 10/11/2026 : cloudflare.com/privacypolicy (adresse, transferts)
+// et autoriteprotectiondonnees.be/citoyen/contact (adresse de l'APD).
+const { langue } = Astro.props;
+const r = await lireReglages();
+const email = r.contact.email;
+const fr = langue === 'fr';
+const maj = fr ? '10 novembre 2026' : '10 November 2026';
+---
+
+<Base
+  titre={fr ? 'Mentions légales' : 'Legal notice'}
+  description={fr ? 'Éditeur, statut, hébergeur, droits d’auteur, confidentialité et cookies du portfolio de Shar’N.' : 'Publisher, status, hosting, copyright, privacy and cookies for the Shar’N portfolio.'}
+  equivalent={route(autreLangue(langue), 'mentions')}
+>
+  <section class="enveloppe hero">
+    <p class="eyebrow">{fr ? 'Informations légales' : 'Legal information'}</p>
+    <h1 class="hero-titre">{fr ? 'Mentions légales' : 'Legal notice'}</h1>
+  </section>
+
+  <div class="enveloppe"><div class="texte-legal">
+    {fr ? (
+      <>
+        <h2>Éditeur</h2>
+        <p>Nom : Renneson<br />Prénom : Charlie (sous le nom Shar’N)<br />E-mail : <a href={`mailto:${email}`}>{email}</a></p>
+
+        <h2>Statut du site</h2>
+        <p>Ce site est un portfolio personnel et étudiant.</p>
+
+        <h2>Hébergeur</h2>
+        <p>Le site est hébergé par Cloudflare Pages, un service de :</p>
+        <address>Cloudflare, Inc.<br />101 Townsend St<br />San Francisco, CA 94107<br />États-Unis<br /><a href="https://www.cloudflare.com/" rel="noopener">cloudflare.com</a></address>
+
+        <h2>Droits d’auteur</h2>
+        <p>Sauf mention contraire, les créations présentées sur ce site (affiches, identités visuelles, animations, mises en page, textes) sont l’œuvre de Charlie Renneson et protégées par le droit d’auteur. Toute reproduction, modification ou réutilisation, même partielle, demande mon accord écrit préalable.</p>
+        <p>Les fan arts et les exercices sont signalés comme tels. Les films, personnages, marques et logos auxquels ils se réfèrent appartiennent à leurs ayants droit ; ils sont montrés ici pour présenter mon travail, sans lien avec ces ayants droit. Pour les travaux réalisés pour des clients, la marque et ses éléments appartiennent au client.</p>
+        <p>Si tu es ayant droit et qu’un contenu te pose problème, écris-moi : je le retire.</p>
+
+        <h2>Confidentialité</h2>
+        <p>Ce site n’a ni formulaire, ni compte, ni outil de statistiques.</p>
+
+        <h3>Quand tu m’écris</h3>
+        <p>Si tu m’envoies un e-mail, je reçois ton adresse, ton nom s’il apparaît, ton message et ses pièces jointes. Je m’en sers uniquement pour te répondre et, le cas échéant, réaliser la commande dont nous parlons. Je ne les transmets à personne et je les garde le temps de l’échange et de la commande éventuelle. Base légale : les démarches préalables à une commande que tu demandes et mon intérêt légitime à répondre aux messages reçus (article 6.1, b et f, du RGPD).</p>
+
+        <h3>Journaux de l’hébergeur</h3>
+        <p>Pour diffuser le site et le protéger, Cloudflare traite des données techniques de chaque visite : adresse IP, données de routage et informations sur le trafic. Cloudflare peut transférer ces données aux États-Unis ; il s’appuie pour cela sur sa certification au Data Privacy Framework UE–États-Unis et sur des clauses contractuelles types. Détails : <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">politique de confidentialité de Cloudflare</a>.</p>
+
+        <h3>Vidéos et liens externes</h3>
+        <p>Certaines pages de projet intègrent une vidéo YouTube en mode de confidentialité renforcée (youtube-nocookie.com). Le lecteur se charge quand la vidéo approche de l’écran : Google reçoit alors les données techniques de la connexion, selon sa <a href="https://policies.google.com/privacy" rel="noopener">politique de confidentialité</a>. Les liens vers Instagram et LinkedIn ne transmettent rien tant que tu ne cliques pas ; une fois sur ces sites, leurs propres règles s’appliquent.</p>
+
+        <h3>Tes droits</h3>
+        <p>Tu peux me demander d’accéder à tes données, de les corriger, de les effacer, d’en limiter l’usage, de t’y opposer ou de les recevoir dans un format lisible, en écrivant à <a href={`mailto:${email}`}>{email}</a>. Tu peux aussi introduire une réclamation auprès de l’Autorité de protection des données :</p>
+        <address>Autorité de protection des données<br />Rue de la Presse 35<br />1000 Bruxelles<br /><a href="mailto:contact@apd-gba.be">contact@apd-gba.be</a> · <a href="https://www.autoriteprotectiondonnees.be/" rel="noopener">autoriteprotectiondonnees.be</a></address>
+
+        <h2>Cookies</h2>
+        <p>Ce site ne dépose aucun cookie : ni mesure d’audience, ni publicité, ni réseaux sociaux. C’est pourquoi aucun bandeau ne te demande ton accord.</p>
+        <p>Seule exception, qui n’est pas un cookie : le bouton « Lumières de la salle » retient ton choix dans le stockage local de ton navigateur (clé <code>salle</code>). Cette information reste sur ton appareil et n’est envoyée nulle part ; tu peux l’effacer en vidant les données du site.</p>
+
+        <p class="maj">Dernière mise à jour : {maj}.</p>
+      </>
+    ) : (
+      <>
+        <h2>Publisher</h2>
+        <p>Last name: Renneson<br />First name: Charlie (working as Shar’N)<br />Email: <a href={`mailto:${email}`}>{email}</a></p>
+
+        <h2>Site status</h2>
+        <p>This site is a personal and student portfolio.</p>
+
+        <h2>Hosting</h2>
+        <p>The site is hosted on Cloudflare Pages, a service of:</p>
+        <address>Cloudflare, Inc.<br />101 Townsend St<br />San Francisco, CA 94107<br />United States<br /><a href="https://www.cloudflare.com/" rel="noopener">cloudflare.com</a></address>
+
+        <h2>Copyright</h2>
+        <p>Unless stated otherwise, the work shown on this site (posters, visual identities, animations, layouts, texts) is by Charlie Renneson and protected by copyright. Any reproduction, modification or reuse, even partial, requires my prior written consent.</p>
+        <p>Fan art and exercises are labelled as such. The films, characters, brands and logos they refer to belong to their rights holders; they are shown here to present my work, with no connection to those rights holders. For client work, the brand and its elements belong to the client.</p>
+        <p>If you are a rights holder and some content is a problem for you, write to me and I will remove it.</p>
+
+        <h2>Privacy</h2>
+        <p>This site has no form, no account and no analytics tool.</p>
+
+        <h3>When you write to me</h3>
+        <p>If you email me, I receive your address, your name if it appears, your message and its attachments. I use them only to reply and, where relevant, to carry out the commission we discuss. I share them with no one and keep them for the length of our exchange and any commission. Legal basis: steps taken at your request before a commission, and my legitimate interest in answering the messages I receive (Article 6(1)(b) and (f) GDPR).</p>
+
+        <h3>Hosting logs</h3>
+        <p>To serve and protect the site, Cloudflare processes technical data from each visit: IP address, traffic routing data and information about traffic. Cloudflare may transfer this data to the United States, relying on its EU–US Data Privacy Framework certification and on standard contractual clauses. Details: <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Cloudflare’s privacy policy</a>.</p>
+
+        <h3>Videos and external links</h3>
+        <p>Some project pages embed a YouTube video in privacy-enhanced mode (youtube-nocookie.com). The player loads when the video nears the screen: Google then receives the connection’s technical data, under its <a href="https://policies.google.com/privacy" rel="noopener">privacy policy</a>. Links to Instagram and LinkedIn send nothing until you click them; once on those sites, their own rules apply.</p>
+
+        <h3>Your rights</h3>
+        <p>You can ask me to access, correct or erase your data, restrict or object to its use, or receive it in a readable format, by writing to <a href={`mailto:${email}`}>{email}</a>. You can also lodge a complaint with the Belgian Data Protection Authority:</p>
+        <address>Autorité de protection des données<br />Rue de la Presse 35<br />1000 Brussels, Belgium<br /><a href="mailto:contact@apd-gba.be">contact@apd-gba.be</a> · <a href="https://www.dataprotectionauthority.be/" rel="noopener">dataprotectionauthority.be</a></address>
+
+        <h2>Cookies</h2>
+        <p>This site sets no cookies: no analytics, no advertising, no social media. That is why no banner asks for your consent.</p>
+        <p>One exception, which is not a cookie: the “House lights” button remembers your choice in your browser’s local storage (key <code>salle</code>). It stays on your device and is sent nowhere; you can erase it by clearing the site’s data.</p>
+
+        <p class="maj">Last updated: {maj}.</p>
+      </>
+    )}
+  </div></div>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+    padding-block: clamp(3rem, 6vw, 6.25rem) clamp(2rem, 4vw, 3rem);
+  }
+  .texte-legal { max-width: 68ch; }
+  .texte-legal h2 {
+    margin: 3rem 0 0.75rem;
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+  .texte-legal h2:first-child { margin-top: 0; }
+  .texte-legal h3 {
+    margin: 1.75rem 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .texte-legal p, .texte-legal address { margin: 0 0 1rem; line-height: 1.6; }
+  .texte-legal address { font-style: normal; padding-left: 1rem; border-left: 2px solid var(--accent); }
+  .texte-legal a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+  .texte-legal a:hover, .texte-legal a:focus-visible { color: var(--accent); }
+  .maj { margin-top: 3rem; font-size: 0.9em; }
+</style>
