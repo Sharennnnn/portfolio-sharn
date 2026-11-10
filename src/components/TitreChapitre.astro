@@ -1,0 +1,11 @@
+---
+// Titre de chapitre en deux lignes (titre, puis chute en italique) : chaque ligne monte derrière
+// un masque quand le titre entre à l'écran, comme le titre du hero (.titre-masque dans global.css).
+const { titre, chute } = Astro.props;
+---
+
+<h2 class="titre-chapitre titre-masque reveal">
+  {/* {' '} : espace entre les lignes pour Google et les lecteurs d'écran (invisible en flex). */}
+  <span class="ligne"><span>{titre}</span></span>{' '}
+  <span class="ligne"><span><em>{chute}</em></span></span>
+</h2>

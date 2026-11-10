@@ -1,4 +1,5 @@
 ---
+import TitreChapitre from '../components/TitreChapitre.astro';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import CarteProjet from '../components/CarteProjet.astro';
@@ -144,7 +145,7 @@ const premier = groupes[0]?.projets[0];
           <div class="enveloppe">
             <div class="entete-chapitre reveal reveal--bloc">
               <p class="eyebrow">{t('accueil.realise.surtitre')}</p>
-              <h2 class="titre-chapitre">{t('accueil.realise.titre')} <em>{t('accueil.realise.chute')}</em></h2>
+              <TitreChapitre titre={t('accueil.realise.titre')} chute={t('accueil.realise.chute')} />
             </div>
             <ul class="rangs">
               {realise.map((x) => (
@@ -162,7 +163,7 @@ const premier = groupes[0]?.projets[0];
           <div class="enveloppe">
             <div class="entete-chapitre reveal reveal--bloc">
               <p class="eyebrow">{t('accueil.index.surtitre')}</p>
-              <h2 class="titre-chapitre">{t('accueil.index.titre')} <em>{t('accueil.index.chute')}</em></h2>
+              <TitreChapitre titre={t('accueil.index.titre')} chute={t('accueil.index.chute')} />
             </div>
             <div class="index">
               <div class="index-groupes">
@@ -202,6 +203,8 @@ const premier = groupes[0]?.projets[0];
               </a>
             </li>
           </ul>
+          {/* Compteur : décor qui rappelle l'affiche en cours ; chaque carte porte déjà son numéro. */}
+          <p class="compteur" aria-hidden="true" hidden><span class="compteur-n">01</span> / {deuxChiffres(projets.length)}</p>
         </section>
       );
       if (s.cle === 'duo') return (
@@ -223,7 +226,7 @@ const premier = groupes[0]?.projets[0];
           <div class="enveloppe">
             <div class="entete-chapitre reveal reveal--bloc">
               <p class="eyebrow">{rubrique('services', 'surtitre')}</p>
-              <h2 class="titre-chapitre">{rubrique('services', 'titre')} <em>{rubrique('services', 'chute')}</em></h2>
+              <TitreChapitre titre={rubrique('services', 'titre')} chute={rubrique('services', 'chute')} />
             </div>
             <ol class="services">
               {services.map((x, i) => (
@@ -497,6 +500,27 @@ const premier = groupes[0]?.projets[0];
     from { translate: 0 var(--profondeur); }
     to { translate: 0 calc(-1 * var(--profondeur)); }
   }
+  /* Compteur de la sélection : « 03 / 05 » fixe en bas à droite tant que la sélection est à l'écran. */
+  .compteur {
+    position: fixed;
+    right: clamp(0.75rem, 2vw, 1.5rem);
+    bottom: clamp(0.75rem, 2vw, 1.5rem);
+    z-index: calc(var(--z-entete) - 1);
+    margin: 0;
+    padding: 0.45rem 0.6rem 0.4rem;
+    font-family: var(--police-titre);
+    font-size: 0.9375rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    background: color-mix(in srgb, var(--fond) 78%, transparent);
+    color: var(--texte-doux);
+    pointer-events: none;
+    opacity: 0;
+    translate: 0 0.5rem;
+    transition: opacity 300ms var(--courbe), translate 300ms var(--courbe);
+  }
+  .compteur.visible { opacity: 1; translate: 0 0; }
+  .compteur-n { display: inline-block; color: var(--texte); }
   .tuile-tout a {
     position: relative;
     display: flex;
@@ -711,4 +735,33 @@ const premier = groupes[0]?.projets[0];
   // Le mur d'affiches s'arrête quand il sort de l'écran : aucun calcul pour un décor invisible.
   const mur = document.querySelector('.mur');
   if (mur) new IntersectionObserver(([e]) => mur.classList.toggle('hors-champ', !e.isIntersecting)).observe(mur);
+
+  // Compteur de la sélection : l'affiche survolée ou atteinte au clavier, sinon la première
+  // (dans l'ordre) qui traverse le milieu de l'écran. Aucun écouteur de scroll.
+  const compteur = document.querySelector('.compteur');
+  const selection = document.querySelector('.selection');
+  if (compteur && selection) {
+    const chiffre = compteur.querySelector('.compteur-n');
+    const cartes = [...selection.querySelectorAll('.carte')];
+    const anime = matchMedia('(prefers-reduced-motion: no-preference)').matches;
+    const auMilieu = new Set();
+    const afficher = (carte) => {
+      const n = String(cartes.indexOf(carte) + 1).padStart(2, '0');
+      if (chiffre.textContent === n) return;
+      chiffre.textContent = n;
+      if (anime) chiffre.animate([{ translate: '0 60%', opacity: 0 }, { translate: '0 0', opacity: 1 }], { duration: 280, easing: 'cubic-bezier(.22,1,.36,1)' });
+    };
+    compteur.hidden = false;
+    new IntersectionObserver(([e]) => compteur.classList.toggle('visible', e.isIntersecting), { rootMargin: '-30% 0px -30% 0px' }).observe(selection);
+    const suivi = new IntersectionObserver((entrees) => {
+      entrees.forEach((e) => auMilieu[e.isIntersecting ? 'add' : 'delete'](e.target));
+      const premiere = cartes.find((c) => auMilieu.has(c));
+      if (premiere) afficher(premiere);
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    cartes.forEach((carte) => {
+      suivi.observe(carte);
+      carte.addEventListener('pointerenter', () => afficher(carte));
+      carte.addEventListener('focusin', () => afficher(carte));
+    });
+  }
 </script>

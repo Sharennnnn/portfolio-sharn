@@ -13,6 +13,7 @@ export const ui = {
 
     'accueil.selection': 'Sélection — 2025 / 2026',
     'accueil.tout': 'Tous les projets',
+    'carte.voir': 'Voir',
     'accueil.mots.intro': 'Ce que je conçois',
     'accueil.mots': 'Affiches|Identités|Animations',
     'accueil.lignes': 'Trois façons de travailler',
@@ -121,6 +122,7 @@ export const ui = {
 
     'accueil.selection': 'Selected work — 2025 / 2026',
     'accueil.tout': 'All projects',
+    'carte.voir': 'View',
     'accueil.mots.intro': 'What I design',
     'accueil.mots': 'Posters|Identities|Motion',
     'accueil.lignes': 'Three ways of working',

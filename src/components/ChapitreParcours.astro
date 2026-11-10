@@ -1,4 +1,5 @@
 ---
+import TitreChapitre from './TitreChapitre.astro';
 // Parcours : la première année de la période sert de grand chiffre ; la frise suit l'ordre chronologique
 // (tri stable : à année égale, l'ordre de l'admin est gardé).
 import { traduire, champ, rempli } from '../i18n/utils.js';
@@ -22,7 +23,7 @@ const parcours = r.apropos.parcours.filter((p) => !/client/i.test(p.lieu)).sort(
     <div class="frise-collant">
       <div class="enveloppe entete-chapitre reveal reveal--bloc">
         <p class="eyebrow">{rubrique('surtitre')}</p>
-        <h2 class="titre-chapitre">{rubrique('titre')} <em>{rubrique('chute')}</em></h2>
+        <TitreChapitre titre={rubrique('titre')} chute={rubrique('chute')} />
       </div>
       <ol class="frise">
         {parcours.map((p) => (
