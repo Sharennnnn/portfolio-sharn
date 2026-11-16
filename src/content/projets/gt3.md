@@ -25,5 +25,5 @@ livrables_en: Poster
 outils:
   - Lightroom
   - Photoshop
-phare: false
+phare: true
 ---
