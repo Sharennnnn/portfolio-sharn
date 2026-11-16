@@ -88,6 +88,7 @@ export const ui = {
     'projet.fermer': 'Fermer',
 
     'origine.client': 'Client',
+    'origine.collab': 'Collaboration',
     'origine.fanart': 'Fan art',
     'origine.exercice': 'Exercice',
     'origine.perso': 'Personnel',
@@ -217,6 +218,7 @@ export const ui = {
     'projet.fermer': 'Close',
 
     'origine.client': 'Client',
+    'origine.collab': 'Collaboration',
     'origine.fanart': 'Fan art',
     'origine.exercice': 'Exercise',
     'origine.perso': 'Personal',
