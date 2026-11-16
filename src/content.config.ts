@@ -7,6 +7,8 @@ const projets = defineCollection({
     titre: z.string(),
     titre_en: z.string(),
     annee: z.number(),
+    // Facultative : sert au tri « Date ». L'admin écrit « 2026-03-10 », ou une chaîne vide si le champ est effacé.
+    date: z.preprocess((v) => (v === '' || v == null ? undefined : v), z.coerce.date().optional()),
     origine: z.enum(['client', 'fanart', 'exercice', 'perso']),
     disciplines: z.array(z.enum(['print', 'identite', 'animation'])),
     client: z.string().optional(),
