@@ -3,6 +3,7 @@ ordre: 23
 titre: Scream
 titre_en: Scream
 annee: 2025
+date: 2025-11-14
 origine: fanart
 disciplines:
   - print
