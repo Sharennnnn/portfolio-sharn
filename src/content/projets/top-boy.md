@@ -3,6 +3,7 @@ ordre: 13
 titre: Top Boy
 titre_en: Top Boy
 annee: 2026
+date: 2026-02-07
 origine: fanart
 disciplines:
   - print
