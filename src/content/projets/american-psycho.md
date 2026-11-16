@@ -3,6 +3,7 @@ ordre: 18
 titre: American Psycho
 titre_en: American Psycho
 annee: 2026
+date: 2026-02-13
 origine: fanart
 disciplines:
   - print
