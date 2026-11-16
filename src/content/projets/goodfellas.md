@@ -3,6 +3,7 @@ ordre: 15
 titre: GoodFellas
 titre_en: GoodFellas
 annee: 2026
+date: 2026-02-15
 origine: fanart
 disciplines:
   - print
