@@ -1,5 +1,5 @@
 ---
-ordre: 16
+ordre: 13
 titre: Miles Morales
 titre_en: Miles Morales
 annee: 2026
@@ -8,8 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/miles-morales-couverture.webp
-couverture_alt: "Planche de bande dessinée en cases montrant Miles Morales en costume de Spider-Man, dessinant et sautant, sous le titre et le logo Marvel."
-couverture_alt_en: "Comic-style page of panels showing Miles Morales in his Spider-Man suit, drawing and leaping, below the title and the Marvel logo."
+couverture_alt: Planche de bande dessinée en cases montrant Miles Morales en costume de Spider-Man, dessinant et sautant, sous le titre et le logo Marvel.
+couverture_alt_en: Comic-style page of panels showing Miles Morales in his Spider-Man suit, drawing and leaping, below the title and the Marvel logo.
 survol: ''
 galerie: []
 video: ''
