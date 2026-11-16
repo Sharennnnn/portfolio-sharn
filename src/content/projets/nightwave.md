@@ -2,7 +2,8 @@
 ordre: 14
 titre: Nightwave
 titre_en: Nightwave
-annee: 2026
+annee: 2025
+date: 2025-12-14
 origine: exercice
 disciplines:
   - identite
