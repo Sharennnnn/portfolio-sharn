@@ -1,5 +1,5 @@
 ---
-ordre: 7
+ordre: 8
 titre: Le Chant des sirènes — Orelsan
 titre_en: Le Chant des sirènes — Orelsan
 annee: 2026

@@ -1,5 +1,5 @@
 ---
-ordre: 9
+ordre: 10
 titre: Logo Infographie
 titre_en: Graphic design class logo
 annee: 2026
