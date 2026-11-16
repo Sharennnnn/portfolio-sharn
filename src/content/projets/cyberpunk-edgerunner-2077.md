@@ -3,6 +3,7 @@ ordre: 12
 titre: Cyberpunk — Edgerunners × 2077
 titre_en: Cyberpunk — Edgerunners × 2077
 annee: 2026
+date: 2026-06-12
 origine: exercice
 disciplines:
   - animation
