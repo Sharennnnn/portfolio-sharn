@@ -3,6 +3,7 @@ ordre: 8
 titre: Ciao Kombucha × Jolagreen23
 titre_en: Ciao Kombucha × Jolagreen23
 annee: 2025
+date: 2025-09-25
 origine: exercice
 disciplines:
   - identite
