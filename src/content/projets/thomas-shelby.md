@@ -3,6 +3,7 @@ ordre: 25
 titre: Thomas Shelby
 titre_en: Thomas Shelby
 annee: 2025
+date: 2025-11-07
 origine: exercice
 disciplines:
   - print
