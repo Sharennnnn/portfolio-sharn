@@ -48,6 +48,12 @@ const lignes = await Promise.all(
   <section class="enveloppe" data-fil={t('projets.titre')}>
     <div class="reveal reveal--bloc barre">
       <Filtres langue={langue} />
+      <div class="tris" role="group" aria-label={t('a11y.tri')}>
+        {['defaut', 'alpha', 'date'].map((cle) => (
+          <button class="filtre" type="button" data-tri={cle} data-nom={t(`projets.tri.${cle}.nom`)} aria-pressed={cle === 'defaut' ? 'true' : 'false'}>{t(`projets.tri.${cle}`)}</button>
+        ))}
+        <p class="sr-only" role="status" data-annonce-tri data-modele={t('projets.tri.annonce')}></p>
+      </div>
       <div class="vues" role="group" aria-label={t('a11y.vue')}>
         <button class="filtre" type="button" data-vue="grille" aria-pressed="true">{t('projets.vue.grille')}</button>
         <button class="filtre" type="button" data-vue="index" aria-pressed="false">{t('projets.vue.index')}</button>
@@ -61,7 +67,7 @@ const lignes = await Promise.all(
     {/* Vue Index : liste façon générique ; même contenu que la grille, masquée par défaut. */}
     <ol class="index" data-liste="index" hidden>
       {lignes.map((l) => (
-        <li data-disciplines={l.disciplines.join(' ')} data-src={l.src} data-srcset={l.srcset}>
+        <li data-disciplines={l.disciplines.join(' ')} data-titre={l.titre} data-annee={l.annee} data-src={l.src} data-srcset={l.srcset}>
           <a href={urlProjet(langue, l.id)}>
             <span class="index-numero" aria-hidden="true">{l.numero}</span>
             {/* Titre lu une fois par les lecteurs d'écran ; la version en lettres ne sert qu'au roulement. */}
@@ -110,8 +116,10 @@ const lignes = await Promise.all(
     margin-bottom: 2.5rem;
   }
   /* Le choix de vue n'a de sens qu'avec JavaScript. */
-  .vues { display: none; gap: 0.5rem; }
-  :global(.js) .vues { display: flex; }
+  .vues,
+  .tris { display: none; gap: 0.5rem; }
+  :global(.js) .vues,
+  :global(.js) .tris { display: flex; }
 
   .index {
     list-style: none;
@@ -210,6 +218,39 @@ const lignes = await Promise.all(
 </style>
 
 <script>
+  import { ordonner } from '../lib/tri.js';
+
+  // Tri : on déplace les mêmes éléments (filtres et vue gardent leur état) et on renumérote.
+  const langue = document.documentElement.lang || 'fr';
+  const tris = document.querySelectorAll<HTMLButtonElement>('[data-tri]');
+  const annonce = document.querySelector<HTMLElement>('[data-annonce-tri]');
+  const listesTri = [
+    { liste: document.querySelector<HTMLElement>('.grille'), numero: '.numero' },
+    { liste: document.querySelector<HTMLElement>('.index'), numero: '.index-numero' },
+  ].map(({ liste, numero }) => ({
+    liste,
+    numero,
+    elements: [...(liste?.children ?? [])].map((el, rang) => ({
+      el: el as HTMLElement,
+      rang,
+      titre: (el as HTMLElement).dataset.titre || '',
+      annee: Number((el as HTMLElement).dataset.annee) || 0,
+    })),
+  }));
+  tris.forEach((bouton) => {
+    bouton.addEventListener('click', () => {
+      tris.forEach((b) => b.setAttribute('aria-pressed', String(b === bouton)));
+      listesTri.forEach(({ liste, numero, elements }) => {
+        ordonner(elements, bouton.dataset.tri || 'defaut', langue).forEach(({ el }, i) => {
+          const n = el.querySelector(numero);
+          if (n) n.textContent = String(i + 1).padStart(2, '0');
+          liste?.append(el);
+        });
+      });
+      if (annonce) annonce.textContent = (annonce.dataset.modele || '').replace('{tri}', bouton.dataset.nom || '');
+    });
+  });
+
   const boutons = document.querySelectorAll<HTMLButtonElement>('[data-vue]');
   const listes = document.querySelectorAll<HTMLElement>('[data-liste]');
   boutons.forEach((bouton) => {

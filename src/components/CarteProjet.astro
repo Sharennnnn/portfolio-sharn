@@ -13,7 +13,7 @@ const couleur = await couleurAttente(d.couverture);
 const chargement = prioritaire ? 'eager' : 'lazy';
 ---
 
-<li class="carte reveal reveal--carte" data-disciplines={d.disciplines.join(' ')}>
+<li class="carte reveal reveal--carte" data-disciplines={d.disciplines.join(' ')} data-titre={titre} data-annee={d.annee}>
   <a class="zone" href={urlProjet(langue, projet.id)}>
     <div class="carte-visuel" style={`view-transition-name: affiche-${projet.id}`}>
       {numero && <span class="numero" aria-hidden="true">{numero}</span>}
