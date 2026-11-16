@@ -3,6 +3,7 @@ ordre: 17
 titre: Cyberpunk 2077
 titre_en: Cyberpunk 2077
 annee: 2026
+date: 2026-05-09
 origine: fanart
 disciplines:
   - print
