@@ -3,6 +3,7 @@ ordre: 22
 titre: Fight Club
 titre_en: Fight Club
 annee: 2025
+date: 2025-11-11
 origine: fanart
 disciplines:
   - print
