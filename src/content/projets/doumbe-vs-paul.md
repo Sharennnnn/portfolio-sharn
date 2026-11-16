@@ -11,7 +11,7 @@ client: ''
 couverture: /images/projets/sharn_affiche_doumbevspaul_v4.webp
 couverture_alt: ''
 couverture_alt_en: ''
-survol: ''
+survol: /images/projets/sharn_affiche_doumbevspaul_v04.webp
 galerie: []
 video: ''
 contrainte: 'Le combat Cédric Doumbé – Jake Paul a été annoncé pour le soir de Noël, à Dubaï. Lors de l’annonce, Doumbé a promis de brandir le drapeau français au-dessus de son adversaire. J’ai voulu transformer cette promesse en affiche : une image de boxe au ton cinématographique, pensée pour les réseaux et publiée avant le combat.'
