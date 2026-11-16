@@ -3,6 +3,7 @@ ordre: 4
 titre: L'Étrange Histoire de Mr. Anderson — Laylow
 titre_en: L’Étrange Histoire de Mr. Anderson — Laylow
 annee: 2026
+date: 2026-07-12
 origine: fanart
 disciplines:
   - print
