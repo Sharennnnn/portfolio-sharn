@@ -3,6 +3,7 @@ ordre: 20
 titre: The Dark Knight
 titre_en: The Dark Knight
 annee: 2026
+date: 2026-01-11
 origine: fanart
 disciplines:
   - print
