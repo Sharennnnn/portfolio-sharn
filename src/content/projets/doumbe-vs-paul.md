@@ -1,5 +1,5 @@
 ---
-ordre: 28
+ordre: 5
 titre: Doumbé vs Paul
 titre_en: Doumbé vs Paul
 annee: 2026
