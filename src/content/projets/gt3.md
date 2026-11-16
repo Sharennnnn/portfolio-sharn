@@ -4,7 +4,7 @@ titre: GT3
 titre_en: GT3
 annee: 2026
 date: 2026-04-04
-origine: perso
+origine: collab
 disciplines:
   - print
 client: ''
