@@ -3,6 +3,7 @@ ordre: 9
 titre: Logo Infographie
 titre_en: Graphic design class logo
 annee: 2026
+date: 2026-03-12
 origine: client
 disciplines:
   - identite
