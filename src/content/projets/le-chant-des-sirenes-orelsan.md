@@ -3,6 +3,7 @@ ordre: 7
 titre: Le Chant des sirènes — Orelsan
 titre_en: Le Chant des sirènes — Orelsan
 annee: 2026
+date: 2026-10-01
 origine: fanart
 disciplines:
   - print
