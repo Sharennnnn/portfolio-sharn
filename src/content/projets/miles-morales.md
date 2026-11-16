@@ -3,6 +3,7 @@ ordre: 16
 titre: Miles Morales
 titre_en: Miles Morales
 annee: 2026
+date: 2026-02-12
 origine: fanart
 disciplines:
   - print
