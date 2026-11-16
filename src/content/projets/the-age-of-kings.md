@@ -3,6 +3,7 @@ ordre: 26
 titre: The Age of Kings
 titre_en: The Age of Kings
 annee: 2025
+date: 2025-11-09
 origine: perso
 disciplines:
   - print
