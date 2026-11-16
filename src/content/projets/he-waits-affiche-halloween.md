@@ -3,6 +3,7 @@ ordre: 5
 titre: He Waits
 titre_en: He Waits
 annee: 2026
+date: 2026-11-02
 origine: perso
 disciplines:
   - print
