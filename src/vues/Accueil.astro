@@ -63,7 +63,7 @@ const realise = [
 ];
 
 // Index : tous les projets, regroupés par origine.
-const index = await Promise.all(['client', 'fanart', 'exercice', 'perso'].map(async (origine) => ({
+const index = await Promise.all(['client', 'collab', 'fanart', 'exercice', 'perso'].map(async (origine) => ({
   origine,
   projets: await Promise.all(tous.filter((p) => p.data.origine === origine).map(async (p) => ({
     titre: champ(p.data, 'titre', langue),

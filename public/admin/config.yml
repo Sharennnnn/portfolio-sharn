@@ -58,6 +58,7 @@ collections:
       default: { field: ordre }
     view_filters:
       - { label: 'Commandes client', field: origine, pattern: client }
+      - { label: 'Collaborations', field: origine, pattern: collab }
       - { label: 'Fan art', field: origine, pattern: fanart }
       - { label: 'Exercices académiques', field: origine, pattern: exercice }
       - { label: 'Projets personnels', field: origine, pattern: perso }
@@ -73,6 +74,7 @@ collections:
         widget: select
         options:
           - { label: 'Commande client', value: client }
+          - { label: 'Collaboration', value: collab }
           - { label: 'Fan art', value: fanart }
           - { label: 'Exercice académique', value: exercice }
           - { label: 'Projet personnel', value: perso }
