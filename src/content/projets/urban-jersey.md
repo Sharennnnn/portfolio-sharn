@@ -1,5 +1,5 @@
 ---
-ordre: 26
+ordre: 19
 titre: Urban Jersey
 titre_en: Urban Jersey
 annee: 2025
@@ -8,8 +8,8 @@ disciplines:
   - identite
 client: Urban Jersey
 couverture: /images/projets/urban-jersey-couverture.webp
-couverture_alt: "Logo Urban Jersey en lettres noires condensées sur fond blanc, avec des étoiles."
-couverture_alt_en: "Urban Jersey logo in condensed black letters on a white background, with stars."
+couverture_alt: Logo Urban Jersey en lettres noires condensées sur fond blanc, avec des étoiles.
+couverture_alt_en: Urban Jersey logo in condensed black letters on a white background, with stars.
 survol: ''
 galerie: []
 video: ''

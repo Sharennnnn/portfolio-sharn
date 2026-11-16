@@ -1,5 +1,5 @@
 ---
-ordre: 23
+ordre: 14
 titre: Nightwave
 titre_en: Nightwave
 annee: 2026
@@ -8,8 +8,8 @@ disciplines:
   - identite
 client: ''
 couverture: /images/projets/nompr_mockup_si_bbp_6qinfo.webp
-couverture_alt: "Trois canettes Nightwave aux motifs liquides violets et bleus sur un comptoir en bois, devant une foule en concert."
-couverture_alt_en: "Three Nightwave cans with liquid purple and blue patterns on a wooden bar, in front of a concert crowd."
+couverture_alt: Trois canettes Nightwave aux motifs liquides violets et bleus sur un comptoir en bois, devant une foule en concert.
+couverture_alt_en: Three Nightwave cans with liquid purple and blue patterns on a wooden bar, in front of a concert crowd.
 survol: ''
 galerie: []
 video: ''

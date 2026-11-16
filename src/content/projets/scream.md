@@ -1,5 +1,5 @@
 ---
-ordre: 19
+ordre: 23
 titre: Scream
 titre_en: Scream
 annee: 2025
@@ -8,8 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/scream.webp
-couverture_alt: "Le masque de Ghostface et un couteau en reflets roses dans un cadre, quatre portraits en vignettes, et une jeune femme au téléphone au-dessus du titre Scream."
-couverture_alt_en: "The Ghostface mask and a knife in pink highlights inside a frame, four small portraits, and a young woman on the phone above the title Scream."
+couverture_alt: Le masque de Ghostface et un couteau en reflets roses dans un cadre, quatre portraits en vignettes, et une jeune femme au téléphone au-dessus du titre Scream.
+couverture_alt_en: The Ghostface mask and a knife in pink highlights inside a frame, four small portraits, and a young woman on the phone above the title Scream.
 survol: ''
 galerie: []
 video: ''

@@ -1,5 +1,5 @@
 ---
-ordre: 18
+ordre: 22
 titre: Fight Club
 titre_en: Fight Club
 annee: 2025
@@ -8,8 +8,8 @@ disciplines:
   - print
 client: ''
 couverture: /images/projets/fight-club.webp
-couverture_alt: "En rose sur fond noir, un homme debout pointe un pistolet vers la bouche d’un homme assis, sous le titre Fight Club."
-couverture_alt_en: "In pink on black, a standing man points a pistol at the mouth of a seated man, below the title Fight Club."
+couverture_alt: En rose sur fond noir, un homme debout pointe un pistolet vers la bouche d’un homme assis, sous le titre Fight Club.
+couverture_alt_en: In pink on black, a standing man points a pistol at the mouth of a seated man, below the title Fight Club.
 survol: ''
 galerie: []
 video: ''
