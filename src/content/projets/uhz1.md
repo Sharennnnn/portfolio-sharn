@@ -3,14 +3,15 @@ ordre: 2
 titre: UHZ1
 titre_en: UHZ1
 annee: 2026
+date: 2026-06-19
 origine: exercice
 disciplines:
   - identite
   - print
 client: ''
 couverture: /images/projets/uhz1-couverture.webp
-couverture_alt: "Logo UHZ1 en lettres blanches massives sur fond violet, avec des étoiles découpées dans le U et le H."
-couverture_alt_en: "UHZ1 logo in heavy white letters on a purple background, with stars cut out of the U and the H."
+couverture_alt: Logo UHZ1 en lettres blanches massives sur fond violet, avec des étoiles découpées dans le U et le H.
+couverture_alt_en: UHZ1 logo in heavy white letters on a purple background, with stars cut out of the U and the H.
 survol: /images/projets/uhz1-survol.webp
 galerie:
   - /images/projets/uhz1-galerie-1.webp
