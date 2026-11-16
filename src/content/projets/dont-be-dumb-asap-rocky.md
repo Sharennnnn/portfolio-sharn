@@ -3,6 +3,7 @@ ordre: 10
 titre: Don't be dumb — A$AP Rocky
 titre_en: Don't be dumb — A$AP Rocky
 annee: 2026
+date: 2026-08-30
 origine: fanart
 disciplines:
   - print
