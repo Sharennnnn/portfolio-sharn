@@ -2,7 +2,8 @@
 ordre: 11
 titre: Sinners
 titre_en: Sinners
-annee: 2026
+annee: 2025
+date: 2025-12-22
 origine: fanart
 disciplines:
   - print
