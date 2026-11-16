@@ -3,6 +3,7 @@ ordre: 21
 titre: SE7EN
 titre_en: SE7EN
 annee: 2025
+date: 2025-11-16
 origine: fanart
 disciplines:
   - print
