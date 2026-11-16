@@ -2,7 +2,8 @@
 ordre: 3
 titre: Les Bijoux de Fafi
 titre_en: Les Bijoux de Fafi
-annee: 2026
+annee: 2025
+date: 2025-12-22
 origine: client
 disciplines:
   - identite
