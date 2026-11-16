@@ -2,7 +2,8 @@
 ordre: 6
 titre: Flashing Lights — Kanye West
 titre_en: Flashing Lights — Kanye West
-annee: 2026
+annee: 2025
+date: 2025-12-20
 origine: exercice
 disciplines:
   - animation
