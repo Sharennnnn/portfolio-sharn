@@ -1,6 +1,7 @@
 ---
 import { traduire, urlProjet, champ } from '../i18n/utils.js';
 import { srcsetVignette, couleurAttente } from '../lib/images.js';
+import { cleDate } from '../lib/tri.js';
 const { projet, langue, niveau = 'h3', prioritaire = false, numero, tailles = '(max-width: 40rem) 50vw, 320px' } = Astro.props;
 const t = traduire(langue);
 const d = projet.data;
@@ -13,7 +14,7 @@ const couleur = await couleurAttente(d.couverture);
 const chargement = prioritaire ? 'eager' : 'lazy';
 ---
 
-<li class="carte reveal reveal--carte" data-disciplines={d.disciplines.join(' ')} data-titre={titre} data-annee={d.annee}>
+<li class="carte reveal reveal--carte" data-disciplines={d.disciplines.join(' ')} data-titre={titre} data-date={cleDate(d)}>
   <a class="zone" href={urlProjet(langue, projet.id)}>
     <div class="carte-visuel" style={`view-transition-name: affiche-${projet.id}`}>
       {numero && <span class="numero" aria-hidden="true">{numero}</span>}

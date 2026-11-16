@@ -8,6 +8,7 @@ import AppelContact from '../components/AppelContact.astro';
 import { traduire, trier, route, autreLangue, urlProjet, champ } from '../i18n/utils.js';
 import { lireReglages } from '../i18n/reglages.js';
 import { srcsetVignette } from '../lib/images.js';
+import { cleDate } from '../lib/tri.js';
 
 const { langue } = Astro.props;
 const t = traduire(langue);
@@ -28,6 +29,7 @@ const lignes = await Promise.all(
     disciplines: p.data.disciplines,
     meta: `${p.data.disciplines.map((x) => t(`projets.filtre.${x}`)).join(' · ')} · ${t(`origine.${p.data.origine}`)}`,
     annee: p.data.annee,
+    date: cleDate(p.data),
     src: p.data.couverture,
     srcset: await srcsetVignette(p.data.couverture),
   }))
@@ -67,7 +69,7 @@ const lignes = await Promise.all(
     {/* Vue Index : liste façon générique ; même contenu que la grille, masquée par défaut. */}
     <ol class="index" data-liste="index" hidden>
       {lignes.map((l) => (
-        <li data-disciplines={l.disciplines.join(' ')} data-titre={l.titre} data-annee={l.annee} data-src={l.src} data-srcset={l.srcset}>
+        <li data-disciplines={l.disciplines.join(' ')} data-titre={l.titre} data-date={l.date} data-src={l.src} data-srcset={l.srcset}>
           <a href={urlProjet(langue, l.id)}>
             <span class="index-numero" aria-hidden="true">{l.numero}</span>
             {/* Titre lu une fois par les lecteurs d'écran ; la version en lettres ne sert qu'au roulement. */}
@@ -234,7 +236,7 @@ const lignes = await Promise.all(
       el: el as HTMLElement,
       rang,
       titre: (el as HTMLElement).dataset.titre || '',
-      annee: Number((el as HTMLElement).dataset.annee) || 0,
+      date: (el as HTMLElement).dataset.date || '',
     })),
   }));
   tris.forEach((bouton) => {
